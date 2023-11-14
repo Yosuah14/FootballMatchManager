@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FootballMatchManager</string>
+    <string name="cuadroemail">Correo</string>
+    <string name="contrasenaemail">Contraseña</string>
+    <string name="registrasenormal">Registrarse</string>
+    <string name="iniciarsesion">Iniciar Sesión</string>
+    <string name="iniciarsesioncongoogle">Iniciar Sesion con Google</string>
+    <string name="EncabezadoLogin">Iniciar Sesion en la aplicacion</string>
 </resources>

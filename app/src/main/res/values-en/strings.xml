@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FootballMatchManager</string>
+    <string name="cuadroemail">Email</string>
+    <string name="contrasenaemail">Password</string>
+    <string name="registrasenormal">Register</string>
+    <string name="iniciarsesion">Log in</string>
+    <string name="iniciarsesioncongoogle">Log in with Google</string>
+    <string name="EncabezadoLogin">Login to the application</string>
+</resources>

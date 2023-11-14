@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "359201656465",
+    "project_id": "footballmatchmanager",
+    "storage_bucket": "footballmatchmanager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359201656465:android:d2a25dfe10dbb2d85a3930",
+        "android_client_info": {
+          "package_name": "com.example.footballmatchmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA710GpiFp2lEgZe2Bzij38I7MzshIzy7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
