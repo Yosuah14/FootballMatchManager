@@ -12,7 +12,12 @@
           "package_name": "com.example.footballmatchmanager"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "359201656465-8ahb3sc8il2l8g1pn778bt9n5ln4pnmp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA710GpiFp2lEgZe2Bzij38I7MzshIzy7k"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "359201656465-8ahb3sc8il2l8g1pn778bt9n5ln4pnmp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

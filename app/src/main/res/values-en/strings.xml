@@ -7,4 +7,6 @@
     <string name="iniciarsesion">Log in</string>
     <string name="iniciarsesioncongoogle">Log in with Google</string>
     <string name="EncabezadoLogin">Login to the application</string>
+
+
 </resources>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import com.example.footballmatchmanager.databinding.ActivityMenuPrincipalBinding
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -42,6 +43,17 @@ class MenuPrincipal : AppCompatActivity() {
                 }
             }
             firebaseauth.signOut()
+
+            val signInClient = Identity.getSignInClient(this)
+            signInClient.signOut()
+            Log.e(TAG,"Cerrada sesión completamente")
+            finish()
+
+        }
+        binding.btVolver.setOnClickListener {
+            // Log.e(TAG, firebaseauth.currentUser.toString())
+            firebaseauth.signOut()
+            finish()
 
         }
 
