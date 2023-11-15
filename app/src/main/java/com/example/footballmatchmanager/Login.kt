@@ -90,6 +90,8 @@ class Login : AppCompatActivity() {
         binding.btGoogle.setOnClickListener {
             loginEnGoogle()
         }
+
+
     }
 
     private fun loginEnGoogle(){
@@ -156,6 +158,7 @@ class Login : AppCompatActivity() {
         }
         startActivity(homeIntent)
     }
+
 
 
 
