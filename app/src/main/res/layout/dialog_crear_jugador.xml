@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+    <!-- Campo de Nombre -->
+    <EditText
+        android:id="@+id/editTextNombre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nombre"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Campo de Valoración -->
+    <EditText
+        android:id="@+id/editTextValoracion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Valoración"
+        app:layout_constraintTop_toBottomOf="@id/editTextNombre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Campo de Goles -->
+    <EditText
+        android:id="@+id/editTextGoles"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Goles"
+        app:layout_constraintTop_toBottomOf="@id/editTextValoracion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Campo de Asistencias -->
+
+    <!-- CheckBox para seleccionar "Portero" -->
+
+    <EditText
+        android:id="@+id/editTextAsistencias"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:hint="Asistencias"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.093"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextGoles" />
+
+    <CheckBox
+        android:id="@+id/checkBoxPortero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Portero"
+        app:layout_constraintTop_toBottomOf="@id/editTextAsistencias"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- CheckBox para seleccionar "Jugador" -->
+    <CheckBox
+        android:id="@+id/checkBoxJugador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jugador"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxPortero"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

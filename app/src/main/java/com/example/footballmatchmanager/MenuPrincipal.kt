@@ -1,5 +1,6 @@
 package com.example.footballmatchmanager
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -50,6 +51,32 @@ class MenuPrincipal : AppCompatActivity() {
         binding.btVolver.setOnClickListener {
             firebaseauth.signOut()
             finish()
+        }
+        binding.btGuardar.setOnClickListener {
+            val nombre = binding.edNombre.text.toString()
+            val edad = binding.edEdad.text.toString()
+
+            if (nombre.isNotEmpty() && edad.isNotEmpty()) {
+                val usuario = hashMapOf(
+                    "nombre" to nombre,
+                    "edad" to edad,
+                    "roles" to arrayListOf(1, 2, 3),
+                    "timestamp" to FieldValue.serverTimestamp()
+                )
+
+                db.collection("users")
+                    .document(binding.txtEmail.text.toString())
+                    .set(usuario)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Datos guardados exitosamente", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
+                    }
+                irMenuOpciones()
+            } else {
+                Toast.makeText(this, "Por favor, ingrese nombre y edad", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btRecuperar.setOnClickListener {
@@ -132,6 +159,11 @@ class MenuPrincipal : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun irMenuOpciones() {
+        val menuOpcionesIntent = Intent(this, MenuOpciones::class.java)
+        startActivity(menuOpcionesIntent)
     }
 }
 
