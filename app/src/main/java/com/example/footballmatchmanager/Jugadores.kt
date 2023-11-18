@@ -5,7 +5,7 @@ class Jugadores(
     nombre: String,
     goles: Int,
     asistencias: Int,
-    posicion: String = ""
+    posicion: String
 ) : JugadorBase(valoracion, nombre, posicion) {
     // Puedes añadir más funcionalidades específicas para los jugadores aquí
 }

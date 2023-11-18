@@ -5,22 +5,28 @@ import android.content.Intent
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import com.example.footballmatchmanager.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class Login : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    private lateinit var firebaseauth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-
+    private lateinit var firebaseauth: FirebaseAuth
+    private val db = Firebase.firestore
     override fun onCreate(savedInstanceState: Bundle?) {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.google_web_client_id))
@@ -30,6 +36,14 @@ class Login : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firebaseauth = FirebaseAuth.getInstance()
+
+
+        // Verificar si ya hay una sesión iniciada
+        if (firebaseauth.currentUser != null) {
+            // Si hay una sesión iniciada, ir directamente al menú de opciones
+            irMenuOpciones()
+            finish()  // Cerrar esta actividad para evitar volver atrás
+        }
 
         binding.btRegistrar.setOnClickListener {
             if (binding.edEmail.text.isNotEmpty() && binding.edPass.text.isNotEmpty()) {
@@ -128,6 +142,38 @@ class Login : AppCompatActivity() {
         }
         startActivity(menuPrincipalIntent)
     }
+    private fun verificarUsuarioEnFirestore(email: String) {
+        lifecycleScope.launch {
+            try {
+                val querySnapshot = db.collection("users")
+                    .whereEqualTo("email", email)
+                    .get()
+                    .await()
+
+                if (!querySnapshot.isEmpty) {
+                    // Si hay un usuario registrado con información en Firestore, ir a MenuOpciones
+                    val menuOpcionesIntent = Intent(this@Login, MenuOpciones::class.java)
+                    startActivity(menuOpcionesIntent)
+                    finish() // Para cerrar la actividad actual
+                } else {
+                    // Si no hay información asociada, mostrar mensaje o realizar otras acciones
+                    Toast.makeText(
+                        this@Login,
+                        "Usuario sin información asociada.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Log.e("LoginActivity", "Error al verificar usuario en Firestore: ${e.message}")
+            }
+        }
+
+    }
+    private fun irMenuOpciones() {
+        val menuOpcionesIntent = Intent(this, MenuOpciones::class.java)
+        startActivity(menuOpcionesIntent)
+    }
+
 }
 
 

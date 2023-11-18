@@ -17,42 +17,58 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <!-- TextView para el primer texto -->
-    <TextView
-        android:id="@+id/textViewNombre"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Nombre del Jugador"
-        android:textSize="16sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/imageViewJugador"/>
 
     <!-- TextView para el segundo texto -->
 
     <!-- Button para realizar acciones -->
 
     <TextView
+        android:id="@+id/textViewNombre"
+        android:layout_width="169dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="28dp"
+        android:text="Nombre"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/imageViewJugador"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/textViewDetalle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Detalles del Jugador"
+        android:layout_marginTop="4dp"
+        android:text="Posicion"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@id/imageViewJugador"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/textViewNombre"
         app:layout_constraintTop_toBottomOf="@id/textViewNombre" />
 
     <Button
         android:id="@+id/btnAccion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Realizar Acción"
+        android:layout_width="93dp"
+        android:layout_height="53dp"
+        android:text="Datos"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/imageViewJugador"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.623" />
+
+    <ImageView
+        android:id="@+id/imageJugador"
+        android:layout_width="98dp"
+        android:layout_height="85dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/pedroleon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

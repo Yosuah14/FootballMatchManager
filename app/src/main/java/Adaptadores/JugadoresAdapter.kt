@@ -8,7 +8,8 @@ import com.example.footballmatchmanager.Portero
 import com.example.footballmatchmanager.R
 import com.example.footballmatchmanager.databinding.RecycleJugadoresBinding
 
-class JugadoresAdapter(private val jugadoresList: List<JugadorBase>) :
+
+class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
     RecyclerView.Adapter<JugadoresAdapter.JugadorViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JugadorViewHolder {
@@ -21,6 +22,13 @@ class JugadoresAdapter(private val jugadoresList: List<JugadorBase>) :
         holder.bind(jugadoresList[position])
     }
 
+    fun actualizarJugadores(nuevaLista: List<JugadorBase>) {
+        // Limpiar la lista actual y agregar todos los elementos de la nueva lista
+        jugadoresList.clear()
+        jugadoresList.addAll(nuevaLista)
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int {
         return jugadoresList.size
     }
@@ -29,24 +37,15 @@ class JugadoresAdapter(private val jugadoresList: List<JugadorBase>) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(jugador: JugadorBase) {
-            // Configurar la vista del elemento de la lista (imagen, textos y botón)
             if (jugador is Portero) {
-                binding.imageViewJugador.setImageResource(R.drawable.Karius)
+                binding.imageJugador.setImageResource(R.drawable.karius)
             } else {
-                binding.imageViewJugador.setImageResource(R.drawable.PedroLeon)
-            }
-            binding.textViewNombre.text = jugador.nombre
-            binding.textViewDetalle.text =
-                "Detalles: ${jugador.posicion}" // Mostrar la posición directamente
-            binding.btnAccion.setOnClickListener {
-                // Acción a realizar cuando se hace clic en el botón
-                // Puedes personalizar esto según lo que necesites
+                binding.imageJugador.setImageResource(R.drawable.pedroleon)
             }
 
-
-
             binding.textViewNombre.text = jugador.nombre
-            binding.textViewDetalle.text = "Detalles: ${jugador.posicion}" // Mostrar la posición directamente
+            binding.textViewDetalle.text = "Detalles: ${jugador.posicion}"
+
             binding.btnAccion.setOnClickListener {
                 // Acción a realizar cuando se hace clic en el botón
                 // Puedes personalizar esto según lo que necesites
@@ -54,6 +53,8 @@ class JugadoresAdapter(private val jugadoresList: List<JugadorBase>) :
         }
     }
 }
+
+
 
 
 

@@ -61,13 +61,10 @@ class CrearJugadores : AppCompatActivity() {
             }
 
             val nuevoJugador = when (posicion) {
-                "Portero" -> Portero(valoracion, nombre)
-                "Jugador Normal" -> Jugadores(valoracion, nombre, goles, asistencias)
+                "Portero" -> Portero(valoracion, nombre, "Portero")
+                "Jugador Normal" -> Jugadores(valoracion, nombre, goles, asistencias, "Jugador Normal")
                 else -> null
             }
-
-            // Asignar la posición al nuevo jugador
-            nuevoJugador?.posicion = posicion
 
             // Si se creó un nuevo jugador, agregarlo a la lista y actualizar el RecyclerView
             nuevoJugador?.let {
@@ -80,4 +77,6 @@ class CrearJugadores : AppCompatActivity() {
 
         builder.create().show()
     }
+
+
 }

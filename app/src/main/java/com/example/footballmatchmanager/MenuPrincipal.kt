@@ -20,6 +20,7 @@ class MenuPrincipal : AppCompatActivity() {
     private lateinit var firebaseauth: FirebaseAuth
     val TAG = "ACSCO"
     val db = Firebase.firestore
+    private var registrado: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +74,8 @@ class MenuPrincipal : AppCompatActivity() {
                     .addOnFailureListener {
                         Toast.makeText(this, "Error al guardar los datos", Toast.LENGTH_SHORT).show()
                     }
+                registrado = true // Marcar como registrado al guardar datos
+
                 irMenuOpciones()
             } else {
                 Toast.makeText(this, "Por favor, ingrese nombre y edad", Toast.LENGTH_SHORT).show()
