@@ -1,3 +1,5 @@
 package com.example.footballmatchmanager
 
-class Portero(val valoracion: Double, val nombre: String)
+class Portero(valoracion: Double, nombre: String) : JugadorBase(valoracion, nombre) {
+    // Puedes añadir más funcionalidades específicas para los porteros aquí
+}

@@ -6,6 +6,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.footballmatchmanager.databinding.ActivityCrearJugadoresBinding
+import com.example.footballmatchmanager.JugadorBase
+import com.example.footballmatchmanager.Portero
+import com.example.footballmatchmanager.Jugadores
 import com.example.footballmatchmanager.databinding.DialogCrearJugadorBinding
 
 class CrearJugadores : AppCompatActivity() {
@@ -59,7 +62,7 @@ class CrearJugadores : AppCompatActivity() {
 
             val nuevoJugador = when (posicion) {
                 "Portero" -> Portero(valoracion, nombre)
-                "Jugador Normal" -> JugadorBase(valoracion, nombre, goles, asistencias)
+                "Jugador Normal" -> Jugadores(valoracion, nombre, goles, asistencias)
                 else -> null
             }
 

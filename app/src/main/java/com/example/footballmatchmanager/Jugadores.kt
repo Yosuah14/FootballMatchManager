@@ -1,5 +1,11 @@
 package com.example.footballmatchmanager
 
-
-class Jugadores(val valoracion: Double, val nombre: String ,   val goles: Int,
-                val asistencias: Int,)
+class Jugadores(
+    valoracion: Double,
+    nombre: String,
+    goles: Int,
+    asistencias: Int,
+    posicion: String = ""
+) : JugadorBase(valoracion, nombre, posicion) {
+    // Puedes añadir más funcionalidades específicas para los jugadores aquí
+}
