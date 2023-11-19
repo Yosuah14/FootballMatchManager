@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_crear_jugador"
+        android:title="Crear Jugador"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_opciones"
+        android:title="Menu Opciones"
+        app:showAsAction="never" />
+</menu>

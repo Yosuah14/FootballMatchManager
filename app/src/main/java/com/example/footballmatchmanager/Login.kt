@@ -91,6 +91,13 @@ class Login : AppCompatActivity() {
     }
 
     private fun loginEnGoogle() {
+        val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.google_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, signInOptions)
+
         val signInClient = googleSignInClient.signInIntent
         launcherVentanaGoogle.launch(signInClient)
     }
@@ -175,6 +182,13 @@ class Login : AppCompatActivity() {
     }
 
 }
+
+
+
+
+
+
+
 
 
 
