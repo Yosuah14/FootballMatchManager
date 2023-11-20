@@ -5,15 +5,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.footballmatchmanager.databinding.ActivityMenuOpcionesBinding
+import com.example.footballmatchmanager.databinding.DialogCrearJugadorBinding
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 class MenuOpciones : AppCompatActivity() {
     private lateinit var binding: ActivityMenuOpcionesBinding
@@ -70,7 +76,7 @@ class MenuOpciones : AppCompatActivity() {
         }
 
         binding.borrarusuario.setOnClickListener {
-            eliminarUsuario()
+            eliminarInformacionUsuario()
         }
     }
 
@@ -97,42 +103,37 @@ class MenuOpciones : AppCompatActivity() {
         }
     }
 
-    private fun eliminarUsuario() {
+    private fun eliminarInformacionUsuario() {
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
+            // Realizar la operación de eliminación de información del usuario en la base de datos
+            val updates = hashMapOf<String, Any>(
+                "nombre" to FieldValue.delete(),
+                "edad" to FieldValue.delete()
+            )
+
             db.collection("users")
-                .whereEqualTo("email", currentUser.email)
-                .get()
-                .addOnSuccessListener { result ->
-                    for (document in result) {
-                        db.collection("users")
-                            .document(document.id)
-                            .delete()
-                            .addOnSuccessListener {
-                                Toast.makeText(this, "Eliminado", Toast.LENGTH_SHORT).show()
-                                navigateMenuPrincipal()
-                            }.addOnFailureListener {
-                                Toast.makeText(
-                                    this,
-                                    "Error al eliminar el documento",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                    }
+                .document(currentUser.uid)
+                .update(updates)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Información eliminada", Toast.LENGTH_SHORT).show()
+                    // Después de eliminar la información, iniciar una nueva actividad
+                    navigateMenuPrincipal()
                 }
-                .addOnFailureListener {
-                    Toast.makeText(
-                        this,
-                        "No se ha encontrado el documento a eliminar",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "$exception", Toast.LENGTH_SHORT).show()
                 }
         } else {
             // Manejar el caso en el que el usuario no esté autenticado
             Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+
+
+
 
 
     private fun navigateToLogin() {
@@ -162,6 +163,8 @@ class MenuOpciones : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_SENDTO, uri)
         startActivity(intent)
     }
+
+
 }
 
 
