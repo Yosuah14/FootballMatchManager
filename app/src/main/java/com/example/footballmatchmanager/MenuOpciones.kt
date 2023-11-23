@@ -56,12 +56,18 @@ class MenuOpciones : AppCompatActivity() {
         }
 
 
-        // Configurar el OnClickListener para el botón btnCrearJugador
-        binding.btnCrearJugador.setOnClickListener {
-            // Intent para abrir la actividad CrearJugadores
-            val intent = Intent(this@MenuOpciones, CrearJugadores::class.java)
+        //Configurar el OnClickListener para el botón btnCrearJugador
+       binding.btnCrearJugador.setOnClickListener {
+        //Intent para abrir la actividad CrearJugadores
+           val intent = Intent(this@MenuOpciones, CrearJugadores::class.java)
             startActivity(intent)
         }
+
+        binding.btnCrearPartido.setOnClickListener {
+            val intent = Intent(this@MenuOpciones, DetailActivity1::class.java)
+          startActivity(intent)
+          }
+
 
         binding.txtCreadorApp.setOnClickListener {
             abrirEnlaceGitHub()
@@ -128,6 +134,7 @@ class MenuOpciones : AppCompatActivity() {
             // Manejar el caso en el que el usuario no esté autenticado
             Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
         }
+
     }
 
 

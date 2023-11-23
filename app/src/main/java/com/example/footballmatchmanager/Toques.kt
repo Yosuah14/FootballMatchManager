@@ -1,8 +1,10 @@
 package com.example.footballmatchmanager
 
+// Toques.kt
+
 data class Toques(
-    val id: Int = 0,
-    val puntos: Int = 0,
-    val contador: Int = 0,
-    val adjetivo: String? = null
+    val usuario: String,
+    var puntos: Int = 0,
+    var contador: Int = 0,
+    var adjetivo: String = ""
 )

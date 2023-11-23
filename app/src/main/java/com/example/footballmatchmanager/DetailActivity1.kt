@@ -1,31 +1,33 @@
 package com.example.footballmatchmanager
 
-
-
-// DetailActivity.kt
-import android.content.ContentValues
+import DbHelper
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.footballmatchmanager.Toques
-
 import com.example.footballmatchmanager.databinding.ActivityDetail1Binding
+import com.google.firebase.auth.FirebaseAuth
 
-class DetailActivity1: AppCompatActivity() {
+class DetailActivity1 : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetail1Binding
     private lateinit var dbHelper: DbHelper
 
-    private var toques = Toques()
+    private var toques = Toques("", 0, 0, "")
+    private lateinit var auth: FirebaseAuth // Agrega esta línea
     private val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetail1Binding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        auth = FirebaseAuth.getInstance() // Agrega esta línea
         dbHelper = DbHelper(this)
+
+        if (!dbHelper.databaseExists()) {
+            dbHelper.writableDatabase.close()
+        }
+
         cargarDatos()
 
         binding.imageButtonBalon.setOnClickListener {
@@ -39,68 +41,49 @@ class DetailActivity1: AppCompatActivity() {
         binding.btnBorrar.setOnClickListener {
             borrarDatos()
         }
+
+        setSupportActionBar(binding.toolbarCrearJugadores)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbarCrearJugadores.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun cambiarImagenTemporal() {
         binding.imageButtonBalon.setImageResource(R.drawable.balonnormal)
-        toques.contador+1
-        toques.puntos+1
+        toques.contador++
+        toques.puntos++
         binding.textViewPuntos.text = "Puntos: ${toques.puntos}"
 
         handler.postDelayed({
             binding.imageButtonBalon.setImageResource(R.drawable.balonblancoynegro)
-        }, 3000)
-    }
-
-    private fun guardarDatos() {
-        val db = dbHelper.writableDatabase
-
-        val values = ContentValues().apply {
-            put(DbHelper.COLUMN_PUNTOS, toques.puntos)
-            put(DbHelper.COLUMN_CONTADOR, toques.contador)
-            put(DbHelper.COLUMN_ADJETIVO, toques.adjetivo)
-        }
-
-        val id = db.insert(DbHelper.TABLE_TOQUES, null, values)
-        if (id != -1L) {
-            Toast.makeText(this, "Datos guardados con ID: $id", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "Error al guardar datos", Toast.LENGTH_SHORT).show()
-        }
-
-        db.close()
-    }
-
-    private fun borrarDatos() {
-        val db = dbHelper.writableDatabase
-        db.delete(DbHelper.TABLE_TOQUES, null, null)
-        Toast.makeText(this, "Datos borrados", Toast.LENGTH_SHORT).show()
-
-        // Reinicia los valores
-        toques = Toques()
-        binding.textViewPuntos.text = "Puntos: ${toques.puntos}"
-
-
-        db.close()
+        }, 1000)
     }
 
     private fun cargarDatos() {
-        val db = dbHelper.readableDatabase
-        val columns = arrayOf(DbHelper.COLUMN_PUNTOS, DbHelper.COLUMN_CONTADOR, DbHelper.COLUMN_ADJETIVO)
-        val cursor = db.query(DbHelper.TABLE_TOQUES, columns, null, null, null, null, null)
+        val loadedToques = dbHelper.queryToques(auth.currentUser?.email.orEmpty())
 
-        if (cursor.moveToFirst()) {
-            toques = Toques(
-                puntos = cursor.getInt(cursor.getColumnIndex(DbHelper.COLUMN_PUNTOS)),
-                contador = cursor.getInt(cursor.getColumnIndex(DbHelper.COLUMN_CONTADOR)),
-                adjetivo = cursor.getString(cursor.getColumnIndex(DbHelper.COLUMN_ADJETIVO))
-            )
-
-            binding.textViewPuntos.text = "Puntos: ${toques.puntos}"
-            // También puedes mostrar el adjetivo en tu TextView correspondiente
+        if (loadedToques != null) {
+            toques = loadedToques
+        } else {
+            toques = Toques(usuario = auth.currentUser?.email.orEmpty(), puntos = 0, contador = 0, adjetivo = "")
+            dbHelper.insertOrUpdateToques(toques)
         }
 
-        cursor.close()
-        db.close()
+        binding.textViewPuntos.text = "Puntos: ${toques.puntos}"
+    }
+
+    private fun guardarDatos() {
+        dbHelper.insertOrUpdateToques(toques)
+        Toast.makeText(this, "Datos guardados", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun borrarDatos() {
+        dbHelper.deleteToques()
+        Toast.makeText(this, "Datos borrados", Toast.LENGTH_SHORT).show()
+
+        toques = Toques(usuario = auth.currentUser?.email.orEmpty(), puntos = 0, contador = 0, adjetivo = "")
+        binding.textViewPuntos.text = "Puntos: ${toques.puntos}"
     }
 }
+

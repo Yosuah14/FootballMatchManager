@@ -24,9 +24,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="nivel"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="296dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewPuntos"
@@ -34,9 +36,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Puntos"
-        app:layout_constraintTop_toBottomOf="@id/textViewnivel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/textViewnivel"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnGuardar"
@@ -52,11 +57,14 @@
         android:id="@+id/btnBorrar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Borrar"
-        app:layout_constraintTop_toBottomOf="@id/btnGuardar"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnGuardar"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
         android:id="@+id/imageButtonBalon"
