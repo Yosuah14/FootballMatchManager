@@ -55,5 +55,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth-ktx:22.2.0")
+    implementation ("org.jetbrains.anko:anko-commons:0.10.8")
+    implementation ("org.jetbrains.anko:anko-sqlite:0.10.8")
+
 
 }
