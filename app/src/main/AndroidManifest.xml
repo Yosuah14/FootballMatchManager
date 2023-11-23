@@ -15,6 +15,9 @@
         android:theme="@style/Theme.FootballMatchManager"
         tools:targetApi="31">
         <activity
+            android:name=".DetailActivity1"
+            android:exported="false" />
+        <activity
             android:name=".CrearJugadores"
             android:exported="false" />
         <activity

@@ -1,16 +1,20 @@
 package com.example.footballmatchmanager
 
+
+
 // DetailActivity.kt
 import android.content.ContentValues
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.databindingexample.databinding.ActivityDetailBinding
+import com.example.footballmatchmanager.Toques
 
-class DetailActivity : AppCompatActivity() {
+import com.example.footballmatchmanager.databinding.ActivityDetail1Binding
 
-    private lateinit var binding: ActivityDetailBinding
+class DetailActivity1: AppCompatActivity() {
+
+    private lateinit var binding: ActivityDetail1Binding
     private lateinit var dbHelper: DbHelper
 
     private var toques = Toques()
@@ -18,7 +22,7 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDetailBinding.inflate(layoutInflater)
+        binding = ActivityDetail1Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
         dbHelper = DbHelper(this)
@@ -39,8 +43,8 @@ class DetailActivity : AppCompatActivity() {
 
     private fun cambiarImagenTemporal() {
         binding.imageButtonBalon.setImageResource(R.drawable.balonnormal)
-        toques.contador++
-        toques.puntos++
+        toques.contador+1
+        toques.puntos+1
         binding.textViewPuntos.text = "Puntos: ${toques.puntos}"
 
         handler.postDelayed({
@@ -73,9 +77,9 @@ class DetailActivity : AppCompatActivity() {
         Toast.makeText(this, "Datos borrados", Toast.LENGTH_SHORT).show()
 
         // Reinicia los valores
-        toques = toques()
-        bindin.text = "Puntos: ${toques.puntos}"
-        binding.
+        toques = Toques()
+        binding.textViewPuntos.text = "Puntos: ${toques.puntos}"
+
 
         db.close()
     }
