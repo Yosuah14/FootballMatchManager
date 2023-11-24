@@ -5,21 +5,16 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.footballmatchmanager.databinding.ActivityMenuOpcionesBinding
-import com.example.footballmatchmanager.databinding.DialogCrearJugadorBinding
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 
 class MenuOpciones : AppCompatActivity() {
     private lateinit var binding: ActivityMenuOpcionesBinding
@@ -59,12 +54,12 @@ class MenuOpciones : AppCompatActivity() {
         //Configurar el OnClickListener para el botón btnCrearJugador
        binding.btnCrearJugador.setOnClickListener {
         //Intent para abrir la actividad CrearJugadores
-           val intent = Intent(this@MenuOpciones, CrearJugadores::class.java)
+           val intent = Intent(this@MenuOpciones, MenuPrincipal::class.java)
             startActivity(intent)
         }
 
-        binding.btnCrearPartido.setOnClickListener {
-            val intent = Intent(this@MenuOpciones, DetailActivity1::class.java)
+        binding.crearBalon.setOnClickListener {
+            val intent = Intent(this@MenuOpciones, JugarBalon::class.java)
           startActivity(intent)
           }
 
