@@ -3,7 +3,9 @@ package com.example.footballmatchmanager
 import Adaptadores.JugadoresAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -59,23 +61,35 @@ class CrearJugadores : AppCompatActivity() {
 
             // Verificar que todos los campos estén llenos
             if (nombre.isNotEmpty() && valoracion.isNotEmpty() && goles.isNotEmpty() && asistencias.isNotEmpty()) {
-                // Verificar que solo se haya seleccionado un checkbox
-                val checkBoxPorteroChecked = dialogBinding.checkBoxPortero.isChecked
-                val checkBoxJugadorChecked = dialogBinding.checkBoxJugador.isChecked
+                // Obtener la posición seleccionada del RadioGroup
+                val radioButtonPosicionId = dialogBinding.radioGroupPosicion.checkedRadioButtonId
 
-                if (checkBoxPorteroChecked xor checkBoxJugadorChecked) { // Solo uno de los dos puede estar seleccionado
+                // Verificar que la posición no sea nula
+                if (radioButtonPosicionId != View.NO_ID) {
+                    // Obtener el texto del RadioButton seleccionado
+                    val posicion = when (radioButtonPosicionId) {
+                        dialogBinding.radioButtonPortero.id -> "Portero"
+                        dialogBinding.radioButtonJugador.id -> "Jugador Normal"
+                        else -> null
+                    }
+
                     // Verificar que los campos numéricos contengan valores válidos
                     val valoracionDouble = valoracion.toDoubleOrNull()
                     val golesInt = goles.toIntOrNull()
                     val asistenciasInt = asistencias.toIntOrNull()
 
                     if (valoracionDouble != null && golesInt != null && asistenciasInt != null) {
-                        // Verificar qué tipo de jugador se seleccionó y crear la instancia correspondiente
-                        val posicion = if (checkBoxPorteroChecked) "Portero" else "Jugador Normal"
-
+                        // Crear la instancia correspondiente al tipo de jugador seleccionado
                         val nuevoJugador = when (posicion) {
                             "Portero" -> Portero(valoracionDouble, nombre, "Portero")
-                            "Jugador Normal" -> Jugadores(valoracionDouble, nombre, golesInt, asistenciasInt, "Jugador Normal")
+                            "Jugador Normal" -> Jugadores(
+                                valoracionDouble,
+                                nombre,
+                                golesInt,
+                                asistenciasInt,
+                                "Jugador Normal"
+                            )
+
                             else -> null
                         }
 
@@ -85,13 +99,18 @@ class CrearJugadores : AppCompatActivity() {
                             jugadoresAdapter.notifyDataSetChanged()
                         }
                     } else {
-                        Toast.makeText(this, "Ingresa valores numéricos válidos en los campos correspondientes", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Ingresa valores numéricos válidos en los campos correspondientes",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
-                    Toast.makeText(this, "Selecciona solo un tipo de jugador", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Selecciona un tipo de jugador", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Todos los campos deben estar rellenos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Todos los campos deben estar rellenos", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -99,7 +118,5 @@ class CrearJugadores : AppCompatActivity() {
 
         builder.create().show()
     }
-
-
-
 }
+

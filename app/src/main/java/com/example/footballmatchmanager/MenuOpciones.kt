@@ -42,8 +42,16 @@ class MenuOpciones : AppCompatActivity() {
                 }
                 R.id.menu_opciones -> {
                     // Manejar la acción del menú "Menu Opciones"
-                    // Agrega aquí el código para abrir el menú de opciones
+
                     Toast.makeText(this, "Opción de menú Opciones", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.jugarbalon -> {
+                    // Manejar la acción del menú "Menu Opciones"
+                    // Agrega aquí el código para abrir el menú de opciones
+                    val intent = Intent(this@MenuOpciones, JugarBalon::class.java)
+                    startActivity(intent)
+                    Toast.makeText(this, "Opción de jugar al balon", Toast.LENGTH_SHORT).show()
                     true
                 }
                 else -> false
@@ -52,9 +60,9 @@ class MenuOpciones : AppCompatActivity() {
 
 
         //Configurar el OnClickListener para el botón btnCrearJugador
-       binding.btnCrearJugador.setOnClickListener {
+       binding.crearJugador.setOnClickListener {
         //Intent para abrir la actividad CrearJugadores
-           val intent = Intent(this@MenuOpciones, MenuPrincipal::class.java)
+           val intent = Intent(this@MenuOpciones, CrearJugadores::class.java)
             startActivity(intent)
         }
 
@@ -62,7 +70,6 @@ class MenuOpciones : AppCompatActivity() {
             val intent = Intent(this@MenuOpciones, JugarBalon::class.java)
           startActivity(intent)
           }
-
 
         binding.txtCreadorApp.setOnClickListener {
             abrirEnlaceGitHub()
@@ -76,9 +83,7 @@ class MenuOpciones : AppCompatActivity() {
             mostrarVentanaConfirmacionCerrarSesion()
         }
 
-        binding.borrarusuario.setOnClickListener {
-            eliminarInformacionUsuario()
-        }
+
     }
 
     private fun mostrarVentanaConfirmacionCerrarSesion() {
@@ -103,52 +108,12 @@ class MenuOpciones : AppCompatActivity() {
             navigateToLogin()
         }
     }
-
-    private fun eliminarInformacionUsuario() {
-        val currentUser = auth.currentUser
-
-        if (currentUser != null) {
-            // Realizar la operación de eliminación de información del usuario en la base de datos
-            val updates = hashMapOf<String, Any>(
-                "nombre" to FieldValue.delete(),
-                "edad" to FieldValue.delete()
-            )
-
-            db.collection("users")
-                .document(currentUser.uid)
-                .update(updates)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Información eliminada", Toast.LENGTH_SHORT).show()
-                    // Después de eliminar la información, iniciar una nueva actividad
-                    navigateMenuPrincipal()
-                }
-                .addOnFailureListener { exception ->
-                    Toast.makeText(this, "$exception", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            // Manejar el caso en el que el usuario no esté autenticado
-            Toast.makeText(this, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
-        }
-
-    }
-
-
-
-
-
-
-
     private fun navigateToLogin() {
         val intent = Intent(this, Login::class.java)
         startActivity(intent)
         finish()
     }
 
-    private fun navigateMenuPrincipal() {
-        val intent = Intent(this, MenuPrincipal::class.java)
-        startActivity(intent)
-        finish()
-    }
 
     private fun abrirEnlaceGitHub() {
         val url = "https://github.com/Yosuah14"

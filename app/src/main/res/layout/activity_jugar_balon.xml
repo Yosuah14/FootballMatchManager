@@ -18,28 +18,15 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        android:id="@+id/textViewnivel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="nivel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/textViewPuntos"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="404dp"
         android:text="Puntos"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewnivel"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnGuardar"
@@ -65,9 +52,9 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
-        android:id="@+id/imageButtonBalon"
-        android:layout_width="188dp"
-        android:layout_height="184dp"
+        android:id="@+id/crearJugador"
+        android:layout_width="208dp"
+        android:layout_height="204dp"
         android:layout_marginTop="16dp"
         android:scaleType="fitCenter"
         android:src="@drawable/balonblancoynegro"

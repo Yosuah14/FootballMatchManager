@@ -8,4 +8,8 @@
         android:id="@+id/menu_opciones"
         android:title="Menu Opciones"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/jugarbalon"
+        android:title="Jugar al Balon"
+        app:showAsAction="never" />
 </menu>

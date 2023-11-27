@@ -38,7 +38,7 @@ class JugarBalon : AppCompatActivity() {
             ultimoToquesCargado = toquesRepository.getUltimoToquesByUsuario("nombre_de_usuario")
         }
 
-        binding.imageButtonBalon.setOnClickListener {
+        binding.crearJugador.setOnClickListener {
             cambiarImagenTemporal()
         }
         binding.btnBorrar.setOnClickListener {
@@ -53,27 +53,17 @@ class JugarBalon : AppCompatActivity() {
     }
 
     private fun cambiarImagenTemporal() {
-        binding.imageButtonBalon.setImageResource(R.drawable.balonnormal)
+        binding.crearJugador.setImageResource(R.drawable.balonnormal)
 
         // Incrementar los puntos solo cuando se hace clic en el imageButtonBalon
         toques.puntos++
         binding.textViewPuntos.text = "Puntos: ${toques.puntos}"
 
         // Verificar si se alcanzó una cantidad específica de puntos para cambiar el adjetivo
-        when (toques.puntos) {
-            10 -> cambiarAdjetivo("Matracas")
-            20 -> cambiarAdjetivo("Normal")
-            100 -> cambiarAdjetivo("SemiBueno")
-            200 -> cambiarAdjetivo("Bueno")
-            500 -> cambiarAdjetivo("Buenisimo")
-            1000 -> cambiarAdjetivo("Dios")
-            1500 -> cambiarAdjetivo("Tifon")
-            2000 -> cambiarAdjetivo("Mastodonte")
-            200000 -> cambiarAdjetivo("Bufalo")
-        }
+
 
         handler.postDelayed({
-            binding.imageButtonBalon.setImageResource(R.drawable.balonblancoynegro)
+            binding.crearJugador.setImageResource(R.drawable.balonblancoynegro)
         }, 1000)
     }
 

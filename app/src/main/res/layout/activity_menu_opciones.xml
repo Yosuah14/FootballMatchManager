@@ -4,27 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#045360"
     tools:context=".MenuOpciones">
 
 
     <ImageButton
-        android:id="@+id/imageButtonBalon"
-        android:layout_width="619dp"
-        android:layout_height="248dp"
-        android:layout_marginBottom="424dp"
-        android:onClick="onImageButtonBalonClick"
-        android:scaleType="fitCenter"
-        android:src="@drawable/elbicho"
+        android:id="@+id/crearBalon"
+        android:layout_width="297dp"
+        android:layout_height="133dp"
+        android:background="#045360"
+        android:src="@drawable/baseline_sports_soccer_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.596"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.598" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarmenuprincipal"
         android:layout_width="408dp"
         android:layout_height="76dp"
-        android:background="#70F129"
+        android:background="#19BFB9"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,15 +52,16 @@
         android:id="@+id/txtCreadorApp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
         android:autoLink="web"
         android:clickable="true"
         android:linksClickable="true"
         android:text="Creador de la App"
-        android:textColor="@color/azul"
+        android:textColor="#19BFB9"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -67,6 +69,8 @@
         android:layout_width="115dp"
         android:layout_height="52dp"
         android:text="Cerrar Sesion"
+        android:textColorHighlight="#19BFB9"
+        android:textColorLink="#19BFB9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.054"
@@ -76,27 +80,30 @@
 
     <TextView
         android:id="@+id/textoMenuopciones"
-        android:layout_width="293dp"
-        android:layout_height="34dp"
+        android:layout_width="208dp"
+        android:layout_height="40dp"
         android:text="Menu de opciones"
+        android:textColor="#19BFB9"
+        android:textColorHint="#19BFB9"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.576"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.14" />
+        app:layout_constraintVertical_bias="0.146" />
 
     <ImageButton
-        android:id="@+id/crearBalon"
-        android:layout_width="300dp"
-        android:layout_height="188dp"
+        android:id="@+id/crearJugador"
+        android:layout_width="297dp"
+        android:layout_height="133dp"
+        android:background="#045360"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.596"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.635"
-        app:srcCompat="@drawable/ranking" />
+        app:layout_constraintVertical_bias="0.304"
+        app:srcCompat="@drawable/baseline_person_add_alt_1_25" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
