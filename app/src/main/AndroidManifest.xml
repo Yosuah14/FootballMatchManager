@@ -19,7 +19,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".CrearJugadores"
+            android:name="com.example.footballmatchmanager.CrearJugadores"
             android:exported="false" />
         <activity
             android:name=".MenuOpciones"

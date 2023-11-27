@@ -1,11 +1,11 @@
 package Adaptadores
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+
 import com.example.footballmatchmanager.JugadorBase
 import com.example.footballmatchmanager.Jugadores
 import com.example.footballmatchmanager.Portero

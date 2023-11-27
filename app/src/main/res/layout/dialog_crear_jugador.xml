@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#045360"
     android:padding="16dp">
 
     <!-- Campo de Nombre -->
@@ -11,31 +12,34 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Nombre"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textColorHint="#19BFB9"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Campo de Valoración -->
     <EditText
         android:id="@+id/editTextValoracion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:hint="Valoración"
-        app:layout_constraintTop_toBottomOf="@id/editTextNombre"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColorHint="#19BFB9"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextNombre" />
 
     <!-- Campo de Goles -->
     <EditText
         android:id="@+id/editTextGoles"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:hint="Goles"
-        app:layout_constraintTop_toBottomOf="@id/editTextValoracion"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColorHint="#19BFB9"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextValoracion" />
 
     <!-- Campo de Asistencias -->
 
@@ -47,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:hint="Asistencias"
+        android:textColorHint="#19BFB9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,13 +71,15 @@
             android:id="@+id/radioButtonPortero"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Portero" />
+            android:text="Portero"
+            android:textColor="#19BFB9" />
 
         <RadioButton
             android:id="@+id/radioButtonJugador"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jugador" />
+            android:text="Jugador"
+            android:textColor="#19BFB9" />
     </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 package com.example.footballmatchmanager
 
-// Toques.kt
+// Clase toques que se almacenara en una base de datos
 
 data class Toques(
     val usuario: String,

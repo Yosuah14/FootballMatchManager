@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_crear_jugador"
+        android:icon="@drawable/baseline_person_add_alt_1_25"
         android:title="Crear Jugador"
         app:showAsAction="never" />
     <item

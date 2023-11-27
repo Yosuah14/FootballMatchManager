@@ -1,11 +1,13 @@
+
 package com.example.footballmatchmanager
 
-import DbHelper
+import DbHelper // Asegúrate de que la importación sea correcta y que DbHelper esté ubicado en el paquete adecuado.
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import com.example.footballmatchmanager.databinding.ActivityJugarBalonBinding
+
 class JugarBalon : AppCompatActivity() {
     private lateinit var binding: ActivityJugarBalonBinding
     private lateinit var toques: Toques
@@ -19,12 +21,14 @@ class JugarBalon : AppCompatActivity() {
         binding = ActivityJugarBalonBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Inicialización de instancias y configuración de la interfaz
         toques = Toques(usuario = "nombre_de_usuario")
         handler = Handler()
         dbHelper = DbHelper(this)
         toquesRepository = ToquesRepository(this, dbHelper)
         cargarUltimoDatoDesdeBD()
 
+        // Configuración de botones y toolbar
         binding.btnGuardar.setOnClickListener {
             // Ejemplo de cómo insertar o actualizar datos en la base de datos
             toquesRepository.insertToques(toques)
@@ -41,6 +45,7 @@ class JugarBalon : AppCompatActivity() {
         binding.crearJugador.setOnClickListener {
             cambiarImagenTemporal()
         }
+
         binding.btnBorrar.setOnClickListener {
             borrarDatosUsuario()
         }
@@ -52,21 +57,22 @@ class JugarBalon : AppCompatActivity() {
         }
     }
 
+    // Método para cambiar la imagen temporal y actualizar puntos
     private fun cambiarImagenTemporal() {
+        // Cambiar la imagen a blanco y negro temporalmente
         binding.crearJugador.setImageResource(R.drawable.balonnormal)
 
         // Incrementar los puntos solo cuando se hace clic en el imageButtonBalon
         toques.puntos++
         binding.textViewPuntos.text = "Puntos: ${toques.puntos}"
 
-        // Verificar si se alcanzó una cantidad específica de puntos para cambiar el adjetivo
-
-
+        // Restaurar la imagen a la original después de un breve tiempo
         handler.postDelayed({
             binding.crearJugador.setImageResource(R.drawable.balonblancoynegro)
         }, 1000)
     }
 
+    // Método para cargar el último dato desde la base de datos
     private fun cargarUltimoDatoDesdeBD() {
         ultimoToquesCargado = toquesRepository.getUltimoToquesByUsuario("nombre_de_usuario")
 
@@ -78,14 +84,16 @@ class JugarBalon : AppCompatActivity() {
             Log.d("Toques", "No se encontraron datos para el usuario 'nombre_de_usuario'")
         }
     }
+
+    // Método para cambiar el adjetivo y guardarlo en la base de datos
     private fun cambiarAdjetivo(nuevoAdjetivo: String) {
-        // Cambiar el adjetivo y guardarlo en la base de datos
         toques.adjetivo = nuevoAdjetivo
         toquesRepository.insertToques(toques)
         Log.d("Toques", "Nuevo Adjetivo: $nuevoAdjetivo")
     }
+
+    // Método para borrar todos los datos del usuario
     private fun borrarDatosUsuario() {
-        // Llamada al método para borrar todos los datos del usuario
         toquesRepository.deleteToquesByUsuario("nombre_de_usuario")
 
         // Restablecer los puntos y el adjetivo en la vista
@@ -97,4 +105,3 @@ class JugarBalon : AppCompatActivity() {
         // Puedes mostrar un Toast o un mensaje en la interfaz para informar al usuario si es necesario.
     }
 }
-

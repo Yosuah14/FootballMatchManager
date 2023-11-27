@@ -5,6 +5,6 @@
     <string name="registrasenormal">Registrarse</string>
     <string name="iniciarsesion">Iniciar Sesión</string>
     <string name="iniciarsesioncongoogle">Iniciar Sesion con Google</string>
-    <string name="EncabezadoLogin">Iniciar Sesion en la aplicacion</string>
+    <string name="EncabezadoLogin">FootballMatchManager</string>
     <string name="google_web_client_id" translatable="false">359201656465-8ahb3sc8il2l8g1pn778bt9n5ln4pnmp.apps.googleusercontent.com</string>
 </resources>

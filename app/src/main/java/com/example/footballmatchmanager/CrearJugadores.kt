@@ -2,29 +2,24 @@ package com.example.footballmatchmanager
 
 import Adaptadores.JugadoresAdapter
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
-import android.widget.RadioGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.footballmatchmanager.databinding.ActivityCrearJugadoresBinding
-import com.example.footballmatchmanager.JugadorBase
-import com.example.footballmatchmanager.Portero
-import com.example.footballmatchmanager.Jugadores
 import com.example.footballmatchmanager.databinding.DialogCrearJugadorBinding
 
 class CrearJugadores : AppCompatActivity() {
-    private lateinit var binding: ActivityCrearJugadoresBinding
+    private val binding by lazy {
+        ActivityCrearJugadoresBinding.inflate(layoutInflater)
+    }
+
     private val jugadoresList: MutableList<JugadorBase> = mutableListOf()
     private lateinit var jugadoresAdapter: JugadoresAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCrearJugadoresBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Configurar el RecyclerView
@@ -89,7 +84,6 @@ class CrearJugadores : AppCompatActivity() {
                                 asistenciasInt,
                                 "Jugador Normal"
                             )
-
                             else -> null
                         }
 
@@ -99,18 +93,13 @@ class CrearJugadores : AppCompatActivity() {
                             jugadoresAdapter.notifyDataSetChanged()
                         }
                     } else {
-                        Toast.makeText(
-                            this,
-                            "Ingresa valores numéricos válidos en los campos correspondientes",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        mostrarMensajeError("Ingresa valores numéricos válidos en los campos correspondientes")
                     }
                 } else {
-                    Toast.makeText(this, "Selecciona un tipo de jugador", Toast.LENGTH_SHORT).show()
+                    mostrarMensajeError("Selecciona un tipo de jugador")
                 }
             } else {
-                Toast.makeText(this, "Todos los campos deben estar rellenos", Toast.LENGTH_SHORT)
-                    .show()
+                mostrarMensajeError("Todos los campos deben estar rellenos")
             }
         }
 
@@ -118,5 +107,10 @@ class CrearJugadores : AppCompatActivity() {
 
         builder.create().show()
     }
+
+    private fun mostrarMensajeError(mensaje: String) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+    }
 }
+
 

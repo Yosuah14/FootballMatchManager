@@ -27,13 +27,17 @@ class MenuPrincipal : AppCompatActivity() {
         binding = ActivityMenuPrincipalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Inicializar la instancia de FirebaseAuth
         firebaseauth = FirebaseAuth.getInstance()
 
+        // Mostrar información del usuario en la interfaz
         binding.txtEmail.text = intent.getStringExtra("email").toString()
         binding.txtProveedor.text = intent.getStringExtra("provider").toString()
         binding.txtNombre.text = intent.getStringExtra("nombre").toString()
 
+        // Configurar el botón "Cerrar Sesión"
         binding.btCerrarSesion.setOnClickListener {
+            // Eliminar la cuenta del usuario actual y cerrar sesión
             firebaseauth.currentUser?.delete()?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     firebaseauth.signOut()
@@ -42,22 +46,28 @@ class MenuPrincipal : AppCompatActivity() {
                     Log.e(TAG, "Hubo algún error al cerrar la sesión")
                 }
             }
+            // Cerrar sesión también utilizando el proveedor de autenticación de Google
             firebaseauth.signOut()
             val signInClient = Identity.getSignInClient(this)
             signInClient.signOut()
             Log.e(TAG, "Cerrada sesión completamente")
-            finish()
+            finish() // Finalizar la actividad actual
         }
 
+        // Configurar el botón "Volver"
         binding.btVolver.setOnClickListener {
+            // Cerrar sesión y finalizar la actividad
             firebaseauth.signOut()
             finish()
         }
+
+        // Configurar el botón "Guardar"
         binding.btGuardar.setOnClickListener {
             val nombre = binding.edNombre.text.toString()
             val edad = binding.edEdad.text.toString()
 
             if (nombre.isNotEmpty() && edad.isNotEmpty()) {
+                // Crear un mapa con la información del usuario
                 val usuario = hashMapOf(
                     "nombre" to nombre,
                     "edad" to edad,
@@ -65,6 +75,7 @@ class MenuPrincipal : AppCompatActivity() {
                     "timestamp" to FieldValue.serverTimestamp()
                 )
 
+                // Guardar la información del usuario en Firestore
                 db.collection("users")
                     .document(binding.txtEmail.text.toString())
                     .set(usuario)
@@ -76,15 +87,15 @@ class MenuPrincipal : AppCompatActivity() {
                     }
                 registrado = true // Marcar como registrado al guardar datos
 
+                // Ir a la actividad de Menú de Opciones
                 irMenuOpciones()
             } else {
                 Toast.makeText(this, "Por favor, ingrese nombre y edad", Toast.LENGTH_SHORT).show()
             }
         }
-
-
     }
 
+    // Función para navegar a la actividad de Menú de Opciones
     private fun irMenuOpciones() {
         val menuOpcionesIntent = Intent(this, MenuOpciones::class.java)
         startActivity(menuOpcionesIntent)

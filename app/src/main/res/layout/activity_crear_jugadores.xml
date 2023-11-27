@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CrearJugadores">
+    android:background="#045360"
+    tools:context="com.example.footballmatchmanager.CrearJugadores">
 
     <!-- Toolbar -->
     <!-- Toolbar con la flecha de retroceso -->
@@ -12,29 +13,33 @@
         android:id="@+id/toolbarCrearJugadores"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="#19BFB9"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:navigationIcon="?android:attr/homeAsUpIndicator"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?android:attr/homeAsUpIndicator"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <!-- Botón "Crear Jugador" -->
-    <Button
-        android:id="@+id/btnCrearJugador"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Crear Jugador"
-        app:layout_constraintTop_toBottomOf="@id/toolbarCrearJugadores"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
 
     <!-- ScrollView para la lista de jugadores -->
+
+    <Button
+        android:id="@+id/btnCrearJugador"
+        android:layout_width="243dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="4dp"
+        android:text="Crear Jugador"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarCrearJugadores" />
+
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#045360"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -46,7 +51,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewJugadores"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="#045360" />
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

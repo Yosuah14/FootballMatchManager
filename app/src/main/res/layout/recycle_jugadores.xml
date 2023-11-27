@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#19BFB9"
     android:padding="16dp">
 
     <!-- ImageView para la imagen -->
@@ -12,9 +13,9 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- TextView para el primer texto -->
 
@@ -28,6 +29,7 @@
         android:layout_height="31dp"
         android:layout_marginTop="28dp"
         android:text="Nombre"
+        android:textColor="#000909"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@id/imageViewJugador"
         app:layout_constraintHorizontal_bias="1.0"
@@ -40,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Posicion"
+        android:textColor="#000202"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@id/imageViewJugador"
         app:layout_constraintHorizontal_bias="0.0"

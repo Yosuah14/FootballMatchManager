@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#045360"
     tools:context=".Login">
 
     <Button
@@ -38,6 +39,7 @@
         android:ems="10"
         android:hint="@string/contrasenaemail"
         android:inputType="textPassword"
+        android:textColorHint="#19BFB9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.405"
@@ -64,6 +66,7 @@
         android:ems="10"
         android:hint="@string/cuadroemail"
         android:inputType="textPersonName"
+        android:textColorHint="#19BFB9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.405"
@@ -73,16 +76,17 @@
 
     <TextView
         android:id="@+id/textviewEncabezado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="362dp"
+        android:layout_height="68dp"
         android:text="@string/EncabezadoLogin"
+        android:textColor="#19BFB9"
+        android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.074" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
