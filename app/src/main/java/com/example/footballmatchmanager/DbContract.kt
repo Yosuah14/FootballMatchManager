@@ -13,6 +13,4 @@ import android.provider.BaseColumns
                 const val COLUMN_NAME_ADJETIVO = "adjetivo"
             }
         }
-
-        // Aquí puedes agregar otras tablas si las tienes
     }

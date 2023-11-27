@@ -5,11 +5,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 
-
 class ToquesRepository(context: Context, dbHelper: DbHelper) {
 
-    private val dbHelper = DbHelper(context)
+    // Se instancia el dbHelper recibido en el constructor
+    private val dbHelper = dbHelper
 
+    // Método para insertar datos en la tabla "toques"
     fun insertToques(toques: Toques) {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
@@ -20,6 +21,8 @@ class ToquesRepository(context: Context, dbHelper: DbHelper) {
         db.insert(DbHelper.TABLE_TOQUES, null, values)
         db.close()
     }
+
+    // Método para obtener el último toque registrado por un usuario
     fun getUltimoToquesByUsuario(usuario: String): Toques? {
         val db = dbHelper.readableDatabase
         var toques: Toques? = null
@@ -47,6 +50,7 @@ class ToquesRepository(context: Context, dbHelper: DbHelper) {
         return toques
     }
 
+    // Método para obtener todos los toques de un usuario
     fun getToquesByUsuario(usuario: String): List<Toques> {
         val toquesList = mutableListOf<Toques>()
         val db = dbHelper.readableDatabase
@@ -84,12 +88,15 @@ class ToquesRepository(context: Context, dbHelper: DbHelper) {
 
         return toquesList
     }
+
+    // Método para eliminar todos los toques de un usuario
     fun deleteToquesByUsuario(usuario: String) {
         val db = dbHelper.writableDatabase
         db.delete(DbHelper.TABLE_TOQUES, "${DbHelper.COLUMN_USUARIO} = ?", arrayOf(usuario))
         db.close()
     }
 
-    // Agrega métodos adicionales según sea necesario, como actualizar o eliminar registros
+
 }
+
 
