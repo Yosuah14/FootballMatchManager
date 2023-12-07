@@ -157,9 +157,24 @@ class CrearJugadores : AppCompatActivity() {
                         Log.d("Firebase", "Obtención de jugadores exitosa")
                         for (document in task.result!!) {
                             try {
-                                // Intentamos obtener los datos del jugador del documento
-                                val jugador = document.toObject(JugadorBase::class.java)
-                                jugadoresList.add(jugador)
+                                // Obtener los datos del jugador del documento
+                                val nombre = document.getString("nombre")
+                                val valoracion = document.getDouble("valoracion")
+                                val posicion = document.getString("posicion")
+                                val goles = document.getLong("goles")?.toInt()
+                                val asistencias = document.getLong("asistencias")?.toInt()
+
+                                // Determinar el tipo de jugador y crear la instancia adecuada
+                                val jugador: JugadorBase? = when (posicion) {
+                                    "Portero" -> Portero(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
+                                    "Jugador Normal" -> Jugadores(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
+                                    else -> null
+                                }
+
+                                // Agregar el jugador a la lista si se creó correctamente
+                                jugador?.let {
+                                    jugadoresList.add(it)
+                                }
                             } catch (e: Exception) {
                                 Log.e("Firebase", "Error al convertir documento a JugadorBase", e)
                             }
