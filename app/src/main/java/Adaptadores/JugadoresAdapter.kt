@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.footballmatchmanager.JugadorBase
 import com.example.footballmatchmanager.Jugadores
 import com.example.footballmatchmanager.Portero
@@ -26,13 +25,6 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         holder.bind(jugadoresList[position])
     }
 
-    fun actualizarJugadores(nuevaLista: List<JugadorBase>) {
-        // Limpiar la lista actual y agregar todos los elementos de la nueva lista
-        jugadoresList.clear()
-        jugadoresList.addAll(nuevaLista)
-        notifyDataSetChanged()
-    }
-
     override fun getItemCount(): Int {
         return jugadoresList.size
     }
@@ -41,7 +33,6 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            // Configurar el clic largo en el botón
             binding.btnAccion.setOnLongClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     mostrarDetallesJugador(jugadoresList[adapterPosition])
@@ -52,15 +43,21 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                true // Indica que se ha manejado el evento
+                true
             }
         }
 
         fun bind(jugador: JugadorBase) {
-            if (jugador is Portero) {
-                binding.imageJugador.setImageResource(R.drawable.karius)
-            } else {
-                binding.imageJugador.setImageResource(R.drawable.pedroleon)
+            // Configurar la imagen según el tipo de jugador
+            when (jugador) {
+                is Jugadores -> {
+                    binding.imageJugador.setImageResource(R.drawable.pedroleon)
+
+                }
+                is Portero -> {
+                    binding.imageJugador.setImageResource(R.drawable.karius)
+
+                }
             }
 
             binding.textViewNombre.text = jugador.nombre
@@ -68,41 +65,43 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         }
 
         private fun mostrarDetallesJugador(jugador: JugadorBase) {
-            // Crear el diálogo con los detalles del jugador
             val inflater = LayoutInflater.from(binding.root.context)
             val dialogBinding = DatosjugadorBinding.inflate(inflater)
             dialogBinding.tvNombre.text = "Nombre: ${jugador.nombre}"
             dialogBinding.tvTipo.text = "Tipo: ${jugador.posicion}"
             dialogBinding.tvValoracion.text = "Valoración: ${jugador.valoracion}"
-            dialogBinding.tvGoles.text =
-                "Goles: ${if (jugador is Jugadores) jugador.goles else "-"}"
-            dialogBinding.tvAsistencias.text =
-                "Asistencias: ${if (jugador is Jugadores) jugador.asistencias else "-"}"
 
-            // Configurar el diálogo
+            when (jugador) {
+                is Jugadores -> {
+                    dialogBinding.tvGoles.text = "Goles: ${jugador.goles}"
+                    dialogBinding.tvAsistencias.text = "Asistencias: ${jugador.asistencias}"
+                }
+                is Portero -> {
+                    dialogBinding.tvGoles.text =  "Goles: ${jugador.goles}"
+                    dialogBinding.tvAsistencias.text = "Asistencias: ${jugador.asistencias}"
+                }
+            }
+
             val dialogBuilder = AlertDialog.Builder(binding.root.context)
                 .setView(dialogBinding.root)
                 .setTitle("Detalles del Jugador")
 
-            // Configurar el botón Cerrar
             val btnCerrar = dialogBinding.btnCerrar
             btnCerrar.setOnClickListener {
-                // Cerrar el diálogo al hacer clic en el botón
                 dialogBuilder.create().dismiss()
             }
 
-            // Mostrar el diálogo
             val dialog = dialogBuilder.create()
             dialog.show()
 
-            // Añadir el mensaje si no se mantiene pulsado el botón Cerrar
             btnCerrar.setOnClickListener {
                 dialog.dismiss()
-                true // Indica que se ha manejado el evento
+                true
             }
         }
     }
 }
+
 
 
 

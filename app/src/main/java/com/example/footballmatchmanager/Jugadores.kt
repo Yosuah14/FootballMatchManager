@@ -3,12 +3,9 @@ package com.example.footballmatchmanager
 
 
 class Jugadores(
-    //Clase hija jugadores normales
     valoracion: Double,
     nombre: String,
-    val goles: Int,
-    val asistencias: Int,
-    posicion: String
-) : JugadorBase(valoracion, nombre, posicion) {
-
-}
+    posicion: String,
+    goles: Int = 0,
+    asistencias: Int = 0
+) : JugadorBase(valoracion, nombre, posicion, goles, asistencias)
