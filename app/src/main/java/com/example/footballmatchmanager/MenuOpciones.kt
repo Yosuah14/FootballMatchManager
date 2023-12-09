@@ -85,6 +85,7 @@ class MenuOpciones : AppCompatActivity() {
         binding.cerrarsesionmenuopciones.setOnClickListener {
             mostrarVentanaConfirmacionCerrarSesion()
         }
+
     }
 
     private fun mostrarVentanaConfirmacionCerrarSesion() {
