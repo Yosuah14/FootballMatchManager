@@ -11,13 +11,16 @@ import com.example.footballmatchmanager.Portero
 import com.example.footballmatchmanager.R
 import com.example.footballmatchmanager.databinding.DatosjugadorBinding
 import com.example.footballmatchmanager.databinding.RecycleJugadoresBinding
+import com.example.footballmatchmanager.databinding.RecycleSeleccionarBinding
 
-class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
-    RecyclerView.Adapter<JugadoresAdapter.JugadorViewHolder>() {
+class JugadoresAdapter2(private val jugadoresList: MutableList<JugadorBase>) :
+    RecyclerView.Adapter<JugadoresAdapter2.JugadorViewHolder>() {
+
+    private val selectedJugadores: MutableList<JugadorBase> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JugadorViewHolder {
         val binding =
-            RecycleJugadoresBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            RecycleSeleccionarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return JugadorViewHolder(binding)
     }
 
@@ -25,24 +28,17 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         holder.bind(jugadoresList[position])
     }
 
-    fun actualizarJugadores(nuevaLista: List<JugadorBase>) {
-        // Limpiar la lista actual y agregar todos los elementos de la nueva lista
-        jugadoresList.clear()
-        jugadoresList.addAll(nuevaLista)
-        notifyDataSetChanged()
-    }
-
     override fun getItemCount(): Int {
         return jugadoresList.size
     }
 
-    inner class JugadorViewHolder(private val binding: RecycleJugadoresBinding) :
+    inner class JugadorViewHolder(private val binding: RecycleSeleccionarBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            // Configurar el clic largo en el botón
             binding.btnAccion.setOnLongClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
+                    toggleSelection(jugadoresList[adapterPosition])
                     mostrarDetallesJugador(jugadoresList[adapterPosition])
                 } else {
                     Toast.makeText(
@@ -51,19 +47,42 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                true // Indica que se ha manejado el evento
+                true
             }
         }
 
         fun bind(jugador: JugadorBase) {
-            if (jugador is Portero) {
-                binding.imageJugador.setImageResource(R.drawable.karius)
-            } else {
-                binding.imageJugador.setImageResource(R.drawable.pedroleon)
+            // Configurar la imagen según el tipo de jugador
+            when (jugador) {
+                is Jugadores -> {
+                    binding.imageJugador.setImageResource(R.drawable.pedroleon)
+                }
+                is Portero -> {
+                    binding.imageJugador.setImageResource(R.drawable.karius)
+                }
             }
 
             binding.textViewNombre.text = jugador.nombre
             binding.textViewDetalle.text = "Detalles: ${jugador.posicion}"
+
+            // Configurar la apariencia de selección
+            if (selectedJugadores.contains(jugador)) {
+                // Aquí puedes personalizar la apariencia de un jugador seleccionado si es necesario
+                // Por ejemplo, cambiar el color de fondo del elemento
+                binding.root.setBackgroundResource(R.drawable.karius)
+            } else {
+                binding.root.setBackgroundResource(0) // Resetear el fondo si no está seleccionado
+            }
+        }
+
+        private fun toggleSelection(jugador: JugadorBase) {
+            // Toggle de la selección del jugador
+            if (selectedJugadores.contains(jugador)) {
+                selectedJugadores.remove(jugador)
+            } else {
+                selectedJugadores.add(jugador)
+            }
+            notifyDataSetChanged()
         }
 
         private fun mostrarDetallesJugador(jugador: JugadorBase) {
@@ -95,20 +114,12 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
 
             val dialog = dialogBuilder.create()
             dialog.show()
-
-            btnCerrar.setOnClickListener {
-                dialog.dismiss()
-                true
-            }
         }
     }
+
+    // Método para obtener la lista de jugadores seleccionados
+    fun getSelectedJugadores(): List<JugadorBase> {
+        return selectedJugadores.toList()
+    }
 }
-
-
-
-
-
-
-
-
 

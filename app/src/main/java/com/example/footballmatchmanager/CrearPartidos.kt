@@ -1,6 +1,6 @@
 package com.example.footballmatchmanager
 
-import Adaptadores.JugadoresAdapter
+import Adaptadores.JugadoresAdapter2
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -39,7 +39,7 @@ class CrearPartidos : AppCompatActivity() {
 
     private fun mostrarDialogoCrearPartido() {
         val builder = AlertDialog.Builder(this)
-        val dialogBinding = DialogCrearPartidosBinding(layoutInflater)
+        val dialogBinding = DialogCrearPartidosBinding.inflate(layoutInflater)
         builder.setView(dialogBinding.root)
 
         builder.setPositiveButton("Crear") { _, _ ->
@@ -63,11 +63,12 @@ class CrearPartidos : AppCompatActivity() {
                     if (fechaSeleccionada != null && fechaSeleccionada >= fechaActual) {
                         // Validar que la hora final sea una hora después de la hora inicial
                         val horaFin = sumarUnaHora(horaInicioSeleccionada)
+                        val horaFin2=horaFin.toString()
                         if (horaFin != null) {
                             val nuevoPartido = Partido(
                                 fecha = fecha,
                                 horaInicio = horaInicio,
-                                horaFin = horaFin,
+                                horaFin = horaFin2,
                                 jugadores = jugadoresSeleccionados.toList() // Lista de jugadores seleccionados
                                 // Puedes agregar más campos del partido según tus necesidades
                             )
@@ -107,14 +108,14 @@ class CrearPartidos : AppCompatActivity() {
         cargarDatosFirebaseEnDialog(jugadoresAdapter)
     }
 
-    private fun configurarDialogoAgregarJugadores(): JugadoresAdapter {
+    private fun configurarDialogoAgregarJugadores(): JugadoresAdapter2 {
         // Configurar el diálogo para agregar jugadores
         val inflater = LayoutInflater.from(this)
         val dialogBinding = DialogagregarjugadoresBinding.inflate(inflater)
         val dialog = AlertDialog.Builder(this).setView(dialogBinding.root).create()
 
-        // Configurar el RecyclerView en el diálogo
-        val jugadoresAdapter = JugadoresAdapter(jugadoresList)
+        // Configurar el RecyclerView en el diálogo con el JugadoresAdapter2
+        val jugadoresAdapter = JugadoresAdapter2(jugadoresList)
         dialogBinding.recyclerViewJugadoresDialog.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = jugadoresAdapter
@@ -123,7 +124,7 @@ class CrearPartidos : AppCompatActivity() {
         // Configurar el botón "Seleccionar"
         dialogBinding.btnAgregarJugadores.setOnClickListener {
             // Obtener la lista de jugadores seleccionados
-            jugadoresSeleccionados = jugadoresAdapter.getSelectedJugadores()
+            jugadoresSeleccionados = jugadoresAdapter.getSelectedJugadores().toMutableList()
 
             // Cerrar el diálogo después de realizar las acciones necesarias
             dialog.dismiss()
@@ -132,52 +133,44 @@ class CrearPartidos : AppCompatActivity() {
         // Mostrar el diálogo
         dialog.show()
 
-        // Configurar la lógica de visibilidad del botón "Seleccionar" en el adaptador
-        jugadoresAdapter.isDialogOpen = true
-
         return jugadoresAdapter
     }
 
-    private fun cargarDatosFirebaseEnDialog(adapter: JugadoresAdapter) {
+    private fun cargarDatosFirebaseEnDialog(adapter: JugadoresAdapter2) {
         val currentUserEmail = firebaseAuth.currentUser?.email
 
         if (currentUserEmail != null) {
             val jugadoresCollection = db.collection("usuarios").document(currentUserEmail).collection("jugadores")
 
-            jugadoresCollection.get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        for (document in task.result!!) {
-                            try {
-                                // Obtener los datos del jugador del documento
-                                val nombre = document.getString("nombre")
-                                val valoracion = document.getDouble("valoracion")
-                                val posicion = document.getString("posicion")
-                                val goles = document.getLong("goles")?.toInt()
-                                val asistencias = document.getLong("asistencias")?.toInt()
+            jugadoresCollection.get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result!!) {
+                        try {
+                            val nombre = document.getString("nombre")
+                            val valoracion = document.getDouble("valoracion")
+                            val posicion = document.getString("posicion")
+                            val goles = document.getLong("goles")?.toInt()
+                            val asistencias = document.getLong("asistencias")?.toInt()
 
-                                // Crear la instancia del jugador
-                                val jugador: JugadorBase? = when (posicion) {
-                                    "Portero" -> Portero(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
-                                    "Jugador Normal" -> Jugadores(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
-                                    else -> null
-                                }
-
-                                // Agregar el jugador a la lista si se creó correctamente
-                                jugador?.let {
-                                    jugadoresList.add(it)
-                                }
-                            } catch (e: Exception) {
-                                Log.e("Firebase", "Error al convertir documento a JugadorBase", e)
+                            val jugador: JugadorBase? = when (posicion) {
+                                "Portero" -> Portero(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
+                                "Jugador Normal" -> Jugadores(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
+                                else -> null
                             }
+
+                            jugador?.let {
+                                jugadoresList.add(it)
+                            }
+                        } catch (e: Exception) {
+                            Log.e("Firebase", "Error al convertir documento a JugadorBase", e)
                         }
-                        // Notificar al adaptador sobre el cambio en los datos
-                        adapter.notifyDataSetChanged()
-                    } else {
-                        Log.e("Firebase", "Error al obtener los jugadores", task.exception)
-                        Toast.makeText(this, "Error al obtener los jugadores", Toast.LENGTH_SHORT).show()
                     }
+                    adapter.notifyDataSetChanged()
+                } else {
+                    Log.e("Firebase", "Error al obtener los jugadores", task.exception)
+                    Toast.makeText(this, "Error al obtener los jugadores", Toast.LENGTH_SHORT).show()
                 }
+            }
         }
     }
 
@@ -197,5 +190,6 @@ class CrearPartidos : AppCompatActivity() {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
     }
 }
+
 
 
