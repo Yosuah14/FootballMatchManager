@@ -64,6 +64,10 @@ class MenuOpciones : AppCompatActivity() {
             val intent = Intent(this@MenuOpciones, CrearJugadores::class.java)
             startActivity(intent)
         }
+        binding.btnCrearPartidos.setOnClickListener{
+            val intent = Intent(this@MenuOpciones, CrearPartidos::class.java)
+            startActivity(intent)
+        }
 
         // Configurar el OnClickListener para el botón crearBalon
         binding.crearBalon.setOnClickListener {
