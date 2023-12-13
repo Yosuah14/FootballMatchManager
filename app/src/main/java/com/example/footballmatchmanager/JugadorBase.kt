@@ -6,5 +6,5 @@ open class JugadorBase(
     var posicion: String = "",
     var goles: Int? = 0, // Cambiado a Int anulable
     var asistencias: Int? = 0 ,// Cambiado a Int anulable,
-    var isAddedTemporarily: Boolean = false
+
 )

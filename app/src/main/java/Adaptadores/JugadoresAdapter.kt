@@ -25,13 +25,6 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         holder.bind(jugadoresList[position])
     }
 
-    fun actualizarJugadores(nuevaLista: List<JugadorBase>) {
-        // Limpiar la lista actual y agregar todos los elementos de la nueva lista
-        jugadoresList.clear()
-        jugadoresList.addAll(nuevaLista)
-        notifyDataSetChanged()
-    }
-
     override fun getItemCount(): Int {
         return jugadoresList.size
     }
