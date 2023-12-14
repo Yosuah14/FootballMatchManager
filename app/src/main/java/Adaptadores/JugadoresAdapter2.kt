@@ -1,85 +1,147 @@
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.footballmatchmanager.JugadorBase
 import com.example.footballmatchmanager.Jugadores
 import com.example.footballmatchmanager.Portero
 import com.example.footballmatchmanager.R
 import com.example.footballmatchmanager.databinding.RecycleSeleccionarBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
-class JugadoresAdapter2(private val jugadoresList: MutableList<JugadorBase>) :
-    RecyclerView.Adapter<JugadoresAdapter2.JugadorViewHolder>() {
+class JugadoresAdapter2(
+    private val jugadoresList: MutableList<JugadorBase>,
+    var nuevaLista: MutableList<JugadorBase> = mutableListOf(),
+    private val onJugadorSeleccionadoListener: OnJugadorSeleccionadoListener? = null
+) : RecyclerView.Adapter<JugadoresAdapter2.JugadorViewHolder>() {
 
-    private val handler = Handler(Looper.getMainLooper())
+    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
-    // Lista para almacenar jugadores seleccionados
-    private val jugadoresSeleccionados: MutableList<JugadorBase> = mutableListOf()
+    interface OnJugadorSeleccionadoListener {
+        fun onJugadorSeleccionado(jugador: JugadorBase?)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JugadorViewHolder {
-        val binding =
-            RecycleSeleccionarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RecycleSeleccionarBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return JugadorViewHolder(binding)
     }
 
+    override fun getItemCount(): Int = jugadoresList.size
+
     override fun onBindViewHolder(holder: JugadorViewHolder, position: Int) {
-        holder.bind(jugadoresList[position])
+        val jugador = jugadoresList[position]
+        holder.bind(jugador)
     }
 
-    override fun getItemCount(): Int {
-        return jugadoresList.size
-    }
-
-    // Método para obtener la lista de jugadores seleccionados
-    fun getJugadoresSeleccionados(): List<JugadorBase> {
-        return jugadoresSeleccionados.toList()
-    }
+    fun getJugadoresSeleccionados(): List<JugadorBase> = jugadoresList.toList()
 
     inner class JugadorViewHolder(private val binding: RecycleSeleccionarBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
-                Toast.makeText(
-                    binding.root.context,
-                    "Debe seleccionar un jugador",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Log.d("JugadoresAdapter2", "Debe seleccionar un jugador")
             }
 
             binding.seleccionar.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    val jugador = jugadoresList[adapterPosition]
-                    jugadoresSeleccionados.add(jugador)
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val jugador = jugadoresList[position]
+                    cargarDatosJugador(jugador.nombre) { jugadorCargado ->
+                        if (jugadorCargado != null) {
+                            nuevaLista.add(jugadorCargado)
+                            jugadoresList.remove(jugador) // Elimina el jugador de la lista actual
+                            notifyItemRemoved(position)
 
-                    // Hacer que el botón sea invisible después de 0.5 segundos
-                    handler.postDelayed({
-                        binding.seleccionar.visibility = View.INVISIBLE
-                        binding.imageView.visibility=View.VISIBLE
-                    }, 500) // 500 milisegundos (0.5 segundos)
+                            // Notificar al listener sobre el jugador seleccionado
+                            onJugadorSeleccionadoListener?.onJugadorSeleccionado(jugadorCargado)
+
+                            Log.d("JugadoresAdapter2", "Jugador seleccionado: $jugadorCargado")
+                        } else {
+                            Log.e("JugadoresAdapter2", "No se pudo cargar el jugador")
+                        }
+                    }
                 }
             }
         }
 
         fun bind(jugador: JugadorBase) {
-            // Configurar la imagen según el tipo de jugador
             when (jugador) {
-                is Jugadores -> {
-                    binding.imageJugador.setImageResource(R.drawable.pedroleon)
-                }
-
-                is Portero -> {
-                    binding.imageJugador.setImageResource(R.drawable.karius)
-                }
+                is Jugadores -> binding.imageJugador.setImageResource(R.drawable.pedroleon)
+                is Portero -> binding.imageJugador.setImageResource(R.drawable.karius)
             }
+
             binding.textViewNombre.text = jugador.nombre
             binding.textViewDetalle.text = "Detalles: ${jugador.posicion}"
+
+            val isSelected = jugadoresList.contains(jugador)
+            binding.root.isSelected = isSelected
+        }
+    }
+
+    private fun cargarDatosJugador(nombreJugador: String, callback: (JugadorBase?) -> Unit) {
+        Log.d("JugadoresAdapter2", "Cargando datos del jugador desde Firestore: $nombreJugador")
+        val currentUserEmail = firebaseAuth.currentUser?.email
+
+        if (currentUserEmail != null) {
+            val jugadoresCollection = db.collection("usuarios").document(currentUserEmail)
+                .collection("jugadores")
+
+            jugadoresCollection.whereEqualTo("nombre", nombreJugador).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val documents = task.result?.documents
+
+                        if (documents != null && documents.isNotEmpty()) {
+                            val document = documents[0]
+
+                            try {
+                                val nombre = document.getString("nombre")
+                                val valoracion = document.getDouble("valoracion")
+                                val posicion = document.getString("posicion")
+                                val goles = document.getLong("goles")?.toInt()
+                                val asistencias = document.getLong("asistencias")?.toInt()
+
+                                val jugador:
+                                        JugadorBase? = when (posicion) {
+                                    "Portero" -> Portero(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
+                                    "Jugador Normal" -> Jugadores(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
+                                    else -> null
+                                }
+
+                                Log.d("JugadoresAdapter2", "Datos del jugador cargados: $jugador")
+                                callback.invoke(jugador)
+                            } catch (e: Exception) {
+                                Log.e("JugadoresAdapter2", "Error al cargar datos del jugador", e)
+                                callback.invoke(null)
+                            }
+                        } else {
+                            Log.d("JugadoresAdapter2", "El documento del jugador no existe")
+                            callback.invoke(null)
+                        }
+                    } else {
+                        Log.e("JugadoresAdapter2", "Error al obtener datos del jugador", task.exception)
+                        callback.invoke(null)
+                    }
+                }
+        } else {
+            Log.e("JugadoresAdapter2", "Usuario no autenticado")
+            callback.invoke(null)
         }
     }
 }
+
+
+
+
+
+
 
 
 
