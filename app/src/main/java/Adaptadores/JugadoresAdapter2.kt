@@ -58,9 +58,9 @@ class JugadoresAdapter2(
                             nuevaLista.add(jugadorCargado)
                             jugadoresList.remove(jugador) // Elimina el jugador de la lista actual
                             notifyItemRemoved(position)
-
                             // Notificar al listener sobre el jugador seleccionado
                             onJugadorSeleccionadoListener?.onJugadorSeleccionado(jugadorCargado)
+
 
                             Log.d("JugadoresAdapter2", "Jugador seleccionado: $jugadorCargado")
                         } else {
@@ -70,13 +70,11 @@ class JugadoresAdapter2(
                 }
             }
         }
-
         fun bind(jugador: JugadorBase) {
             when (jugador) {
                 is Jugadores -> binding.imageJugador.setImageResource(R.drawable.pedroleon)
                 is Portero -> binding.imageJugador.setImageResource(R.drawable.karius)
             }
-
             binding.textViewNombre.text = jugador.nombre
             binding.textViewDetalle.text = "Detalles: ${jugador.posicion}"
 
@@ -88,7 +86,6 @@ class JugadoresAdapter2(
     private fun cargarDatosJugador(nombreJugador: String, callback: (JugadorBase?) -> Unit) {
         Log.d("JugadoresAdapter2", "Cargando datos del jugador desde Firestore: $nombreJugador")
         val currentUserEmail = firebaseAuth.currentUser?.email
-
         if (currentUserEmail != null) {
             val jugadoresCollection = db.collection("usuarios").document(currentUserEmail)
                 .collection("jugadores")
@@ -105,8 +102,8 @@ class JugadoresAdapter2(
                                 val nombre = document.getString("nombre")
                                 val valoracion = document.getDouble("valoracion")
                                 val posicion = document.getString("posicion")
-                                val goles = document.getLong("goles")?.toInt()
-                                val asistencias = document.getLong("asistencias")?.toInt()
+                                val goles = document.getLong("goles")
+                                val asistencias = document.getLong("asistencias")
 
                                 val jugador:
                                         JugadorBase? = when (posicion) {

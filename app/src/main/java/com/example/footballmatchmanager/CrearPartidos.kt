@@ -23,7 +23,6 @@ class CrearPartidos : AppCompatActivity() {
     private lateinit var partidosList: MutableList<Partido>
     private lateinit var binding: ActivityCrearPartidosBinding
     private lateinit var jugadoresList: MutableList<JugadorBase>
-    private var jugadoresAdapter: JugadoresAdapter2? = null
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
     private val jugadoresPartidos: MutableList<JugadorBase> = mutableListOf()
@@ -34,13 +33,14 @@ class CrearPartidos : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCrearPartidosBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        leerPartidosDelUsuario()
         jugadoresList = mutableListOf()
         partidosList = mutableListOf()
         partidosAdapter = PartidosAdapter(partidosList)
         binding.recyclerViewPartidos.layoutManager = LinearLayoutManager(this)
         binding.recyclerViewPartidos.adapter = partidosAdapter
+
         binding.btnCrearPartido.setOnClickListener {
-            agregados=false
             mostrarDialogoCrearPartido()
         }
         // Configurar la Toolbar con la flecha de retroceso
@@ -61,105 +61,113 @@ class CrearPartidos : AppCompatActivity() {
             false // Variable para rastrear si se han seleccionado jugadores
         dialogBinding.btnAgregarJugadores.setOnClickListener {
 
-            // Configurar el diálogo para agregar jugadores
-            val inflater = LayoutInflater.from(this)
-            val dialogBinding = DialogagregarjugadoresBinding.inflate(inflater)
-            val builder = AlertDialog.Builder(this)
-            builder.setView(dialogBinding.root)
-            // Configurar el RecyclerView en el diálogo con el JugadoresAdapter2
-            val jugadoresAdapter = JugadoresAdapter2(jugadoresList)
-            // Cargar los datos de Firebase en el RecyclerView del diálogo
-            dialogBinding.recyclerViewJugadoresDialog.apply {
-                layoutManager = LinearLayoutManager(context)
-                adapter = jugadoresAdapter
+                // Configurar el diálogo para agregar jugadores
+                val inflater = LayoutInflater.from(this)
+                val dialogBinding = DialogagregarjugadoresBinding.inflate(inflater)
+                val builder = AlertDialog.Builder(this)
+                builder.setView(dialogBinding.root)
+                // Configurar el RecyclerView en el diálogo con el JugadoresAdapter2
+                val jugadoresAdapter = JugadoresAdapter2(jugadoresList)
+                // Cargar los datos de Firebase en el RecyclerView del diálogo
+                dialogBinding.recyclerViewJugadoresDialog.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = jugadoresAdapter
+                }
+                val jugadoresSeleccionados =
+                    jugadoresAdapter.getJugadoresSeleccionados().toMutableList()
+                Log.d("JugadoresPartidos", jugadoresSeleccionados.toString())
+                jugadoresPartidos.addAll(jugadoresSeleccionados)
+                Log.d("JugadoresPartidos", jugadoresPartidos.toString())
+                if (!cargado){
+                    cargarDatosFirebaseEnDialog(jugadoresAdapter)
+                    cargado=true
+                }else{
+                    cargado=true
+                }
+                builder.setPositiveButton("Eliminar") { _, _ ->
+
+                    // Cerrar el diálogo después de realizar las acciones necesarias
+                    // (En este punto, los jugadores seleccionados han sido eliminados temporalmente del RecyclerView)
+                    dialogBinding.root.postDelayed(
+                        { builder.create().dismiss() },
+                        500
+                    ) // Cerrar el diálogo con un retraso de 500 milisegundos
+                }
+                // Configurar el botón "Cancelar"
+                builder.setNegativeButton("Cancelar") { _, _ ->
+                }
+                // Mostrar el diálogo correctamente
+                val dialog = builder.create()
+                dialog.show()
             }
-            val jugadoresSeleccionados =
-                jugadoresAdapter.getJugadoresSeleccionados().toMutableList()
-            Log.d("JugadoresPartidos", jugadoresSeleccionados.toString())
-            jugadoresPartidos.addAll(jugadoresSeleccionados)
-            Log.d("JugadoresPartidos", jugadoresPartidos.toString())
-            if (!cargado){
-                cargarDatosFirebaseEnDialog(jugadoresAdapter)
-                cargado=true
-            }else{
-                cargado=true
-            }
+
             builder.setPositiveButton("Crear") { _, _ ->
-                agregados = true
-                // Cerrar el diálogo después de realizar las acciones necesarias
-                // (En este punto, los jugadores seleccionados han sido eliminados temporalmente del RecyclerView)
-                dialogBinding.root.postDelayed(
-                    { builder.create().dismiss() },
-                    500
-                ) // Cerrar el diálogo con un retraso de 500 milisegundos
+                val fecha = dialogBinding.editTextFecha.text.toString()
+                val horaInicio = dialogBinding.editTextHora.text.toString()
+                Log.d("JugadoresPartidos", jugadoresSeleccionados.toString())
+                if (fecha.isNotEmpty() && horaInicio.isNotEmpty()) {
+                    try {
+                        // Validar la fecha y la hora
+                        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                        val fechaActual = Date()
+                        val fechaSeleccionada = dateFormat.parse(fecha)
+                        val horaInicioSeleccionada = timeFormat.parse(horaInicio)
+                        // Verificar que la fecha sea mayor o igual a la fecha actual
+                        if (fechaSeleccionada != null && fechaSeleccionada >= fechaActual) {
+                            // Validar que la hora final sea una hora después de la hora inicial
+                            val horaFin = sumarUnaHora(horaInicioSeleccionada)
+                            val horaFin2 = horaFin.toString()
+                            if (horaFin != null) {
+                                // Actualizar la variable jugadoresSeleccionados
+                                jugadoresSeleccionados = !jugadoresList.isEmpty()
+                                Log.d("JugadoresPartidos", jugadoresSeleccionados.toString())
+                                Log.d("JugadoresPartidos", jugadoresList.toString())
+                                // Crear una nueva instancia de partido solo si hay jugadores seleccionados
+                                if (jugadoresSeleccionados) {
+                                    nuevoPartido = Partido(
+                                        fecha = fecha,
+                                        horaInicio = horaInicio,
+                                        horaFin = horaFin2,
+                                        jugadores = jugadoresList
+                                    )
+
+                                    // Agregar el nuevo partido a la lista de partidos
+                                    // Supongo que tienes una lista de partidos llamada partidosList
+
+                                    partidosList.add(nuevoPartido)
+                                    guardarPartidoEnFirestore(nuevoPartido)
+                                    // Notificar al adaptador sobre el cambio en los datos
+                                    partidosAdapter?.notifyDataSetChanged()
+                                    jugadoresList.clear()
+                                    cargado=false
+
+                                    // Notificar al adaptador sobre el cambio en los datos
+
+
+                                } else {
+                                    mostrarMensajeError("Debes seleccionar al menos un jugador")
+                                }
+                            }
+                        } else {
+                            mostrarMensajeError("La fecha debe ser mayor o igual a la fecha actual")
+                            cargado=false
+                        }
+                    } catch (e: Exception) {
+                        mostrarMensajeError("Error al procesar la información del partido")
+                        cargado=false
+                    }
+                } else {
+                    mostrarMensajeError("Todos los campos obligatorios deben estar rellenos")
+                    cargado=false
+                }
             }
-            // Configurar el botón "Cancelar"
-            builder.setNegativeButton("Cancelar") { _, _ ->
-            }
-            // Mostrar el diálogo correctamente
+            builder.setNegativeButton("Cancelar", null)
             val dialog = builder.create()
             dialog.show()
         }
 
-        builder.setPositiveButton("Crear") { _, _ ->
-            val fecha = dialogBinding.editTextFecha.text.toString()
-            val horaInicio = dialogBinding.editTextHora.text.toString()
-            Log.d("JugadoresPartidos", jugadoresSeleccionados.toString())
-            if (fecha.isNotEmpty() && horaInicio.isNotEmpty()) {
-                try {
-                    // Validar la fecha y la hora
-                    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-                    val fechaActual = Date()
-                    val fechaSeleccionada = dateFormat.parse(fecha)
-                    val horaInicioSeleccionada = timeFormat.parse(horaInicio)
-                    // Verificar que la fecha sea mayor o igual a la fecha actual
-                    if (fechaSeleccionada != null && fechaSeleccionada >= fechaActual) {
-                        // Validar que la hora final sea una hora después de la hora inicial
-                        val horaFin = sumarUnaHora(horaInicioSeleccionada)
-                        val horaFin2 = horaFin.toString()
-                        if (horaFin != null) {
-                            // Actualizar la variable jugadoresSeleccionados
-                            jugadoresSeleccionados = !jugadoresList.isEmpty()
-                            Log.d("JugadoresPartidos", jugadoresSeleccionados.toString())
-                            Log.d("JugadoresPartidos", jugadoresList.toString())
-                            // Crear una nueva instancia de partido solo si hay jugadores seleccionados
-                            if (jugadoresSeleccionados) {
-                                nuevoPartido = Partido(
-                                    fecha = fecha,
-                                    horaInicio = horaInicio,
-                                    horaFin = horaFin2,
-                                    jugadores = jugadoresList
-                                )
 
-                                // Agregar el nuevo partido a la lista de partidos
-                                // Supongo que tienes una lista de partidos llamada partidosList
-
-                                partidosList.add(nuevoPartido)
-                                guardarPartidoEnFirestore(nuevoPartido)
-                                // Notificar al adaptador sobre el cambio en los datos
-                                partidosAdapter?.notifyDataSetChanged()
-
-                                // Notificar al adaptador sobre el cambio en los datos
-
-                            } else {
-                                mostrarMensajeError("Debes seleccionar al menos un jugador")
-                            }
-                        }
-                    } else {
-                        mostrarMensajeError("La fecha debe ser mayor o igual a la fecha actual")
-                    }
-                } catch (e: Exception) {
-                    mostrarMensajeError("Error al procesar la información del partido")
-                }
-            } else {
-                mostrarMensajeError("Todos los campos obligatorios deben estar rellenos")
-            }
-        }
-        builder.setNegativeButton("Cancelar", null)
-        val dialog = builder.create()
-        dialog.show()
-    }
     private fun cargarDatosFirebaseEnDialog(adapter: JugadoresAdapter2) {
         val currentUserEmail = firebaseAuth.currentUser?.email
         if (currentUserEmail != null) {
@@ -173,8 +181,10 @@ class CrearPartidos : AppCompatActivity() {
                                 val nombre = document.getString("nombre")
                                 val valoracion = document.getDouble("valoracion")
                                 val posicion = document.getString("posicion")
-                                val goles = document.getLong("goles")?.toInt()
-                                val asistencias = document.getLong("asistencias")?.toInt()
+                                val goles = document.getLong("goles")
+                                val asistencias = document.getLong("asistencias")
+
+
                                 // Crear la instancia del jugador
                                 val jugador: JugadorBase? = when (posicion) {
                                     "Portero" -> Portero(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
@@ -244,6 +254,58 @@ class CrearPartidos : AppCompatActivity() {
                 }
         }
     }
+    private fun leerPartidosDelUsuario() {
+        val currentUserEmail = firebaseAuth.currentUser?.email
+
+        if (currentUserEmail != null) {
+            val partidosCollection = db.collection("usuarios").document(currentUserEmail).collection("partidos")
+
+            partidosCollection.get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            try {
+                                // Obtener los datos del partido del documento
+                                val fecha = document.getString("fecha")
+                                val horaInicio = document.getString("horaInicio")
+                                val horaFin = document.getString("horaFin")
+
+                                // Obtener la lista de jugadores
+                                val jugadoresData = document.get("jugadores") as List<HashMap<String, Any>>?
+                                val jugadores = jugadoresData?.map { jugadorData ->
+                                    JugadorBase(
+
+                                        jugadorData["valoracion"] as Double,
+                                        jugadorData["nombre"].toString(),
+                                        jugadorData["posicion"].toString(),
+                                        jugadorData["goles"] as Long,
+                                        jugadorData["asistencias"] as Long
+                                        // Otros campos según tu modelo de datos para JugadorBase
+                                    )
+                                }
+
+                                // Crear el objeto Partido y agregarlo a la lista de partidos
+                                val partido = Partido(fecha!!, horaInicio!!, horaFin!!, jugadores)
+                                partidosList.add(partido)
+
+                            } catch (e: Exception) {
+                                Log.e("Firebase", "Error al convertir documento a Partido", e)
+                            }
+                        }
+
+                        // Notificar al adaptador sobre el cambio en los datos
+                        partidosAdapter?.notifyDataSetChanged()
+                    } else {
+                        Log.e("Firebase", "Error al obtener los partidos", task.exception)
+                        Toast.makeText(this, "Error al obtener los partidos", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        } else {
+            Log.e("Firebase", "El email del usuario es nulo")
+            // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
+        }
+    }
+
 }
 
 

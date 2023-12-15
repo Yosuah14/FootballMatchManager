@@ -79,8 +79,8 @@ class CrearJugadores : AppCompatActivity() {
                         }
 
                         val nuevoJugador = when (posicion) {
-                            "Portero" -> Portero( valoracion.toDouble(), nombre,"Portero",goles.toInt(), asistencias.toInt())
-                            "Jugador Normal" -> Jugadores(valoracion.toDouble(), nombre,"Jugador Normal",goles.toInt(), asistencias.toInt())
+                            "Portero" -> Portero( valoracion.toDouble(), nombre,"Portero",goles.toLong(), asistencias.toLong())
+                            "Jugador Normal" -> Jugadores(valoracion.toDouble(), nombre,"Jugador Normal",goles.toLong(), asistencias.toLong() )
                             else -> null
                         }
 
@@ -161,8 +161,8 @@ class CrearJugadores : AppCompatActivity() {
                                 val nombre = document.getString("nombre")
                                 val valoracion = document.getDouble("valoracion")
                                 val posicion = document.getString("posicion")
-                                val goles = document.getLong("goles")?.toInt()
-                                val asistencias = document.getLong("asistencias")?.toInt()
+                                val goles = document.getLong("goles")
+                                val asistencias = document.getLong("asistencias")
 
                                 // Determinar el tipo de jugador y crear la instancia adecuada
                                 val jugador: JugadorBase? = when (posicion) {
