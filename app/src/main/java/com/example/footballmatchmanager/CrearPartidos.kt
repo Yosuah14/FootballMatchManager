@@ -1,6 +1,7 @@
 package com.example.footballmatchmanager
 
 import Adaptadores.JugadoresAdapter
+import Adaptadores.JugadoresAdapter3
 
 import Adaptadores.PartidosAdapter
 import JugadoresAdapter2
