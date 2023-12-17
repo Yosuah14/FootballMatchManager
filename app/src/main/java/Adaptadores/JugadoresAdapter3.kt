@@ -10,14 +10,14 @@ import com.example.footballmatchmanager.Jugadores
 import com.example.footballmatchmanager.Portero
 import com.example.footballmatchmanager.R
 import com.example.footballmatchmanager.databinding.DatosjugadorBinding
-import com.example.footballmatchmanager.databinding.RecycleJugadoresBinding
+import com.example.footballmatchmanager.databinding.RecyclerModificarBinding
 
-class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
-    RecyclerView.Adapter<JugadoresAdapter.JugadorViewHolder>() {
+class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
+    RecyclerView.Adapter<JugadoresAdapter3.JugadorViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JugadorViewHolder {
         val binding =
-            RecycleJugadoresBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            RecyclerModificarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return JugadorViewHolder(binding)
     }
 
@@ -29,7 +29,7 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         return jugadoresList.size
     }
 
-    inner class JugadorViewHolder(private val binding: RecycleJugadoresBinding) :
+    inner class JugadorViewHolder(private val binding: RecyclerModificarBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -96,12 +96,3 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         }
     }
 }
-
-
-
-
-
-
-
-
-

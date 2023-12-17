@@ -51,9 +51,9 @@
 
     <Button
         android:id="@+id/btnmodi"
-        android:layout_width="92dp"
-        android:layout_height="54dp"
-        android:text="Datos"
+        android:layout_width="108dp"
+        android:layout_height="62dp"
+        android:text="Modificar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
