@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#045360"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/editTextGolesDialog"
+        android:layout_width="124dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="16dp"
+        android:hint="Goles"
+        android:inputType="number"
+        android:textColorHint="#19BFB9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Campo de Asistencias -->
+    <EditText
+        android:id="@+id/editTextAsistenciasDialog"
+        android:layout_width="127dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="16dp"
+        android:hint="Asistencias"
+        android:inputType="number"
+        android:textColorHint="#19BFB9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextGolesDialog" />
+
+    <!-- CheckBox para MVP -->
+    <CheckBox
+        android:id="@+id/checkBoxMVP"
+        android:layout_width="132dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="16dp"
+        android:text="MVP"
+        android:textColor="#19BFB9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextAsistenciasDialog" />
+
+    <!-- Botones de acción (por ejemplo, Aceptar y Cancelar) -->
+    <!-- Agrega tus botones aquí -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

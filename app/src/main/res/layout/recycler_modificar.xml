@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#19BFB9"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <!-- ImageView para la imagen -->
     <ImageView
@@ -27,23 +27,24 @@
         android:id="@+id/textViewNombre"
         android:layout_width="169dp"
         android:layout_height="31dp"
-        android:layout_marginTop="28dp"
         android:text="Nombre"
         android:textColor="#000909"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@id/imageViewJugador"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.723"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.21" />
 
     <TextView
         android:id="@+id/textViewDetalle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Posicion"
+        android:layout_marginTop="56dp"
+        android:text="Goles"
         android:textColor="#000202"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@id/imageViewJugador"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/textViewNombre"
@@ -51,21 +52,22 @@
 
     <Button
         android:id="@+id/btnmodi"
-        android:layout_width="108dp"
-        android:layout_height="62dp"
+        android:layout_width="93dp"
+        android:layout_height="45dp"
         android:text="Modificar"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/imageViewJugador"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.746" />
+        app:layout_constraintVertical_bias="0.786" />
 
     <ImageView
         android:id="@+id/imageJugador"
-        android:layout_width="98dp"
-        android:layout_height="85dp"
+        android:layout_width="76dp"
+        android:layout_height="72dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -73,5 +75,44 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/pedroleon" />
+
+    <TextView
+        android:id="@+id/asistencias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Asistencias"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.79" />
+
+    <TextView
+        android:id="@+id/mvp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MVP"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.56" />
+
+    <TextView
+        android:id="@+id/posicion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Posicion"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.44"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.352" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package Adaptadores
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -9,11 +10,16 @@ import com.example.footballmatchmanager.JugadorBase
 import com.example.footballmatchmanager.Jugadores
 import com.example.footballmatchmanager.Portero
 import com.example.footballmatchmanager.R
-import com.example.footballmatchmanager.databinding.DatosjugadorBinding
+import com.example.footballmatchmanager.databinding.DialogActulaizaJugadoresBinding
 import com.example.footballmatchmanager.databinding.RecyclerModificarBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
+
     RecyclerView.Adapter<JugadoresAdapter3.JugadorViewHolder>() {
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JugadorViewHolder {
         val binding =
@@ -34,7 +40,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
 
         init {
             // Configurar el clic largo en el botón
-            binding.btnmodi.setOnLongClickListener {
+            binding.btnmodi.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     mostrarDetallesJugador(jugadoresList[adapterPosition])
                 } else {
@@ -55,44 +61,149 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                 binding.imageJugador.setImageResource(R.drawable.pedroleon)
             }
 
-            binding.textViewNombre.text = jugador.nombre
-            binding.textViewDetalle.text = "Detalles: ${jugador.posicion}"
+            binding.textViewNombre.text = "Nombre:" + jugador.nombre
+            binding.textViewDetalle.text = "Goles: ${jugador.goles}"
+            binding.asistencias.text = "Asistencias:+ ${jugador.asistencias}"
+            binding.posicion.text = "Posicion:+ ${jugador.posicion}"
         }
 
         private fun mostrarDetallesJugador(jugador: JugadorBase) {
             val inflater = LayoutInflater.from(binding.root.context)
-            val dialogBinding = DatosjugadorBinding.inflate(inflater)
-            dialogBinding.tvNombre.text = "Nombre: ${jugador.nombre}"
-            dialogBinding.tvTipo.text = "Tipo: ${jugador.posicion}"
-            dialogBinding.tvValoracion.text = "Valoración: ${jugador.valoracion}"
+            val dialogBinding = DialogActulaizaJugadoresBinding.inflate(inflater)
 
-            when (jugador) {
-                is Jugadores -> {
-                    dialogBinding.tvGoles.text = "Goles: ${jugador.goles}"
-                    dialogBinding.tvAsistencias.text = "Asistencias: ${jugador.asistencias}"
-                }
-                is Portero -> {
-                    dialogBinding.tvGoles.text =  "Goles: ${jugador.goles}"
-                    dialogBinding.tvAsistencias.text = "Asistencias: ${jugador.asistencias}"
-                }
-            }
-
-            val dialogBuilder = AlertDialog.Builder(binding.root.context)
+            val dialog = AlertDialog.Builder(binding.root.context)
                 .setView(dialogBinding.root)
-                .setTitle("Detalles del Jugador")
+                .setPositiveButton("Modificar") { _, _ ->
+                    // Validar y realizar acciones de modificación
+                    val golesText = dialogBinding.editTextGolesDialog.text.toString()
+                    val asistenciasText = dialogBinding.editTextAsistenciasDialog.text.toString()
 
-            val btnCerrar = dialogBinding.btnCerrar
-            btnCerrar.setOnClickListener {
-                dialogBuilder.create().dismiss()
-            }
+                    if (golesText.isNotEmpty() && golesText.toInt() >= 0 &&
+                        asistenciasText.isNotEmpty() && asistenciasText.toInt() >= 0
+                    ) {
+                        // Crear un nuevo objeto JugadorBase con los datos modificados
+                        val jugadorModificado = JugadorBase(
+                            nombre = binding.textViewNombre.text.toString(),
+                            goles = golesText.toLong(),
+                            asistencias = asistenciasText.toLong(),
+                            posicion = jugador.posicion
+                        )
+                        guardarJugadorEnFirestoreParaPartido(jugadorModificado)
+                        // Actualizar el objeto en la lista
+                        jugadoresList[adapterPosition] = jugadorModificado
 
-            val dialog = dialogBuilder.create()
+                        // Actualizar la vista del RecyclerView
+                        notifyDataSetChanged()
+                    } else {
+                        Toast.makeText(
+                            binding.root.context,
+                            "Ingresa números válidos para goles y asistencias",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                .setNegativeButton("Cancelar", null)
+                .create()
+
             dialog.show()
+        }
+    }
 
-            btnCerrar.setOnClickListener {
-                dialog.dismiss()
-                true
-            }
+    private fun guardarJugadorEnFirestoreParaPartido(jugador: JugadorBase) {
+        val currentUserEmail = firebaseAuth.currentUser?.email
+        if (currentUserEmail != null) {
+            val jugadoresCollection = db.collection("usuarios").document(currentUserEmail)
+                .collection("datosjugadorespartido")
+
+            val jugadorData = hashMapOf(
+                "nombre" to jugador.nombre,
+                "valoracion" to jugador.valoracion,
+                "posicion" to jugador.posicion,
+                "goles" to jugador.goles,
+                "asistencias" to jugador.asistencias
+                // Otros campos según tu modelo de datos
+            )
+
+            jugadoresCollection.add(jugadorData)
+                .addOnSuccessListener {
+                    Log.e(
+                        "Firebase",
+                        "Error al guardar los datos en firestore",
+
+                        )
+                }
+                .addOnFailureListener {
+                    Log.e(
+                        "Firebase",
+                        "Error al guardar los datos en firestore",
+
+                    )
+                }
+        }
+    }
+
+    private fun leerJugadoresDelUsuarioParaPartido(callback: (List<JugadorBase>) -> Unit) {
+        val currentUserEmail = firebaseAuth.currentUser?.email
+        if (currentUserEmail != null) {
+            val jugadoresCollection = db.collection("usuarios").document(currentUserEmail)
+                .collection("datosjugadorespartido")
+
+            jugadoresCollection.get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val jugadoresList = mutableListOf<JugadorBase>()
+
+                        for (document in task.result!!) {
+                            try {
+                                val nombre = document.getString("nombre")
+                                val valoracion = document.getDouble("valoracion")
+                                val posicion = document.getString("posicion")
+                                val goles = document.getLong("goles")
+                                val asistencias = document.getLong("asistencias")
+
+                                val jugador: JugadorBase? = when (posicion) {
+                                    "Portero" -> Portero(
+                                        valoracion!!,
+                                        nombre!!,
+                                        posicion!!,
+                                        goles!!,
+                                        asistencias!!
+                                    )
+
+                                    "Jugador Normal" -> Jugadores(
+                                        valoracion!!,
+                                        nombre!!,
+                                        posicion!!,
+                                        goles!!,
+                                        asistencias!!
+                                    )
+
+                                    else -> null
+                                }
+
+                                jugador?.let {
+                                    jugadoresList.add(it)
+                                }
+                            } catch (e: Exception) {
+                                Log.e("Firebase", "Error al convertir documento a JugadorBase", e)
+                            }
+                        }
+
+                        callback.invoke(jugadoresList)
+                    } else {
+                        Log.e(
+                            "Firebase",
+                            "Error al obtener los jugadores para el partido",
+                            task.exception
+                        )
+
+                    }
+                }
         }
     }
 }
+
+
+
+
+
