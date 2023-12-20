@@ -39,6 +39,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
+
             // Configurar el clic largo en el botón
             binding.btnmodi.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -55,16 +56,20 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
         }
 
         fun bind(jugador: JugadorBase) {
-            if (jugador is Portero) {
-                binding.imageJugador.setImageResource(R.drawable.karius)
-            } else {
-                binding.imageJugador.setImageResource(R.drawable.pedroleon)
-            }
+            cargarDatosJugador(jugador.nombre) { jugadorCargado ->
+                jugadorCargado?.let {
+                    if (jugador is Portero) {
+                        binding.imageJugador.setImageResource(R.drawable.karius)
+                    } else {
+                        binding.imageJugador.setImageResource(R.drawable.pedroleon)
+                    }
 
-            binding.textViewNombre.text = "Nombre:" + jugador.nombre
-            binding.textViewDetalle.text = "Goles: ${jugador.goles}"
-            binding.asistencias.text = "Asistencias:+ ${jugador.asistencias}"
-            binding.posicion.text = "Posicion:+ ${jugador.posicion}"
+                    binding.textViewNombre.text = "Nombre:" + it.nombre
+                    binding.textViewDetalle.text = "Goles: ${it.goles}"
+                    binding.asistencias.text = "Asistencias:+ ${it.asistencias}"
+                    binding.posicion.text = "Posicion:+ ${it.posicion}"
+                }
+            }
         }
 
         private fun mostrarDetallesJugador(jugador: JugadorBase) {
@@ -83,7 +88,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                     ) {
                         // Crear un nuevo objeto JugadorBase con los datos modificados
                         val jugadorModificado = JugadorBase(
-                            nombre = binding.textViewNombre.text.toString(),
+                            nombre = jugador.nombre,
                             goles = golesText.toLong(),
                             asistencias = asistenciasText.toLong(),
                             posicion = jugador.posicion
@@ -126,19 +131,81 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
 
             jugadoresCollection.add(jugadorData)
                 .addOnSuccessListener {
-                    Log.e(
-                        "Firebase",
-                        "Error al guardar los datos en firestore",
-
-                        )
+                    Log.d("Firebase", "Datos del jugador para el partido guardados en Firestore")
                 }
                 .addOnFailureListener {
-                    Log.e(
-                        "Firebase",
-                        "Error al guardar los datos en firestore",
-
-                    )
+                    Log.e("Firebase", "Error al guardar los datos del jugador para el partido en Firestore")
                 }
+        }
+    }
+
+    private fun cargarDatosJugador(nombreJugador: String, callback: (JugadorBase?) -> Unit) {
+        val currentUserEmail = firebaseAuth.currentUser?.email
+        if (currentUserEmail != null) {
+            val jugadoresCollection = db.collection("usuarios").document(currentUserEmail)
+                .collection("datosjugadorespartido")
+
+            jugadoresCollection.whereEqualTo("nombre", nombreJugador).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val documents = task.result?.documents
+
+                        if (documents != null && documents.isNotEmpty()) {
+                            val document = documents[0]
+
+                            try {
+                                val nombre = document.getString("nombre")
+                                val valoracion = document.getDouble("valoracion")
+                                val posicion = document.getString("posicion")
+                                val goles = document.getLong("goles")
+                                val asistencias = document.getLong("asistencias")
+
+                                val jugador: JugadorBase? = when (posicion) {
+                                    "Portero" -> Portero(
+                                        valoracion!!,
+                                        nombre!!,
+                                        posicion!!,
+                                        goles!!,
+                                        asistencias!!
+                                    )
+
+                                    "Jugador Normal" -> Jugadores(
+                                        valoracion!!,
+                                        nombre!!,
+                                        posicion!!,
+                                        goles!!,
+                                        asistencias!!
+                                    )
+
+                                    else -> null
+                                }
+
+                                callback.invoke(jugador)
+                            } catch (e: Exception) {
+                                Log.e("Firebase", "Error al cargar datos del jugador", e)
+                                callback.invoke(null)
+                            }
+                        } else {
+                            Log.d("Firebase", "El documento del jugador no existe")
+                            callback.invoke(null)
+                        }
+                    } else {
+                        Log.e("Firebase", "Error al obtener datos del jugador", task.exception)
+                        callback.invoke(null)
+                    }
+                }
+        } else {
+            Log.e("Firebase", "Usuario no autenticado")
+            callback.invoke(null)
+        }
+    }
+
+    private fun cargarDatosIniciales(callback: () -> Unit) {
+        leerJugadoresDelUsuarioParaPartido { jugadores ->
+            jugadoresList.clear()
+            jugadoresList.addAll(jugadores)
+            notifyDataSetChanged()
+            callback.invoke()
         }
     }
 
@@ -196,12 +263,16 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                             "Error al obtener los jugadores para el partido",
                             task.exception
                         )
-
+                        callback.invoke(emptyList())
                     }
                 }
+        } else {
+            Log.e("Firebase", "Usuario no autenticado")
+            callback.invoke(emptyList())
         }
     }
 }
+
 
 
 
