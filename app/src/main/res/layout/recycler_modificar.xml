@@ -52,10 +52,10 @@
 
     <Button
         android:id="@+id/btnmodi"
-        android:layout_width="93dp"
-        android:layout_height="45dp"
+        android:layout_width="104dp"
+        android:layout_height="79dp"
         android:text="Modificar"
-        android:textSize="10sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

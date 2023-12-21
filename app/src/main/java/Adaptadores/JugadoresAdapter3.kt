@@ -23,7 +23,10 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var golesModificar = 0L
     private var assistenciasModi = 0L
-    private var mvp = 0
+    private var mvp = 0.0
+    private var golesAntiguos=0L
+    private var mvpAntiguos:Double=0.0
+    private var asistenciasAntiguas=0L
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JugadorViewHolder {
         val binding =
@@ -68,21 +71,25 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                     } else {
                         binding.imageJugador.setImageResource(R.drawable.pedroleon)
                     }
+                    asistenciasAntiguas=jugadorCargado.asistencias!!
+                    golesAntiguos=jugadorCargado.goles!!
+                    mvpAntiguos=jugadorCargado.valoracion
+
 
                     binding.textViewNombre.text = "Nombre:" + jugador.nombre
                     binding.textViewDetalle.text = "Goles: ${jugadorCargado.goles}"
                     binding.asistencias.text = "Asistencias:+ ${jugadorCargado.asistencias}"
                     binding.posicion.text = "Posicion:+ ${jugadorCargado.posicion}"
+                    binding.mvp.text="Mvp:+${jugadorCargado.valoracion}"
                     notifyDataSetChanged()
 
                 }
             }
         }
-
         private fun mostrarDetallesJugador(jugador: JugadorBase) {
             val inflater = LayoutInflater.from(binding.root.context)
             val dialogBinding = DialogActulaizaJugadoresBinding.inflate(inflater)
-
+            val checkBoxMvp = dialogBinding.checkBoxMVP
             val dialog = AlertDialog.Builder(binding.root.context)
                 .setView(dialogBinding.root)
                 .setPositiveButton("Modificar") { _, _ ->
@@ -90,20 +97,48 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                     val golesText = dialogBinding.editTextGolesDialog.text.toString()
                     val asistenciasText = dialogBinding.editTextAsistenciasDialog.text.toString()
 
+                    cargarDatosJugador(jugador.nombre) { jugadorCargado ->
+                        jugadorCargado?.let {
+                            // Jugador encontrado, actualizar la interfaz de usuario
+                            if (jugador is Portero) {
+                                binding.imageJugador.setImageResource(R.drawable.karius)
+                            } else {
+                                binding.imageJugador.setImageResource(R.drawable.pedroleon)
+                            }
+                            asistenciasAntiguas=jugadorCargado.asistencias!!
+                            golesAntiguos=jugadorCargado.goles!!
+                            mvpAntiguos=jugadorCargado.valoracion
+                        }
+                    }
+
+
+
+
                     if (golesText.isNotEmpty() && golesText.toInt() >= 0 &&
                         asistenciasText.isNotEmpty() && asistenciasText.toInt() >= 0
                     ) {
+                        // Determinar el valor de valoracion según el estado del CheckBox
+                        var valoracion =0.0
+
+                        if (checkBoxMvp.isChecked){
+                            valoracion=1.0
+                        }else{
+                            valoracion=0.0
+                        }
+
                         // Crear un nuevo objeto JugadorBase con los datos modificados
                         val jugadorModificado = JugadorBase(
                             nombre = jugador.nombre,
                             goles = golesText.toLong(),
                             asistencias = asistenciasText.toLong(),
+                            valoracion = valoracion,
                             posicion = jugador.posicion
                         )
-
-                        golesModificar = jugadorModificado.goles?.minus(jugador.goles!!)!!
+                        golesModificar = jugadorModificado.goles?.minus(golesAntiguos!!)!!
+                        Log.d("goles",golesAntiguos.toString())
                         assistenciasModi =
-                            jugadorModificado.asistencias?.minus(jugador.asistencias!!)!!
+                            jugadorModificado.asistencias?.minus(asistenciasAntiguas!!)!!
+                        mvp = jugadorModificado.valoracion-mvpAntiguos
 
                         // Verificar si el jugador ya existe
                         existeJugadorEnFirestore(jugadorModificado.nombre) { jugadorExiste ->
@@ -112,6 +147,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                             } else {
                                 guardarJugadorEnFirestoreParaPartido(jugadorModificado)
                             }
+                            actualizarDatosEnFirestoreJugadores(jugador.nombre,golesModificar,assistenciasModi,mvp)
 
                             // Actualizar el objeto en la lista
                             binding.textViewNombre.text = "Nombre:" + jugador.nombre
@@ -119,13 +155,9 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                             binding.asistencias.text = "Asistencias:+ ${jugadorModificado.asistencias}"
                             binding.posicion.text = "Posicion:+ ${jugadorModificado.posicion}"
                             notifyDataSetChanged()
-
                         }
 
-
-
-                        // Actualizar la vista directamente en el hilo principal
-
+                        // Resto del código...
                     } else {
                         Toast.makeText(
                             binding.root.context,
@@ -134,7 +166,6 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                         ).show()
                     }
                 }
-                .setNegativeButton("Cancelar", null)
                 .create()
 
             dialog.show()
@@ -303,9 +334,54 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                 callback.invoke(null)
             }
         }
+        private fun actualizarDatosEnFirestoreJugadores(nombreJugador: String, nuevosGoles: Long, nuevasAsistencias: Long, nuevaValoracion: Double) {
+            val currentUserEmail = firebaseAuth.currentUser?.email
+
+            if (currentUserEmail != null) {
+                val jugadoresCollection = db.collection("usuarios").document(currentUserEmail)
+                    .collection("jugadores")
+
+                // Buscar el jugador por nombre
+                jugadoresCollection.whereEqualTo("nombre", nombreJugador)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        if (!documents.isEmpty) {
+                            // Actualizar los datos del primer jugador encontrado
+                            val documentId = documents.documents[0].id
+
+                            // Obtener los valores actuales del jugador
+                            val jugadorActual = documents.documents[0].toObject(JugadorBase::class.java)
+
+                            // Calcular los nuevos valores sumando los existentes con los proporcionados
+                            val nuevosDatos = hashMapOf(
+                                "goles" to jugadorActual?.goles?.plus(nuevosGoles),
+                                "asistencias" to jugadorActual?.asistencias?.plus(nuevasAsistencias),
+                                "valoracion" to jugadorActual?.valoracion?.plus(nuevaValoracion)
+                            )
+
+                            jugadoresCollection.document(documentId)
+                                .update(nuevosDatos as Map<String, Any>)
+                                .addOnSuccessListener {
+                                    Log.d("Firestore", "Datos del jugador actualizados en Firestore")
+                                }
+                                .addOnFailureListener {
+                                    Log.e("Firestore", "Error al actualizar los datos del jugador en Firestore", it)
+                                }
+                        } else {
+                            Log.e("Firestore", "No se encontró el jugador en Firestore")
+                        }
+                    }
+                    .addOnFailureListener {
+                        Log.e("Firestore", "Error al buscar el jugador en Firestore", it)
+                    }
+            }
+        }
+
+        }
+
 
     }
-}
+
 
 
 
