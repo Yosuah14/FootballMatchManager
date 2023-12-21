@@ -156,6 +156,7 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
             }
         }
     }
+
 }
 
 
