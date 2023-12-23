@@ -102,66 +102,76 @@ class CrearPartidos : AppCompatActivity() {
                 dialog.show()
             }
 
-            builder.setPositiveButton("Crear") { _, _ ->
-                val fecha = dialogBinding.editTextFecha.text.toString()
-                val horaInicio = dialogBinding.editTextHora.text.toString()
-                Log.d("JugadoresPartidos", jugadoresSeleccionados.toString())
-                if (fecha.isNotEmpty() && horaInicio.isNotEmpty()) {
-                    try {
-                        // Validar la fecha y la hora
-                        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-                        val fechaActual = Date()
-                        val fechaSeleccionada = dateFormat.parse(fecha)
-                        val horaInicioSeleccionada = timeFormat.parse(horaInicio)
-                        // Verificar que la fecha sea mayor o igual a la fecha actual
-                        if (fechaSeleccionada != null && fechaSeleccionada >= fechaActual) {
-                            // Validar que la hora final sea una hora después de la hora inicial
-                            val horaFin = sumarUnaHora(horaInicioSeleccionada)
-                            val horaFin2 = horaFin.toString()
-                            if (horaFin != null) {
-                                // Actualizar la variable jugadoresSeleccionados
-                                jugadoresSeleccionados = !jugadoresList.isEmpty()
-                                Log.d("JugadoresPartidos", jugadoresSeleccionados.toString())
-                                Log.d("JugadoresPartidos", jugadoresList.toString())
-                                // Crear una nueva instancia de partido solo si hay jugadores seleccionados
-                                if (jugadoresSeleccionados) {
-                                    nuevoPartido = Partido(
-                                        fecha = fecha,
-                                        horaInicio = horaInicio,
-                                        horaFin = horaFin2,
-                                        jugadores = jugadoresList
-                                    )
+        builder.setPositiveButton("Crear") { _, _ ->
+            val fecha = dialogBinding.editTextFecha.text.toString()
+            val horaInicio = dialogBinding.editTextHora.text.toString()
+            Log.d("JugadoresPartidos", jugadoresSeleccionados.toString())
 
-                                    // Agregar el nuevo partido a la lista de partidos
-                                    // Supongo que tienes una lista de partidos llamada partidosList
+            if (fecha.isNotEmpty() && horaInicio.isNotEmpty()) {
+                try {
+                    // Validar la fecha y la hora
+                    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                    val fechaActual = Date()
+                    val fechaSeleccionada = dateFormat.parse(fecha)
+                    val horaInicioSeleccionada = timeFormat.parse(horaInicio)
 
-                                    partidosList.add(nuevoPartido)
-                                    guardarPartidoEnFirestore(nuevoPartido)
-                                    // Notificar al adaptador sobre el cambio en los datos
-                                    partidosAdapter?.notifyDataSetChanged()
-                                    jugadoresList.clear()
-                                    cargado=false
+                    // Verificar que la fecha sea mayor o igual a la fecha actual
+                    if (fechaSeleccionada != null && fechaSeleccionada >= fechaActual) {
+                        // Validar que la hora final sea una hora después de la hora inicial
+                        val horaFin: String? = sumarUnaHoraObtenerHora(horaInicioSeleccionada)
+                        val horaFin2 = horaFin.toString()
 
-                                    // Notificar al adaptador sobre el cambio en los datos
+                        if (horaFin != null) {
+                            // Actualizar la variable jugadoresSeleccionados
+                            jugadoresSeleccionados = !jugadoresList.isEmpty()
+                            Log.d("JugadoresPartidos", jugadoresSeleccionados.toString())
+                            Log.d("JugadoresPartidos", jugadoresList.toString())
 
+                            // Verificar si ya existe un partido para la fecha seleccionada
+                            partidoExistenteEnFirestore(fecha) { partidoExistente ->
+                                if (!partidoExistente) {
+                                    // Crear una nueva instancia de partido solo si hay jugadores seleccionados
+                                    if (jugadoresSeleccionados) {
+                                        val nuevoPartido = Partido(
+                                            fecha = fecha,
+                                            horaInicio = horaInicio,
+                                            horaFin = horaFin2,
+                                            jugadores = jugadoresList
+                                        )
 
+                                        // Agregar el nuevo partido a la lista de partidos
+                                        partidosList.add(nuevoPartido)
+
+                                        // Guardar el partido en Firestore
+                                        guardarPartidoEnFirestore(nuevoPartido)
+
+                                        // Notificar al adaptador sobre el cambio en los datos
+                                        partidosAdapter?.notifyDataSetChanged()
+                                        jugadoresList.clear()
+                                        cargado = false
+                                    } else {
+                                        mostrarMensajeError("Debes seleccionar al menos un jugador")
+                                    }
                                 } else {
-                                    mostrarMensajeError("Debes seleccionar al menos un jugador")
+                                    mostrarMensajeError("Ya tienes un partido para esta fecha")
                                 }
                             }
-                        } else {
-                            mostrarMensajeError("La fecha debe ser mayor o igual a la fecha actual")
-                            cargado=false
                         }
-                    } catch (e: Exception) {
-                        mostrarMensajeError("Error al procesar la información del partido")
-                        cargado=false
+                    } else {
+                        mostrarMensajeError("La fecha debe ser mayor o igual a la fecha actual")
+                        cargado = false
                     }
-                } else {
-                    mostrarMensajeError("Todos los campos obligatorios deben estar rellenos")
-                    cargado=false
+                } catch (e: Exception) {
+                    mostrarMensajeError("Error al procesar la información del partido")
+                    cargado = false
                 }
+            } else {
+                mostrarMensajeError("Todos los campos obligatorios deben estar rellenos")
+                cargado = false
+            }
+
+
             }
             builder.setNegativeButton("Cancelar", null)
             val dialog = builder.create()
@@ -209,15 +219,19 @@ class CrearPartidos : AppCompatActivity() {
                 }
         }
     }
-    private fun sumarUnaHora(fecha: Date?): Date? {
+    private fun sumarUnaHoraObtenerHora(fecha: Date?): String? {
         if (fecha == null) {
             return null
         }
         val calendar = Calendar.getInstance()
         calendar.time = fecha
         calendar.add(Calendar.HOUR_OF_DAY, 1)
-        return calendar.time
+
+        // Obtener solo la hora en formato HH:mm
+        val formatoHora = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return formatoHora.format(calendar.time)
     }
+
     private fun mostrarMensajeError(mensaje: String) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
     }
@@ -304,6 +318,26 @@ class CrearPartidos : AppCompatActivity() {
         } else {
             Log.e("Firebase", "El email del usuario es nulo")
             // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
+        }
+    }
+    private fun partidoExistenteEnFirestore(fecha: String, onComplete: (Boolean) -> Unit) {
+        val currentUserEmail = firebaseAuth.currentUser?.email
+        if (currentUserEmail != null) {
+            val partidosCollection = db.collection("usuarios").document(currentUserEmail).collection("partidos")
+
+            partidosCollection.whereEqualTo("fecha", fecha).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val partidos = task.result?.toObjects(Partido::class.java)
+                        onComplete(partidos?.isNotEmpty() == true)
+                    } else {
+                        onComplete(false)
+                        Log.e("Firebase", "Error al comprobar partido existente en Firestore", task.exception)
+                    }
+                }
+        } else {
+            onComplete(false)
+            Log.e("Firebase", "El email del usuario es nulo")
         }
     }
 

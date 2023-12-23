@@ -9,7 +9,7 @@
 
     <!-- ImageView para la imagen -->
     <ImageView
-        android:id="@+id/imageViewJugador"
+        android:id="@+id/jugadormodificado"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginEnd="16dp"
@@ -31,7 +31,7 @@
         android:text="Nombre"
         android:textColor="#000909"
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@id/imageViewJugador"
+        app:layout_constraintEnd_toStartOf="@id/jugadormodificado"
         app:layout_constraintHorizontal_bias="0.895"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,7 @@
         android:text="Posicion"
         android:textColor="#000202"
         android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@id/imageViewJugador"
+        app:layout_constraintEnd_toStartOf="@id/jugadormodificado"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/textViewNombre"
         app:layout_constraintTop_toBottomOf="@id/textViewNombre" />

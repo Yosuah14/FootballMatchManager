@@ -51,15 +51,23 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
         }
 
         fun bind(partido: Partido) {
+
             binding.textViewFecha.text = "Fecha: ${partido.fecha}"
 
             binding.textViewHoraInicio.text = "Hora de inicio: ${partido.horaInicio}"
             binding.textViewHoraFin.text = "Hora de fin: ${partido.horaFin}"
-
             binding.btnVerJugadores.setOnClickListener {
                 leerPartidosDelUsuario(partido.fecha)
 
             }
+            binding.btnBorrarPartido.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    // Llamar al método para borrar el partido
+                    borrarPartido(position)
+                }
+            }
+
         }
 
         private fun leerPartidosDelUsuario(fechaPartido: String) {
@@ -153,6 +161,36 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
 
                 // Mostrar el diálogo correctamente
                 builder.show()
+            }
+        }
+        fun borrarPartido(position: Int) {
+            val partidoBorrado = partidosList[position]
+            val currentUserEmail = firebaseAuth.currentUser?.email
+
+            if (currentUserEmail != null) {
+                val partidosCollection =
+                    db.collection("usuarios").document(currentUserEmail).collection("partidos")
+
+                partidosCollection.whereEqualTo("fecha", partidoBorrado.fecha).get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result!!) {
+                                // Borrar el documento correspondiente al partido en Firebase
+                                document.reference.delete()
+                            }
+
+                            // Borrar el partido de la lista local
+                            partidosList.removeAt(position)
+
+                            // Notificar al adaptador sobre el cambio en los datos
+                            notifyDataSetChanged()
+                        } else {
+                            Log.e("Firebase", "Error al obtener los partidos", task.exception)
+                        }
+                    }
+            } else {
+                Log.e("Firebase", "El email del usuario es nulo")
+                // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
             }
         }
     }

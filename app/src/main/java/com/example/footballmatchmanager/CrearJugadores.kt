@@ -50,7 +50,6 @@ class CrearJugadores : AppCompatActivity() {
 
 
     }
-
     private fun mostrarDialogoCrearJugador() {
         val builder = AlertDialog.Builder(this)
         val dialogBinding = DialogCrearJugadorBinding.inflate(layoutInflater)
@@ -78,18 +77,26 @@ class CrearJugadores : AppCompatActivity() {
                             else -> null
                         }
 
-                        val nuevoJugador = when (posicion) {
-                            "Portero" -> Portero( valoracion.toDouble(), nombre,"Portero",goles.toLong(), asistencias.toLong())
-                            "Jugador Normal" -> Jugadores(valoracion.toDouble(), nombre,"Jugador Normal",goles.toLong(), asistencias.toLong() )
-                            else -> null
-                        }
+                        // Verificar si ya existe un jugador con el mismo nombre en Firestore
+                        jugadorExistenteEnFirestore(nombre) { jugadorExistente ->
+                            if (!jugadorExistente) {
+                                // Crear una nueva instancia de Jugador solo si no existe
+                                val nuevoJugador = when (posicion) {
+                                    "Portero" -> Portero(valoracion.toDouble(), nombre, "Portero", goles.toLong(), asistencias.toLong())
+                                    "Jugador Normal" -> Jugadores(valoracion.toDouble(), nombre, "Jugador Normal", goles.toLong(), asistencias.toLong())
+                                    else -> null
+                                }
 
-                        // Si se creó un nuevo jugador, agregarlo a la lista y actualizar el RecyclerView
-                        nuevoJugador?.let {
-                            jugadoresList.add(it)
-                            jugadoresAdapter.notifyDataSetChanged()
-                            // Guardar el jugador en Firestore
-                            guardarJugadorEnFirestore(it)
+                                // Si se creó un nuevo jugador, agregarlo a la lista y actualizar el RecyclerView
+                                nuevoJugador?.let {
+                                    jugadoresList.add(it)
+                                    jugadoresAdapter.notifyDataSetChanged()
+                                    // Guardar el jugador en Firestore
+                                    guardarJugadorEnFirestore(it)
+                                }
+                            } else {
+                                mostrarMensajeError("Ya existe un jugador con el mismo nombre")
+                            }
                         }
                     } else {
                         mostrarMensajeError("Selecciona un tipo de jugador")
@@ -194,6 +201,26 @@ class CrearJugadores : AppCompatActivity() {
 
     private fun mostrarMensajeError(mensaje: String) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+    }
+    private fun jugadorExistenteEnFirestore(nombre: String, onComplete: (Boolean) -> Unit) {
+        val currentUserEmail = firebaseAuth.currentUser?.email
+        if (currentUserEmail != null) {
+            val jugadoresCollection = db.collection("usuarios").document(currentUserEmail).collection("jugadores")
+
+            jugadoresCollection.whereEqualTo("nombre", nombre).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val jugadores = task.result?.toObjects(JugadorBase::class.java)
+                        onComplete(jugadores?.isNotEmpty() == true)
+                    } else {
+                        onComplete(false)
+                        Log.e("Firebase", "Error al comprobar jugador existente en Firestore", task.exception)
+                    }
+                }
+        } else {
+            onComplete(false)
+            Log.e("Firebase", "El email del usuario es nulo")
+        }
     }
 
 

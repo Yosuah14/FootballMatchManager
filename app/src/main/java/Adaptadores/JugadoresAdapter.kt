@@ -1,5 +1,6 @@
 package Adaptadores
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -11,9 +12,14 @@ import com.example.footballmatchmanager.Portero
 import com.example.footballmatchmanager.R
 import com.example.footballmatchmanager.databinding.DatosjugadorBinding
 import com.example.footballmatchmanager.databinding.RecycleJugadoresBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
+
     RecyclerView.Adapter<JugadoresAdapter.JugadorViewHolder>() {
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JugadorViewHolder {
         val binding =
@@ -57,6 +63,14 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
 
             binding.textViewNombre.text = jugador.nombre
             binding.textViewDetalle.text = "Detalles: ${jugador.posicion}"
+            // Configurar el botón "Borrar Jugador"
+            binding.btnBorrarJugador.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    // Llamar al método para borrar el jugador
+                    borrarJugador(position)
+                }
+            }
         }
 
         private fun mostrarDetallesJugador(jugador: JugadorBase) {
@@ -92,6 +106,36 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
             btnCerrar.setOnClickListener {
                 dialog.dismiss()
                 true
+            }
+        }
+        fun borrarJugador(position: Int) {
+            val jugadorBorrado = jugadoresList[position]
+            val currentUserEmail = firebaseAuth.currentUser?.email
+
+            if (currentUserEmail != null) {
+                val jugadoresCollection =
+                    db.collection("usuarios").document(currentUserEmail).collection("jugadores")
+
+                jugadoresCollection.whereEqualTo("nombre", jugadorBorrado.nombre).get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result!!) {
+                                // Borrar el documento correspondiente al jugador en Firestore
+                                document.reference.delete()
+                            }
+
+                            // Borrar el jugador de la lista local
+                            jugadoresList.removeAt(position)
+
+                            // Notificar al adaptador sobre el cambio en los datos
+                            notifyDataSetChanged()
+                        } else {
+                            Log.e("Firebase", "Error al obtener los jugadores", task.exception)
+                        }
+                    }
+            } else {
+                Log.e("Firebase", "El email del usuario es nulo")
+                // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
             }
         }
     }

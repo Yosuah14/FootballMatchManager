@@ -27,6 +27,8 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
     private var golesAntiguos=0L
     private var mvpAntiguos:Double=0.0
     private var asistenciasAntiguas=0L
+    var nombre: String? = null
+    var modificado=false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JugadorViewHolder {
         val binding =
@@ -90,6 +92,33 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
             val inflater = LayoutInflater.from(binding.root.context)
             val dialogBinding = DialogActulaizaJugadoresBinding.inflate(inflater)
             val checkBoxMvp = dialogBinding.checkBoxMVP
+
+            val textoCompleto = binding.textViewNombre.text.toString()
+
+            val partes = textoCompleto.split(":")
+
+            // Verificar si hay al menos dos partes después de dividir
+            if (partes.size >= 2) {
+                // El nombre está en la segunda parte
+                nombre = partes[1].trim()
+            }
+            cargarDatosJugador(nombre!!) { jugadorCargado ->
+                jugadorCargado?.let {
+                    // Jugador encontrado, actualizar la interfaz de usuario
+                    if (jugador is Portero) {
+                        binding.imageJugador.setImageResource(R.drawable.karius)
+                    } else {
+                        binding.imageJugador.setImageResource(R.drawable.pedroleon)
+                    }
+                    Log.d("golesf", nombre.toString())
+                    asistenciasAntiguas = jugadorCargado.asistencias!!
+                    Log.d("golesf", "assitencias del recycler1 " + asistenciasAntiguas.toString())
+                    golesAntiguos = jugadorCargado.goles!!
+                    Log.d("golesf", "goles del recycler1 " + golesAntiguos.toString())
+                    mvpAntiguos = jugadorCargado.valoracion
+                }
+            }
+
             val dialog = AlertDialog.Builder(binding.root.context)
                 .setView(dialogBinding.root)
                 .setPositiveButton("Modificar") { _, _ ->
@@ -97,33 +126,17 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                     val golesText = dialogBinding.editTextGolesDialog.text.toString()
                     val asistenciasText = dialogBinding.editTextAsistenciasDialog.text.toString()
 
-                    cargarDatosJugador(jugador.nombre) { jugadorCargado ->
-                        jugadorCargado?.let {
-                            // Jugador encontrado, actualizar la interfaz de usuario
-                            if (jugador is Portero) {
-                                binding.imageJugador.setImageResource(R.drawable.karius)
-                            } else {
-                                binding.imageJugador.setImageResource(R.drawable.pedroleon)
-                            }
-                            asistenciasAntiguas=jugadorCargado.asistencias!!
-                            golesAntiguos=jugadorCargado.goles!!
-                            mvpAntiguos=jugadorCargado.valoracion
-                        }
-                    }
-
-
-
-
+                    // Dividir la cadena usando ":" como separador
                     if (golesText.isNotEmpty() && golesText.toInt() >= 0 &&
                         asistenciasText.isNotEmpty() && asistenciasText.toInt() >= 0
                     ) {
                         // Determinar el valor de valoracion según el estado del CheckBox
-                        var valoracion =0.0
+                        var valoracion = 0.0
 
-                        if (checkBoxMvp.isChecked){
-                            valoracion=1.0
-                        }else{
-                            valoracion=0.0
+                        if (checkBoxMvp.isChecked) {
+                            valoracion = 1.0
+                        } else {
+                            valoracion = 0.0
                         }
 
                         // Crear un nuevo objeto JugadorBase con los datos modificados
@@ -135,10 +148,19 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                             posicion = jugador.posicion
                         )
                         golesModificar = jugadorModificado.goles?.minus(golesAntiguos!!)!!
-                        Log.d("goles",golesAntiguos.toString())
-                        assistenciasModi =
-                            jugadorModificado.asistencias?.minus(asistenciasAntiguas!!)!!
-                        mvp = jugadorModificado.valoracion-mvpAntiguos
+                        Log.d("golesf", "goles del recycler2 " + golesAntiguos.toString())
+                        Log.d("golesf", jugadorModificado.goles.toString())
+                        Log.d("golesf", golesModificar.toString())
+
+                        assistenciasModi = jugadorModificado.asistencias?.minus(asistenciasAntiguas!!)!!
+                        Log.d("golesf", "assitencias del recycler2 " + asistenciasAntiguas.toString())
+                        Log.d("golesf", jugadorModificado.asistencias.toString())
+                        Log.d("golesf", assistenciasModi.toString())
+
+                        mvp = jugadorModificado.valoracion - mvpAntiguos
+                        Log.d("golesf", mvpAntiguos.toString())
+                        Log.d("golesf", jugadorModificado.valoracion.toString())
+                        Log.d("golesf", mvp.toString())
 
                         // Verificar si el jugador ya existe
                         existeJugadorEnFirestore(jugadorModificado.nombre) { jugadorExiste ->
@@ -147,7 +169,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                             } else {
                                 guardarJugadorEnFirestoreParaPartido(jugadorModificado)
                             }
-                            actualizarDatosEnFirestoreJugadores(jugador.nombre,golesModificar,assistenciasModi,mvp)
+                            actualizarDatosEnFirestoreJugadores(jugador.nombre, golesModificar, assistenciasModi, mvp)
 
                             // Actualizar el objeto en la lista
                             binding.textViewNombre.text = "Nombre:" + jugador.nombre
@@ -156,8 +178,11 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                             binding.posicion.text = "Posicion:+ ${jugadorModificado.posicion}"
                             notifyDataSetChanged()
                         }
+                        modificado=true
+                        binding.jugadorModificado.text=modificado.toString()
 
-                        // Resto del código...
+                        // Cerrar el diálogo principal
+
                     } else {
                         Toast.makeText(
                             binding.root.context,
@@ -378,8 +403,6 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
         }
 
         }
-
-
     }
 
 
