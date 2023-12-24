@@ -55,11 +55,10 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         }
 
         fun bind(jugador: JugadorBase) {
-            if (jugador is Portero) {
-                binding.imageJugador.setImageResource(R.drawable.karius)
-            } else {
-                binding.imageJugador.setImageResource(R.drawable.pedroleon)
-            }
+                binding.imageJugador.setImageResource(jugador.imagenUrl)
+
+
+
 
             binding.textViewNombre.text = jugador.nombre
             binding.textViewDetalle.text = "Detalles: ${jugador.posicion}"

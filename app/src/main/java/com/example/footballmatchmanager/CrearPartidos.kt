@@ -1,10 +1,8 @@
 package com.example.footballmatchmanager
 
-import Adaptadores.JugadoresAdapter
-import Adaptadores.JugadoresAdapter3
-
 import Adaptadores.PartidosAdapter
 import JugadoresAdapter2
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,6 +26,7 @@ class CrearPartidos : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val jugadoresPartidos: MutableList<JugadorBase> = mutableListOf()
     private var agregados = false
+    private var selectedImageUri: Uri? = null
     private var partidosAdapter: PartidosAdapter? = null
     var cargado=false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -198,8 +197,22 @@ class CrearPartidos : AppCompatActivity() {
 
                                 // Crear la instancia del jugador
                                 val jugador: JugadorBase? = when (posicion) {
-                                    "Portero" -> Portero(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
-                                    "Jugador Normal" -> Jugadores(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
+                                    "Portero" -> Portero(
+                                        valoracion!!,
+                                        nombre!!,
+                                        posicion!!,
+                                        goles!!,
+                                        asistencias!!,
+                                        selectedImageUri.toString()
+                                    )
+                                    "Jugador Normal" -> Jugadores(
+                                        valoracion!!,
+                                        nombre!!,
+                                        posicion!!,
+                                        goles!!,
+                                        asistencias!!,
+                                        selectedImageUri.toString()
+                                    )
                                     else -> null
                                 }
                                 // Agregar el jugador a la lista si se creó correctamente

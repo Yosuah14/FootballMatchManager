@@ -1,3 +1,4 @@
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,9 +12,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class JugadoresAdapter2(
+
     private val jugadoresList: MutableList<JugadorBase>,
     var nuevaLista: MutableList<JugadorBase> = mutableListOf(),
-    private val onJugadorSeleccionadoListener: OnJugadorSeleccionadoListener? = null
+    private val onJugadorSeleccionadoListener: OnJugadorSeleccionadoListener? = null ,
+    private var selectedImageUri: Uri? = null
 ) : RecyclerView.Adapter<JugadoresAdapter2.JugadorViewHolder>() {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
@@ -107,8 +110,22 @@ class JugadoresAdapter2(
 
                                 val jugador:
                                         JugadorBase? = when (posicion) {
-                                    "Portero" -> Portero(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
-                                    "Jugador Normal" -> Jugadores(valoracion!!, nombre!!, posicion!!, goles!!, asistencias!!)
+                                    "Portero" -> Portero(
+                                        valoracion!!,
+                                        nombre!!,
+                                        posicion!!,
+                                        goles!!,
+                                        asistencias!!,
+                                        selectedImageUri.toString()
+                                    )
+                                    "Jugador Normal" -> Jugadores(
+                                        valoracion!!,
+                                        nombre!!,
+                                        posicion!!,
+                                        goles!!,
+                                        asistencias!!,
+                                        selectedImageUri.toString()
+                                    )
                                     else -> null
                                 }
 

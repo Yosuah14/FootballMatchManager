@@ -1,6 +1,6 @@
 package Adaptadores
 
-import android.app.Activity
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -21,6 +21,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
     RecyclerView.Adapter<JugadoresAdapter3.JugadorViewHolder>() {
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private var selectedImageUri: Uri? = null
     private var golesModificar = 0L
     private var assistenciasModi = 0L
     private var mvp = 0.0
@@ -326,7 +327,8 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                                             nombre!!,
                                             posicion!!,
                                             goles!!,
-                                            asistencias!!
+                                            asistencias!!,
+                                            selectedImageUri.toString()
                                         )
 
                                         "Jugador Normal" -> Jugadores(
@@ -334,7 +336,8 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
                                             nombre!!,
                                             posicion!!,
                                             goles!!,
-                                            asistencias!!
+                                            asistencias!!,
+                                            selectedImageUri.toString()
                                         )
 
                                         else -> null
