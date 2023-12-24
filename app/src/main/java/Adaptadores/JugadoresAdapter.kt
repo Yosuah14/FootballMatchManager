@@ -14,6 +14,8 @@ import com.example.footballmatchmanager.databinding.DatosjugadorBinding
 import com.example.footballmatchmanager.databinding.RecycleJugadoresBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.bumptech.glide.Glide
+
 
 class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
 
@@ -55,11 +57,9 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         }
 
         fun bind(jugador: JugadorBase) {
-                binding.imageJugador.setImageResource(jugador.imagenUrl)
-
-
-
-
+            Glide.with(binding.root.context)
+                .load(jugador.imagenUrl)
+                .into(binding.imageJugador)
             binding.textViewNombre.text = jugador.nombre
             binding.textViewDetalle.text = "Detalles: ${jugador.posicion}"
             // Configurar el botón "Borrar Jugador"

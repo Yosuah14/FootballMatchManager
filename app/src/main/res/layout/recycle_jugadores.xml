@@ -64,8 +64,8 @@
 
     <ImageView
         android:id="@+id/imageJugador"
-        android:layout_width="98dp"
-        android:layout_height="85dp"
+        android:layout_width="108dp"
+        android:layout_height="114dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.086"

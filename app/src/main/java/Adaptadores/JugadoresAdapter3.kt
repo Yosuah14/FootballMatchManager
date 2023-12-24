@@ -69,11 +69,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
             cargarDatosJugador(jugador.nombre) { jugadorCargado ->
                 jugadorCargado?.let {
                     // Jugador encontrado, actualizar la interfaz de usuario
-                    if (jugador is Portero) {
-                        binding.imageJugador.setImageResource(R.drawable.karius)
-                    } else {
-                        binding.imageJugador.setImageResource(R.drawable.pedroleon)
-                    }
+
                     asistenciasAntiguas=jugadorCargado.asistencias!!
                     golesAntiguos=jugadorCargado.goles!!
                     mvpAntiguos=jugadorCargado.valoracion
@@ -106,11 +102,6 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>) :
             cargarDatosJugador(nombre!!) { jugadorCargado ->
                 jugadorCargado?.let {
                     // Jugador encontrado, actualizar la interfaz de usuario
-                    if (jugador is Portero) {
-                        binding.imageJugador.setImageResource(R.drawable.karius)
-                    } else {
-                        binding.imageJugador.setImageResource(R.drawable.pedroleon)
-                    }
                     Log.d("golesf", nombre.toString())
                     asistenciasAntiguas = jugadorCargado.asistencias!!
                     Log.d("golesf", "assitencias del recycler1 " + asistenciasAntiguas.toString())

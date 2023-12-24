@@ -3,6 +3,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.footballmatchmanager.JugadorBase
 import com.example.footballmatchmanager.Jugadores
 import com.example.footballmatchmanager.Portero
@@ -74,10 +75,9 @@ class JugadoresAdapter2(
             }
         }
         fun bind(jugador: JugadorBase) {
-            when (jugador) {
-                is Jugadores -> binding.imageJugador.setImageResource(R.drawable.pedroleon)
-                is Portero -> binding.imageJugador.setImageResource(R.drawable.karius)
-            }
+            Glide.with(binding.root.context)
+                .load(jugador.imagenUrl)
+                .into(binding.imageJugador)
             binding.textViewNombre.text = jugador.nombre
             binding.textViewDetalle.text = "Detalles: ${jugador.posicion}"
 
