@@ -7,4 +7,6 @@
     <string name="iniciarsesioncongoogle">Iniciar Sesion con Google</string>
     <string name="EncabezadoLogin">FootballMatchManager</string>
     <string name="google_web_client_id" translatable="false">359201656465-8ahb3sc8il2l8g1pn778bt9n5ln4pnmp.apps.googleusercontent.com</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
