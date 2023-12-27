@@ -1,59 +1,85 @@
 package com.example.footballmatchmanager
-
+import Adaptadores.JugadoresAdapter
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.footballmatchmanager.JugadorBase
+import com.example.footballmatchmanager.Jugadores
+import com.example.footballmatchmanager.Portero
+import com.example.footballmatchmanager.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [RankingGoles.newInstance] factory method to
- * create an instance of this fragment.
- */
 class RankingGoles : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var jugadoresAdapter: JugadoresAdapter
+    private val jugadoresList = mutableListOf<JugadorBase>()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ranking_goles, container, false)
+        val view = inflater.inflate(R.layout.fragment_ranking_goles, container, false)
+        recyclerView = view.findViewById(R.id.recyclerViewJugadores)
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RankingGoles.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RankingGoles().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d("MenuOpciones", "onCreate llamado")
+        // Configurar el adaptador y el RecyclerView
+        jugadoresAdapter = JugadoresAdapter(jugadoresList)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = jugadoresAdapter
+
+        // Obtener y ordenar la lista de jugadores desde Firestore por la cantidad de goles
+        cargarDatosDesdeFirestore()
+    }
+    override fun onDestroyView() {
+        // Detener cualquier tarea asincrónica o animación aquí
+        super.onDestroyView()
+    }
+
+    private fun cargarDatosDesdeFirestore() {
+        val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
+
+        if (currentUserEmail != null) {
+            val jugadoresCollection = FirebaseFirestore.getInstance()
+                .collection("usuarios")
+                .document(currentUserEmail)
+                .collection("jugadores")
+
+            jugadoresCollection.get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val jugadores = task.result?.toObjects(JugadorBase::class.java)
+                    jugadores?.let {
+                        // Ordenar la lista de jugadores por la cantidad de goles de mayor a menor
+                        jugadoresList.addAll(it.sortedByDescending { jugador ->
+                            when (jugador) {
+                                is Jugadores -> jugador.goles
+                                is Portero -> jugador.goles
+                                else -> 0
+                            }
+                        })
+                        // Notificar al adaptador sobre el cambio en los datos
+                        jugadoresAdapter.notifyDataSetChanged()
+                    }
+                } else {
+                    Log.e("Firebase", "Error al obtener los jugadores", task.exception)
                 }
             }
+        } else {
+            Log.e("Firebase", "El email del usuario es nulo")
+            // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
+        }
     }
 }

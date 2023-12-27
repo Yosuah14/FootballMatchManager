@@ -55,7 +55,6 @@ class CrearPartidos : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         val dialogBinding = DialogCrearPartidosBinding.inflate(layoutInflater)
         builder.setView(dialogBinding.root)
-        var nuevoPartido = Partido()
 
         var jugadoresSeleccionados = false
 

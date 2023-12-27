@@ -54,6 +54,7 @@ class MenuPrincipal : AppCompatActivity() {
             finish() // Finalizar la actividad actual
         }
 
+
         // Configurar el botón "Volver"
         binding.btVolver.setOnClickListener {
             // Cerrar sesión y finalizar la actividad

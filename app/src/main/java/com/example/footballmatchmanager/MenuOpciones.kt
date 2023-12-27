@@ -1,5 +1,6 @@
 package com.example.footballmatchmanager
 
+
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -57,6 +58,18 @@ class MenuOpciones : AppCompatActivity() {
                 else -> false
             }
         }
+        binding.Rankingbutton.setOnClickListener {
+            val fragmentManager = supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+
+            // Deshabilitar temporalmente las animaciones
+            transaction.setCustomAnimations(0, 0, 0, 0)
+
+            transaction.replace(R.id.container, RankingGoles())
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
 
         // Configurar el OnClickListener para el botón btnCrearJugador
         binding.crearJugador.setOnClickListener {
