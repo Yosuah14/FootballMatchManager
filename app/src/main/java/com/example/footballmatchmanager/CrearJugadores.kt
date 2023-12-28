@@ -295,6 +295,7 @@ class CrearJugadores : AppCompatActivity() {
             Log.e("Firebase", "El email del usuario es nulo")
         }
     }
+
 }
 
 

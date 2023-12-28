@@ -102,7 +102,6 @@ class MenuOpciones : AppCompatActivity() {
         }
         binding.btnBorrarUsuario.setOnClickListener {
             mostrarVentanaConfirmacionBorrar()
-
         }
 
     }
@@ -117,30 +116,6 @@ class MenuOpciones : AppCompatActivity() {
             .setNegativeButton("Cancelar", null)
             .show()
     }
-    private fun mostrarVentanaConfirmacionBorrar() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Borrar Usuario")
-            .setMessage("¿Estás seguro de que deseas borrar el usuario?")
-            .setPositiveButton("Sí") { _, _ ->
-                auth.signOut()
-                val signInClient = Identity.getSignInClient(this)
-                signInClient.signOut().addOnCompleteListener {
-                    Log.e(TAG, "Cerrada sesión completamente")
-
-                }.addOnFailureListener {
-                    Log.e(TAG, "Hubo algún error al cerrar la sesión")
-
-                }
-                borrarUsuarioYJugadores()
-                borrarUsuario2()
-                val intent = Intent(this@MenuOpciones, Login::class.java).apply {
-                    putExtra("borrado", true)
-                }
-                startActivity(intent)
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
-    }
 
     private fun cerrarSesion() {
         // Cerrar sesión en Firebase y en el proveedor de autenticación de Google
@@ -148,18 +123,27 @@ class MenuOpciones : AppCompatActivity() {
         val signInClient = Identity.getSignInClient(this)
         signInClient.signOut().addOnCompleteListener {
             Log.e(TAG, "Cerrada sesión completamente")
-            val intent = Intent(this@MenuOpciones, Login::class.java).apply {
-                putExtra("borrado", true)
-            }
-            startActivity(intent)
+            navigateToLogin()
         }.addOnFailureListener {
             Log.e(TAG, "Hubo algún error al cerrar la sesión")
-            val intent = Intent(this@MenuOpciones, Login::class.java).apply {
-                putExtra("borrado", true)
-            }
-            startActivity(intent)
+            navigateToLogin()
         }
     }
+    private fun mostrarVentanaConfirmacionBorrar() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Borrar Usuario")
+            .setMessage("¿Estás seguro de que deseas borrar el usuario?")
+            .setPositiveButton("Sí") { _, _ ->
+                // Realiza la acción de borrado cuando el usuario confirma
+                borrarJugadoresEnFirestore()
+                borrarUsuarioEnUsersCollection()
+                cerrarSesion()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+
 
     private fun navigateToLogin() {
         // Navegar a la actividad de inicio de sesión (Login)
@@ -185,67 +169,51 @@ class MenuOpciones : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_SENDTO, uri)
         startActivity(intent)
     }
-    private fun borrarUsuarioYJugadores() {
+    private fun borrarJugadoresEnFirestore() {
+        val currentUserEmail = firebaseAuth.currentUser?.email
+        if (currentUserEmail != null) {
+            val jugadoresCollection = db.collection("usuarios").document(currentUserEmail).collection("jugadores")
+
+            // Obtener todos los documentos de la colección "jugadores" del usuario actual
+            jugadoresCollection.get().addOnSuccessListener { querySnapshot ->
+                // Borrar cada documento de la colección
+                for (document in querySnapshot.documents) {
+                    jugadoresCollection.document(document.id).delete()
+                        .addOnSuccessListener {
+                            Log.d("BORRAR_JUGADOR", "Jugador borrado exitosamente de Firestore")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("BORRAR_JUGADOR", "Error al borrar jugador de Firestore", e)
+                        }
+                }
+            }.addOnFailureListener { e ->
+                Log.e("BORRAR_JUGADOR", "Error al obtener jugadores de Firestore", e)
+            }
+        }
+    }
+    fun borrarUsuarioEnUsersCollection() {
         val currentUserEmail = firebaseAuth.currentUser?.email
 
         if (currentUserEmail != null) {
-            val usuarioDocument = db.collection("usuarios").document(currentUserEmail)
+            val userDocument = db.collection("users").document(currentUserEmail)
 
-            // Borrar el documento del usuario
-            usuarioDocument.delete()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.e("Firebase", "Usuario borrado correctamente")
-
-                        // Borrar la colección de jugadores del usuario
-                        val jugadoresCollection = db.collection("usuarios").document(currentUserEmail)
-                            .collection("jugadores")
-
-                        jugadoresCollection.get()
-                            .addOnCompleteListener { jugadoresTask ->
-                                if (jugadoresTask.isSuccessful) {
-                                    for (document in jugadoresTask.result!!) {
-                                        document.reference.delete()
-                                    }
-                                    Log.e("Firebase", "Jugadores del usuario borrados correctamente")
-                                } else {
-                                    Log.e("Firebase", "Error al obtener los jugadores del usuario", jugadoresTask.exception)
-                                }
-                            }
-                    } else {
-                        Log.e("Firebase", "Error al borrar el usuario", task.exception)
-                    }
+            // Borrar el documento del usuario en Firestore
+            userDocument.delete()
+                .addOnSuccessListener {
+                    Log.d("BORRAR_USUARIO", "Usuario borrado exitosamente de Firestore")
+                    // Realizar acciones adicionales después de borrar el usuario si es necesario
+                }
+                .addOnFailureListener { e ->
+                    Log.e("BORRAR_USUARIO", "Error al borrar usuario de Firestore", e)
                 }
         } else {
-            Log.e("Firebase", "El email del usuario es nulo")
+            Log.e("BORRAR_USUARIO", "El email del usuario es nulo")
             // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
         }
     }
-
-
-    private fun borrarUsuario2() {
-        val currentUserEmail = firebaseAuth.currentUser?.email
-
-        if (currentUserEmail != null) {
-            val usuarioDocument =
-                db.collection("users").document(currentUserEmail)
-
-            usuarioDocument.delete()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.e("Firebase", "Usuario borrado correctamente")
-
-
-                    } else {
-                        Log.e("Firebase", "Error al borrar el usuario", task.exception)
-                    }
-                }
-        } else {
-            Log.e("Firebase", "El email del usuario es nulo")
-            // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
-        }
     }
-}
+
+
 
 
 

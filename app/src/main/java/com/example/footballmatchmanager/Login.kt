@@ -25,6 +25,7 @@ class Login : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseauth: FirebaseAuth
+    private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Configuración de opciones de inicio de sesión de Google
@@ -38,16 +39,13 @@ class Login : AppCompatActivity() {
         setContentView(binding.root)
         firebaseauth = FirebaseAuth.getInstance()
 
-        val borrado = intent.getBooleanExtra("borrado", false)
-        Log.d("Borrado", "Valor de borrado: $borrado")
-
-        if (!borrado) {
-            Log.e("login2", "Cerrada sesión completamente")
-            Log.e("login2", firebaseauth.currentUser.toString() )
+        // Verificar si ya hay una sesión iniciada
+        if (firebaseauth.currentUser != null) {
             // Si hay una sesión iniciada, ir directamente al menú de opciones
             irMenuOpciones()
             finish()  // Cerrar esta actividad para evitar volver atrás
         }
+
         // Botón para registrar un nuevo usuario
         binding.btRegistrar.setOnClickListener {
             if (binding.edEmail.text.isNotEmpty() && binding.edPass.text.isNotEmpty()) {
