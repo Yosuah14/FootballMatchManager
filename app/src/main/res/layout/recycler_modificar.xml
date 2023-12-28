@@ -51,18 +51,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.503" />
 
-    <ImageView
-        android:id="@+id/imageJugador"
-        android:layout_width="112dp"
-        android:layout_height="107dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.026"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.704"
-        app:srcCompat="@drawable/pedroleon" />
-
     <TextView
         android:id="@+id/asistencias"
         android:layout_width="wrap_content"

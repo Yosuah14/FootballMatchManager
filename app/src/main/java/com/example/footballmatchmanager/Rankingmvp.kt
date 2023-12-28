@@ -47,7 +47,64 @@ class Rankingmvp : Fragment() {
     }
 
     private fun leerJugadoresDelUsuarioPorMVP() {
-        // Similar a la implementación de leerJugadoresDelUsuario en RankingGoles
-        // Pero ordenar por valoración (MVP) en lugar de goles
+        val currentUserEmail = firebaseAuth.currentUser?.email
+        Log.d("Firebase", "Email del usuario: $currentUserEmail")
+
+        if (currentUserEmail != null) {
+            val jugadoresCollection = db.collection("usuarios").document(currentUserEmail)
+                .collection("jugadores")
+
+            jugadoresCollection.get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("Firebase", "Obtención de jugadores exitosa")
+                    for (document in task.result!!) {
+                        try {
+                            val nombre = document.getString("nombre")
+                            val valoracion = document.getDouble("valoracion")
+                            val posicion = document.getString("posicion")
+                            val goles = document.getLong("goles")
+                            val asistencias = document.getLong("asistencias")
+                            val imageUrl = document.getString("imageUrl")
+
+                            val jugador: JugadorBase? = when (posicion) {
+                                "Portero" -> Portero(
+                                    valoracion!!,
+                                    nombre!!,
+                                    posicion!!,
+                                    goles!!,
+                                    asistencias!!,
+                                    imageUrl ?: ""
+                                )
+                                "Jugador Normal" -> Jugadores(
+                                    valoracion!!,
+                                    nombre!!,
+                                    posicion!!,
+                                    goles!!,
+                                    asistencias!!,
+                                    imageUrl ?: ""
+                                )
+                                else -> null
+                            }
+
+                            jugador?.let {
+                                jugadoresList.add(it)
+                            }
+                        } catch (e: Exception) {
+                            Log.e("Firebase", "Error al convertir documento a JugadorBase", e)
+                        }
+                    }
+
+                    // Ordenar la lista de jugadores por la cantidad de goles de mayor a menor
+                    jugadoresList.sortByDescending { it.asistencias }
+
+                    jugadoresAdapter.notifyDataSetChanged()
+                } else {
+                    Log.e("Firebase", "Error al obtener los jugadores", task.exception)
+                }
+            }
+        } else {
+            Log.e("Firebase", "El email del usuario es nulo")
+            // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
+        }
     }
 }

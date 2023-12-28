@@ -1,4 +1,5 @@
 package com.example.footballmatchmanager
+
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.footballmatchmanager.databinding.ActivityRankingsBinding
@@ -19,21 +20,17 @@ class Rankings : AppCompatActivity() {
         val pagerAdapter = RankingsPagerAdapter(this)
         viewPager.adapter = pagerAdapter
 
+        // Usar TabLayoutMediator para sincronizar el TabLayout y ViewPager2
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = getTabTitle(position)
         }.attach()
-
-        // Cargar el fragmento en la primera pestaña al iniciar la actividad
-        val firstFragment = RankingGoles()
-        supportFragmentManager.beginTransaction()
-            .replace(binding.fragmentContainer.id, firstFragment)
-            .commit()
     }
 
     private fun getTabTitle(position: Int): String {
         return when (position) {
             0 -> "Goles"
-
+            1 -> "Asistencias"
+            2 -> "MVP"
             else -> "Pestaña $position"
         }
     }

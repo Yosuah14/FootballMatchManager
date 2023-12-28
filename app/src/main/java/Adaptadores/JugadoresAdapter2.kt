@@ -75,9 +75,7 @@ class JugadoresAdapter2(
             }
         }
         fun bind(jugador: JugadorBase) {
-            Glide.with(binding.root.context)
-                .load(jugador.imagenUrl)
-                .into(binding.imageJugador)
+
             binding.textViewNombre.text = jugador.nombre
             binding.textViewDetalle.text = "Detalles: ${jugador.posicion}"
 

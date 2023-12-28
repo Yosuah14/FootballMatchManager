@@ -34,12 +34,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTipo" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="#19BFB9" />
-
-    <TextView
         android:id="@+id/tvGoles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
