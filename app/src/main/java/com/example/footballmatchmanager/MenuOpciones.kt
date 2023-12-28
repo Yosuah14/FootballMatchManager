@@ -85,9 +85,9 @@ class MenuOpciones : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Configurar el OnClickListener para el TextView "txtCreadorApp"
-        binding.txtCreadorApp.setOnClickListener {
-            abrirEnlaceGitHub()
+        binding.btnAcercaDe.setOnClickListener{
+            val intent = Intent(this@MenuOpciones, AcercaDe::class.java)
+            startActivity(intent)
         }
 
         // Configurar el OnClickListener para el botón "contacto"
@@ -137,6 +137,7 @@ class MenuOpciones : AppCompatActivity() {
                 // Realiza la acción de borrado cuando el usuario confirma
                 borrarJugadoresEnFirestore()
                 borrarUsuarioEnUsersCollection()
+                borrarPartidosEnFirestore()
                 cerrarSesion()
             }
             .setNegativeButton("Cancelar", null)
@@ -152,12 +153,7 @@ class MenuOpciones : AppCompatActivity() {
         finish()
     }
 
-    private fun abrirEnlaceGitHub() {
-        // Abrir el enlace del perfil de GitHub en el navegador web
-        val url = "https://github.com/Yosuah14"
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(intent)
-    }
+
 
     private fun enviarCorreo() {
         // Crear un intent para enviar un correo electrónico
@@ -191,6 +187,34 @@ class MenuOpciones : AppCompatActivity() {
             }
         }
     }
+    private fun borrarPartidosEnFirestore() {
+        val currentUserEmail = firebaseAuth.currentUser?.email
+
+        if (currentUserEmail != null) {
+            val partidosCollection = db.collection("usuarios").document(currentUserEmail).collection("partidos")
+
+            // Obtener todos los documentos de la colección "partidos" del usuario actual
+            partidosCollection.get().addOnSuccessListener { querySnapshot ->
+                // Borrar cada documento de la colección
+                for (document in querySnapshot.documents) {
+                    partidosCollection.document(document.id).delete()
+                        .addOnSuccessListener {
+                            Log.d("BORRAR_PARTIDO", "Partido borrado exitosamente de Firestore")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("BORRAR_PARTIDO", "Error al borrar partido de Firestore", e)
+                        }
+                }
+            }.addOnFailureListener { e ->
+                Log.e("BORRAR_PARTIDO", "Error al obtener partidos de Firestore", e)
+            }
+        } else {
+            Log.e("BORRAR_PARTIDO", "El email del usuario es nulo")
+            // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
+        }
+    }
+
+
     fun borrarUsuarioEnUsersCollection() {
         val currentUserEmail = firebaseAuth.currentUser?.email
 

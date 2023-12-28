@@ -29,7 +29,6 @@ class CrearJugadores : AppCompatActivity() {
     private var selectedImageUri: Uri? = null
     private lateinit var dialogImageView: ImageView
     private val REQUEST_IMAGE_PICK = 2
-
     private val jugadoresList: MutableList<JugadorBase> = mutableListOf()
     private lateinit var jugadoresAdapter: JugadoresAdapter
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()

@@ -64,6 +64,7 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         }
 
         fun bind(jugador: JugadorBase) {
+            //Cargar la imagen
             Glide.with(binding.root.context)
                 .load(jugador.imagenUrl)
                 .into(binding.imageJugador)

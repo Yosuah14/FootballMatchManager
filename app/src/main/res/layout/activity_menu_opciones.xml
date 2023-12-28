@@ -48,22 +48,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.946" />
 
-    <TextView
-        android:id="@+id/txtCreadorApp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="136dp"
-        android:autoLink="web"
-        android:clickable="true"
-        android:linksClickable="true"
-        android:text="Creador de la App"
-        android:textColor="#19BFB9"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <Button
         android:id="@+id/cerrarsesionmenuopciones"
         android:layout_width="106dp"
@@ -139,5 +123,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.703" />
+
+    <Button
+        android:id="@+id/btnAcercaDe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Acera de"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.196" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
