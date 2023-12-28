@@ -59,15 +59,9 @@ class MenuOpciones : AppCompatActivity() {
             }
         }
         binding.Rankingbutton.setOnClickListener {
-            val fragmentManager = supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
+            val intent = Intent(this@MenuOpciones, Rankings::class.java)
+            startActivity(intent)
 
-            // Deshabilitar temporalmente las animaciones
-            transaction.setCustomAnimations(0, 0, 0, 0)
-
-            transaction.replace(R.id.container, RankingGoles())
-            transaction.addToBackStack(null)
-            transaction.commit()
         }
 
 

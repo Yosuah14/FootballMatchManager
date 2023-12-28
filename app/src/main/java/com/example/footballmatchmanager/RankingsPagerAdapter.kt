@@ -1,27 +1,22 @@
 package com.example.footballmatchmanager
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class RankingsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class RankingsPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 
-    override fun getItem(position: Int): Fragment {
-        return when (position) {
-            0 -> RankingGoles()  // Tu fragmento existente
-            // Agrega más casos si tienes fragmentos adicionales
-            else -> throw IllegalArgumentException("Posición no válida: $position")
-        }
+    override fun getItemCount(): Int {
+        // Número total de pestañas
+        return 2  // Ajusta el número según sea necesario
     }
 
-    override fun getCount(): Int {
-        return 1  // Ajusta el recuento según la cantidad de fragmentos que tengas
-    }
-
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun createFragment(position: Int): Fragment {
+        // Devuelve el fragmento correspondiente a la posición
         return when (position) {
-            0 -> "Ranking Goles"  // Establece los títulos de las pestañas según sea necesario
-            // Agrega más títulos si tienes fragmentos adicionales
-            else -> null
+            0 -> RankingGoles()
+
+            // Agrega más casos según sea necesario
+            else -> throw IllegalArgumentException("Invalid position: $position")
         }
     }
 }

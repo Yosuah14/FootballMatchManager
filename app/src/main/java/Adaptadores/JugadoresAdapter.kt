@@ -2,6 +2,7 @@ package Adaptadores
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -37,8 +38,14 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
         return jugadoresList.size
     }
 
+
     inner class JugadorViewHolder(private val binding: RecycleJugadoresBinding) :
         RecyclerView.ViewHolder(binding.root) {
+         fun ocultarBotonBorrar(holder: RecyclerView.ViewHolder) {
+            // Configurar la visibilidad del botón de borrar según tus criterios
+            // Puedes ajustar la lógica aquí para mostrar u ocultar el botón según tus necesidades
+            binding.btnBorrarJugador.visibility = View.INVISIBLE
+        }
 
         init {
             // Configurar el clic largo en el botón
@@ -107,6 +114,7 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
                 true
             }
         }
+
         fun borrarJugador(position: Int) {
             val jugadorBorrado = jugadoresList[position]
             val currentUserEmail = firebaseAuth.currentUser?.email

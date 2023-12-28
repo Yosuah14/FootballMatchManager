@@ -3,16 +3,17 @@ package com.example.footballmatchmanager
 import Adaptadores.JugadoresAdapter
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class RankingGoles : Fragment() {
+
+class RankingAsistencias : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var jugadoresAdapter: JugadoresAdapter
@@ -21,15 +22,15 @@ class RankingGoles : Fragment() {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     companion object {
-        const val TAG = "RankingGolesFragment"
+        const val TAG = "RankingAsistenciasFragment"
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_ranking_goles, container, false)
-        recyclerView = view.findViewById(R.id.recyclerViewGoles)
+        val view = inflater.inflate(R.layout.fragment_ranking_asistencias, container, false)
+        recyclerView = view.findViewById(R.id.recyclerViewAsistencias)
         return view
     }
 
@@ -42,13 +43,13 @@ class RankingGoles : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = jugadoresAdapter
 
-
-
-        // Obtener y ordenar la lista de jugadores desde Firestore por la cantidad de goles
-        leerJugadoresDelUsuario()
+        // Obtener y ordenar la lista de jugadores desde Firestore por la cantidad de asistencias
+        leerJugadoresDelUsuarioPorAsistencias()
     }
 
-    private fun leerJugadoresDelUsuario() {
+    private fun leerJugadoresDelUsuarioPorAsistencias() {
+        // Similar a la implementación de leerJugadoresDelUsuario en RankingGoles
+        // Pero ordenar por asistencias en lugar de goles
         val currentUserEmail = firebaseAuth.currentUser?.email
         Log.d("Firebase", "Email del usuario: $currentUserEmail")
 
@@ -97,7 +98,7 @@ class RankingGoles : Fragment() {
                     }
 
                     // Ordenar la lista de jugadores por la cantidad de goles de mayor a menor
-                    jugadoresList.sortByDescending { it.goles }
+                    jugadoresList.sortByDescending { it.asistencias }
 
                     jugadoresAdapter.notifyDataSetChanged()
                 } else {
@@ -110,4 +111,3 @@ class RankingGoles : Fragment() {
         }
     }
 }
-
