@@ -17,11 +17,10 @@ import com.google.android.play.core.integrity.e
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class PartidosAdapter(private val partidosList: MutableList<Partido>) :
-    RecyclerView.Adapter<PartidosAdapter.PartidoViewHolder>() {
+class PartidosAdapter(
+    private val partidosList: MutableList<Partido>
+) : RecyclerView.Adapter<PartidosAdapter.PartidoViewHolder>() {
 
-    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartidoViewHolder {
         val binding =
@@ -40,6 +39,10 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
     inner class PartidoViewHolder(private val binding: RecyclerPartidosBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+        private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        private var jugadoresAdapter: JugadoresAdapter3? = null // Nueva propiedad
+
         init {
             binding.root.setOnClickListener {
                 Toast.makeText(
@@ -51,15 +54,14 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
         }
 
         fun bind(partido: Partido) {
-
             binding.textViewFecha.text = "Fecha: ${partido.fecha}"
-
             binding.textViewHoraInicio.text = "Hora de inicio: ${partido.horaInicio}"
             binding.textViewHoraFin.text = "Hora de fin: ${partido.horaFin}"
+
             binding.btnVerJugadores.setOnClickListener {
                 leerPartidosDelUsuario(partido.fecha)
-
             }
+
             binding.btnBorrarPartido.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -67,7 +69,6 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
                     borrarPartido(position)
                 }
             }
-
         }
 
         private fun leerPartidosDelUsuario(fechaPartido: String) {
@@ -84,9 +85,6 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
 
                             for (document in task.result!!) {
                                 try {
-                                    // Obtener los datos del partido del documento
-
-
                                     // Obtener la lista de jugadores
                                     val jugadoresData =
                                         document.get("jugadores") as List<HashMap<String, Any>>?
@@ -97,7 +95,6 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
                                             jugadorData["posicion"].toString(),
                                             jugadorData["goles"] as Long,
                                             jugadorData["asistencias"] as Long
-                                            // Otros campos según tu modelo de datos para JugadorBase
                                         )
                                     }
 
@@ -105,22 +102,16 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
                                     jugadores?.let {
                                         jugadoresList.addAll(it)
                                     }
-
-
-                                    // Crear el objeto Partido y agregarlo a la lista de partidos
-
-
                                 } catch (e: Exception) {
                                     Log.e("Firebase", "Error al convertir documento a Partido", e)
                                 }
                             }
 
-                            // Notificar al adaptador sobre el cambio en los datos
+                            // Crear la instancia del adaptador con la fecha del partido
+                            jugadoresAdapter = JugadoresAdapter3(jugadoresList, fechaPartido)
 
-
-                            // Mostrar los jugadores de este partido
-                            Log.d("Firebase", "Jugadores del partido $fechaPartido: $jugadoresList")
-                            cargarJugadoresEnDialog(jugadoresList)
+                            // Mostrar los jugadores en el diálogo
+                            cargarJugadoresEnDialog(jugadoresAdapter)
                         } else {
                             Log.e("Firebase", "Error al obtener los partidos", task.exception)
                         }
@@ -131,11 +122,8 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
             }
         }
 
-        private fun cargarJugadoresEnDialog(jugadores: MutableList<JugadorBase>) {
-
-
-            // Configurar el botón "Ver Jugadores"
-            binding.btnVerJugadores.setOnClickListener {
+        private fun cargarJugadoresEnDialog(jugadoresAdapter: JugadoresAdapter3?) {
+            if (jugadoresAdapter != null) {
                 // Configurar el diálogo para agregar jugadores
                 val inflater = LayoutInflater.from(binding.root.context)
                 val dialogBinding = DialogagregarjugadoresBinding.inflate(inflater)
@@ -143,8 +131,6 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
                 builder.setView(dialogBinding.root)
 
                 // Configurar el RecyclerView en el diálogo con el JugadoresAdapter3
-                val jugadoresAdapter = JugadoresAdapter3(jugadores)
-                // Cargar los datos de Firebase en el RecyclerView del diálogo
                 dialogBinding.recyclerViewJugadoresDialog.apply {
                     layoutManager = LinearLayoutManager(context)
                     adapter = jugadoresAdapter
@@ -163,6 +149,7 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
                 builder.show()
             }
         }
+
         fun borrarPartido(position: Int) {
             val partidoBorrado = partidosList[position]
             val currentUserEmail = firebaseAuth.currentUser?.email
@@ -194,7 +181,7 @@ class PartidosAdapter(private val partidosList: MutableList<Partido>) :
             }
         }
     }
-
 }
+
 
 

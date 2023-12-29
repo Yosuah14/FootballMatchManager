@@ -136,6 +136,7 @@ class MenuOpciones : AppCompatActivity() {
             .setPositiveButton("Sí") { _, _ ->
                 // Realiza la acción de borrado cuando el usuario confirma
                 borrarJugadoresEnFirestore()
+                borrarDatosJugadoresPartido()
                 borrarUsuarioEnUsersCollection()
                 borrarPartidosEnFirestore()
                 cerrarSesion()
@@ -235,7 +236,39 @@ class MenuOpciones : AppCompatActivity() {
             // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
         }
     }
+    fun borrarDatosJugadoresPartido() {
+        val currentUserEmail = firebaseAuth.currentUser?.email
+
+        if (currentUserEmail != null) {
+            val datosJugadoresPartidoCollection = db.collection("usuarios")
+                .document(currentUserEmail)
+                .collection("datosjugadorespartido")
+
+            // Borrar todos los documentos en la colección "datosjugadorespartido"
+            datosJugadoresPartidoCollection.get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        datosJugadoresPartidoCollection.document(document.id)
+                            .delete()
+                            .addOnSuccessListener {
+                                Log.d("BORRAR_DATOS_JUGADORES", "Datos del jugador para el partido borrados exitosamente de Firestore")
+                                // Realizar acciones adicionales después de borrar los datos si es necesario
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("BORRAR_DATOS_JUGADORES", "Error al borrar datos del jugador para el partido de Firestore", e)
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("BORRAR_DATOS_JUGADORES", "Error al obtener datos de jugadores para el partido de Firestore", e)
+                }
+        } else {
+            Log.e("BORRAR_DATOS_JUGADORES", "El email del usuario es nulo")
+            // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
+        }
     }
+
+}
 
 
 
