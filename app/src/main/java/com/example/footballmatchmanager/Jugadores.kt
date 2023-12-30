@@ -3,7 +3,7 @@ package com.example.footballmatchmanager
 
 
 class Jugadores(
-    valoracion: Double,
+    valoracion: Long,
     nombre: String,
     posicion: String,
     goles: Long = 0,

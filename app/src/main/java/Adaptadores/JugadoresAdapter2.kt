@@ -101,7 +101,7 @@ class JugadoresAdapter2(
 
                             try {
                                 val nombre = document.getString("nombre")
-                                val valoracion = document.getDouble("valoracion")
+                                val valoracion = document.getLong("valoracion")
                                 val posicion = document.getString("posicion")
                                 val goles = document.getLong("goles")
                                 val asistencias = document.getLong("asistencias")

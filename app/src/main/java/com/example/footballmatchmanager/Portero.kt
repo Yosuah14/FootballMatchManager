@@ -1,6 +1,6 @@
 package com.example.footballmatchmanager
 class Portero(
-    valoracion: Double,
+    valoracion: Long,
     nombre: String,
     posicion: String,
     goles: Long = 0,

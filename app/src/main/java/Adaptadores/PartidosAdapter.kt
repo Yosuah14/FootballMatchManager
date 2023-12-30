@@ -38,11 +38,8 @@ class PartidosAdapter(
 
     inner class PartidoViewHolder(private val binding: RecyclerPartidosBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
         private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-        private var jugadoresAdapter: JugadoresAdapter3? = null // Nueva propiedad
-
         init {
             binding.root.setOnClickListener {
                 Toast.makeText(
@@ -59,7 +56,7 @@ class PartidosAdapter(
             binding.textViewHoraFin.text = "Hora de fin: ${partido.horaFin}"
 
             binding.btnVerJugadores.setOnClickListener {
-                leerPartidosDelUsuario(partido.fecha)
+                leerJugadoresDePartido(partido.fecha, partido.horaInicio,partido.horaFin)
             }
 
             binding.btnBorrarPartido.setOnClickListener {
@@ -71,7 +68,7 @@ class PartidosAdapter(
             }
         }
 
-        private fun leerPartidosDelUsuario(fechaPartido: String) {
+        private fun leerJugadoresDePartido(fechaPartido: String,horaIni:String,horaFin:String) {
             val currentUserEmail = firebaseAuth.currentUser?.email
 
             if (currentUserEmail != null) {
@@ -85,12 +82,12 @@ class PartidosAdapter(
 
                             for (document in task.result!!) {
                                 try {
-                                    // Obtener la lista de jugadores
+                                    // Obtener la lista de jugadores específicos de este partido
                                     val jugadoresData =
                                         document.get("jugadores") as List<HashMap<String, Any>>?
                                     val jugadores = jugadoresData?.map { jugadorData ->
                                         JugadorBase(
-                                            jugadorData["valoracion"] as Double,
+                                            jugadorData["valoracion"] as Long,
                                             jugadorData["nombre"].toString(),
                                             jugadorData["posicion"].toString(),
                                             jugadorData["goles"] as Long,
@@ -108,12 +105,12 @@ class PartidosAdapter(
                             }
 
                             // Crear la instancia del adaptador con la fecha del partido
-                            jugadoresAdapter = JugadoresAdapter3(jugadoresList, fechaPartido)
+                            val jugadoresAdapter = JugadoresAdapter3(jugadoresList, fechaPartido,horaIni,horaFin )
 
                             // Mostrar los jugadores en el diálogo
                             cargarJugadoresEnDialog(jugadoresAdapter)
                         } else {
-                            Log.e("Firebase", "Error al obtener los partidos", task.exception)
+                            Log.e("Firebase", "Error al obtener los jugadores del partido", task.exception)
                         }
                     }
             } else {
@@ -121,6 +118,7 @@ class PartidosAdapter(
                 // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
             }
         }
+
 
         private fun cargarJugadoresEnDialog(jugadoresAdapter: JugadoresAdapter3?) {
             if (jugadoresAdapter != null) {

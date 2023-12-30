@@ -98,7 +98,7 @@ class CrearJugadores : AppCompatActivity() {
                                 // Crear una nueva instancia de Jugador solo si no existe
                                 val nuevoJugador = when (posicion) {
                                     "Portero" -> Portero(
-                                        valoracion.toDouble(),
+                                        valoracion.toLong(),
                                         nombre,
                                         "Portero",
                                         goles.toLong(),
@@ -107,7 +107,7 @@ class CrearJugadores : AppCompatActivity() {
                                     )
 
                                     "Jugador Normal" -> Jugadores(
-                                        valoracion.toDouble(),
+                                        valoracion.toLong(),
                                         nombre,
                                         "Jugador Normal",
                                         goles.toLong(),
@@ -223,7 +223,7 @@ class CrearJugadores : AppCompatActivity() {
                             try {
                                 // Obtener los datos del jugador del documento
                                 val nombre = document.getString("nombre")
-                                val valoracion = document.getDouble("valoracion")
+                                val valoracion = document.getLong("valoracion")
                                 val posicion = document.getString("posicion")
                                 val goles = document.getLong("goles")
                                 val asistencias = document.getLong("asistencias")

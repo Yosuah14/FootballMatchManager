@@ -169,7 +169,7 @@ class CrearPartidos : AppCompatActivity() {
                         for (document in task.result!!) {
                             try {
                                 val nombre = document.getString("nombre")
-                                val valoracion = document.getDouble("valoracion")
+                                val valoracion = document.getLong("valoracion")
                                 val posicion = document.getString("posicion")
                                 val goles = document.getLong("goles")
                                 val asistencias = document.getLong("asistencias")
@@ -236,10 +236,10 @@ class CrearPartidos : AppCompatActivity() {
             val jugadoresData = partido.jugadores?.map { jugador ->
                 mapOf(
                     "nombre" to jugador.nombre,
-                    "valoracion" to jugador.valoracion,
+                    "valoracion" to 0L,
                     "posicion" to jugador.posicion,
-                    "goles" to jugador.goles,
-                    "asistencias" to jugador.asistencias,
+                    "goles" to 0L,
+                    "asistencias" to 0L,
                     "imageUrl" to jugador.imagenUrl
                 )
             }
@@ -281,25 +281,42 @@ class CrearPartidos : AppCompatActivity() {
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
                             try {
+                                Log.d("Firebase", "Antes de la línea 301")
                                 val fecha = document.getString("fecha")
                                 val horaInicio = document.getString("horaInicio")
                                 val horaFin = document.getString("horaFin")
+                                Log.d("Firebase", fecha+horaInicio+horaFin)
 
-                                val jugadoresData =
-                                    document.get("jugadores") as List<HashMap<String, Any>>?
-                                val jugadores = jugadoresData?.map { jugadorData ->
-                                    JugadorBase(
-                                        jugadorData["valoracion"] as Double,
-                                        jugadorData["nombre"].toString(),
-                                        jugadorData["posicion"].toString(),
-                                        jugadorData["goles"] as Long,
-                                        jugadorData["asistencias"] as Long,
-                                        jugadorData["imageUrl"] as String?
-                                    )
+                                if (fecha != null && horaInicio != null && horaFin != null) {
+                                    val jugadoresData =
+                                        document.get("jugadores") as? List<HashMap<String, Any>>?
+
+                                    val jugadores = jugadoresData?.mapNotNull { jugadorData ->
+                                        try {
+                                            JugadorBase(
+                                                jugadorData["valoracion"] as? Long ?: 0,
+                                                jugadorData["nombre"]?.toString() ?: "",
+                                                jugadorData["posicion"]?.toString() ?: "",
+                                                jugadorData["goles"] as? Long ?: 0,
+                                                jugadorData["asistencias"] as? Long ?: 0,
+                                                jugadorData["imageUrl"]?.toString()
+                                            )
+                                        } catch (e: Exception) {
+                                            Log.e("Firebase", "Error al convertir jugadorData a JugadorBase", e)
+                                            null
+                                        }
+                                    }
+
+                                    val partido = Partido(fecha, horaInicio, horaFin, jugadores)
+                                    partidosList.add(partido)
+
+                                    Log.d("Firebase", "Partido agregado correctamente")
+
+                                } else {
+                                    Log.e("Firebase", "Alguno de los campos fecha, horaInicio, horaFin es null")
                                 }
 
-                                val partido = Partido(fecha!!, horaInicio!!, horaFin!!, jugadores)
-                                partidosList.add(partido)
+                                Log.d("Firebase", "Después de la línea 301")
 
                             } catch (e: Exception) {
                                 Log.e("Firebase", "Error al convertir documento a Partido", e)

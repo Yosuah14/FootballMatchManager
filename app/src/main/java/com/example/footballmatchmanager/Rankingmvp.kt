@@ -19,11 +19,9 @@ class Rankingmvp : Fragment() {
     private val jugadoresList = mutableListOf<JugadorBase>()
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
     companion object {
         const val TAG = "RankingMVPFragment"
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,20 +30,16 @@ class Rankingmvp : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerViewmvp)
         return view
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated llamado")
-
         // Configurar el adaptador y el RecyclerView
         jugadoresAdapter = JugadoresAdapter(jugadoresList)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = jugadoresAdapter
-
         // Obtener y ordenar la lista de jugadores desde Firestore por la valoración (MVP)
         leerJugadoresDelUsuarioPorMVP()
     }
-
     private fun leerJugadoresDelUsuarioPorMVP() {
         val currentUserEmail = firebaseAuth.currentUser?.email
         Log.d("Firebase", "Email del usuario: $currentUserEmail")
@@ -60,7 +54,7 @@ class Rankingmvp : Fragment() {
                     for (document in task.result!!) {
                         try {
                             val nombre = document.getString("nombre")
-                            val valoracion = document.getDouble("valoracion")
+                            val valoracion = document.getLong("valoracion")
                             val posicion = document.getString("posicion")
                             val goles = document.getLong("goles")
                             val asistencias = document.getLong("asistencias")
