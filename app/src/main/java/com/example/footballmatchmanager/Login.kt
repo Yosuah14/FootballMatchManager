@@ -1,13 +1,23 @@
 package com.example.footballmatchmanager
 
+import android.Manifest
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.footballmatchmanager.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -55,6 +65,7 @@ class Login : AppCompatActivity() {
                 ).addOnCompleteListener {
                     if (it.isSuccessful) {
                         irMenuPrincipal(it.result?.user?.email ?: "", Proveedor.BASIC)
+                        mostrarNotificacionInicioSesion()
                     } else {
                         showAlert("Error registrando al usuario.")
                     }
@@ -74,6 +85,7 @@ class Login : AppCompatActivity() {
                     binding.edPass.text.toString()
                 ).addOnCompleteListener {
                     if (it.isSuccessful) {
+                        mostrarNotificacionInicioSesion()
                         irMenuPrincipal(it.result?.user?.email ?: "", Proveedor.BASIC)
                     } else {
                         showAlert("Credenciales incorrectas")
@@ -103,6 +115,7 @@ class Login : AppCompatActivity() {
 
         val signInClient = googleSignInClient.signInIntent
         launcherVentanaGoogle.launch(signInClient)
+        mostrarNotificacionInicioSesion()
     }
 
     private val launcherVentanaGoogle =
@@ -152,6 +165,90 @@ class Login : AppCompatActivity() {
         }
         startActivity(menuPrincipalIntent)
     }
+    private fun mostrarNotificacionInicioSesion() {
+        // Crear un canal de notificación (Obligatorio desde Android 8.0 Oreo)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "mi_canal_id"
+            val channelName = "Mi Canal"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, channelName, importance).apply {
+                description = "Descripción del canal"
+            }
+
+            // Registrar el canal con el NotificationManager
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Crear un intent para abrir la aplicación al hacer clic en la notificación
+        val intent = Intent(this, MenuOpciones::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        // Crear la notificación
+        val notification = NotificationCompat.Builder(this, "mi_canal_id")
+            .setSmallIcon(R.drawable.logo)
+            .setContentTitle("¡Inicio de sesión exitoso!")
+            .setContentText("Has iniciado sesión en la aplicación.")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .build()
+
+        // Mostrar la notificación
+        with(NotificationManagerCompat.from(this)) {
+            // Verificar si se tiene el permiso necesario
+            if (ActivityCompat.checkSelfPermission(
+                    this@Login,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Si no se tiene el permiso, solicitarlo en tiempo de ejecución
+                ActivityCompat.requestPermissions(
+                    this@Login,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    PERMISSION_REQUEST_CODE
+                )
+            } else {
+                // Si se tiene el permiso, mostrar la notificación
+                notify(NOTIFICATION_ID, notification)
+            }
+        }
+    }
+
+    // Definir una constante para el código de solicitud de permisos
+    private val PERMISSION_REQUEST_CODE = 123
+
+    // Definir una constante para el ID de notificación
+    private val NOTIFICATION_ID = 1
+
+    // Sobrescribir el método onRequestPermissionsResult para manejar la respuesta del usuario
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> {
+                // Verificar si el permiso fue otorgado
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permiso otorgado, mostrar la notificación
+                    mostrarNotificacionInicioSesion()
+                } else {
+                    // Permiso denegado, puedes manejar esto según tus necesidades
+                    Toast.makeText(
+                        this,
+                        "Permiso de notificación denegado. La notificación no se mostrará.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            else -> {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            }
+        }
+    }
+
 
     private fun irMenuOpciones() {
         val menuOpcionesIntent = Intent(this, MenuOpciones::class.java)
