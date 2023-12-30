@@ -134,14 +134,15 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                             Log.d("Firebase",asistenciasAntiguas.toString() )
                             nuevasAsistenciasTemp = golesText.toLong() - asistenciasAntiguas
                             nuevosMvpTemp = nuevosMvp-mvpAntiguos
+                            mostrarConfirmacionCambios(
+                                jugador.nombre,
+                                golesText.toLong(),
+                                golesText.toLong()
+                            )
                         }
 
 
-                        mostrarConfirmacionCambios(
-                            jugador.nombre,
-                            golesText.toLong(),
-                            golesText.toLong()
-                        )
+
                     } else {
                         Toast.makeText(
                             binding.root.context,

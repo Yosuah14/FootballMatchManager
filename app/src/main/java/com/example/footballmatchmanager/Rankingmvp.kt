@@ -89,7 +89,7 @@ class Rankingmvp : Fragment() {
                     }
 
                     // Ordenar la lista de jugadores por la cantidad de goles de mayor a menor
-                    jugadoresList.sortByDescending { it.asistencias }
+                    jugadoresList.sortByDescending { it.valoracion }
 
                     jugadoresAdapter.notifyDataSetChanged()
                 } else {

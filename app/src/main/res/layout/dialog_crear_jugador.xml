@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#045360"
     android:padding="16dp">
 
     <!-- Campo de Nombre -->
@@ -13,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Nombre"
-        android:textColorHint="#19BFB9"
+        android:textColorHint="@color/md_theme_dark_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -68,12 +67,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextGoles">
 
-        <ImageView
-            android:id="@+id/imagenJugador"
-            android:layout_width="185dp"
-            android:layout_height="95dp"
-            tools:srcCompat="@tools:sample/avatars" />
-
         <RadioButton
             android:id="@+id/radioButtonPortero"
             android:layout_width="wrap_content"
@@ -93,6 +86,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Abrir camara" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="218dp"
+            android:layout_height="118dp"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </RadioGroup>
 

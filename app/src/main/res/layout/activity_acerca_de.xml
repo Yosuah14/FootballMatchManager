@@ -11,7 +11,6 @@
         android:id="@+id/toolbarCrearJugadores"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="#19BFB9"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +61,6 @@
         android:clickable="true"
         android:linksClickable="true"
         android:text="Enlace a mi github"
-        android:textColor="#19BFB9"
         android:textSize="16sp"
         android:textStyle="bold"
 
