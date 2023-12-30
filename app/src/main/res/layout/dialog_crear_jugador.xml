@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Nombre"
-        android:textColorHint="@color/md_theme_dark_background"
+        android:textColorHint="#19BFB9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -74,6 +74,11 @@
             android:text="Portero"
             android:textColor="#19BFB9" />
 
+        <ImageView
+            android:layout_width="188dp"
+            android:layout_height="95dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
         <RadioButton
             android:id="@+id/radioButtonJugador"
             android:layout_width="wrap_content"
@@ -86,12 +91,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Abrir camara" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="218dp"
-            android:layout_height="118dp"
-            tools:srcCompat="@tools:sample/avatars" />
 
     </RadioGroup>
 
