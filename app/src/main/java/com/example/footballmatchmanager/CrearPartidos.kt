@@ -140,14 +140,17 @@ class CrearPartidos : AppCompatActivity() {
                         }
                     } else {
                         mostrarMensajeError("La fecha debe ser mayor o igual a la fecha actual")
+                        jugadoresList.clear()
                         cargado = false
                     }
                 } catch (e: Exception) {
                     mostrarMensajeError("Error al procesar la información del partido")
+                    jugadoresList.clear()
                     cargado = false
                 }
             } else {
                 mostrarMensajeError("Todos los campos obligatorios deben estar rellenos")
+                jugadoresList.clear()
                 cargado = false
             }
         }

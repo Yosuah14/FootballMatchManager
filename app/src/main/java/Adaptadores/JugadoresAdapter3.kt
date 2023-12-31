@@ -26,7 +26,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
     private var nuevosGolesTemp: Long = 0L
     private var nuevasAsistenciasTemp: Long = 0L
     private var nuevosMvp: Long = 0L
-    private var nuevosMvpTemp:Long=0L
+    private var nuevosMvpTemp: Long = 0L
     private var selectedImageUri: Uri? = null
     private var golesAntiguos = 0L
     private var mvpAntiguos: Long = 0L
@@ -73,7 +73,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
         // Función para vincular datos de un jugador al ViewHolder
         fun bind(jugador: JugadorBase) {
             binding.textViewNombre.text = "Nombre:" + jugador.nombre
-            cargarDatosJugador(jugador.nombre,fecha) { jugadorCargado ->
+            cargarDatosJugador(jugador.nombre, fecha) { jugadorCargado ->
                 jugadorCargado?.let {
                     asistenciasAntiguas = jugadorCargado.asistencias!!
                     golesAntiguos = jugadorCargado.goles!!
@@ -88,6 +88,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                 }
             }
         }
+
         // Función para mostrar un cuadro de diálogo con detalles y opciones de modificación del jugador
         private fun mostrarDetallesJugador(jugador: JugadorBase) {
             val inflater = LayoutInflater.from(binding.root.context)
@@ -98,11 +99,11 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
             if (partes.size >= 2) {
                 nombre = partes[1].trim()
             }
-            cargarDatosJugador(nombre!!,fecha) { jugadorCargado ->
+            cargarDatosJugador(nombre!!, fecha) { jugadorCargado ->
                 asistenciasAntiguas = jugadorCargado?.asistencias ?: 0L
-                Log.d("Firebase",asistenciasAntiguas.toString() )
+                Log.d("Firebase", asistenciasAntiguas.toString())
                 golesAntiguos = jugadorCargado?.goles ?: 0L
-                Log.d("Firebase",golesAntiguos.toString() )
+                Log.d("Firebase", golesAntiguos.toString())
                 mvpAntiguos = jugadorCargado?.valoracion ?: 0L
 
             }
@@ -123,24 +124,24 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                         } else {
                             nuevosMvp = 0L
                         }
-                        cargarDatosJugador(nombre!!,fecha) { jugadorCargado ->
+                        cargarDatosJugador(nombre!!, fecha) { jugadorCargado ->
                             asistenciasAntiguas = jugadorCargado?.asistencias ?: 0L
-                            Log.d("Firebase",asistenciasAntiguas.toString() )
+                            Log.d("Firebase", asistenciasAntiguas.toString())
                             golesAntiguos = jugadorCargado?.goles ?: 0L
-                            Log.d("Firebase",golesAntiguos.toString() )
+                            Log.d("Firebase", golesAntiguos.toString())
                             mvpAntiguos = jugadorCargado?.valoracion ?: 0L
-                            Log.d("Firebase",golesAntiguos.toString() )
+                            Log.d("Firebase", golesAntiguos.toString())
                             nuevosGolesTemp = golesText.toLong() - golesAntiguos
-                            Log.d("Firebase",asistenciasAntiguas.toString() )
-                            nuevasAsistenciasTemp = golesText.toLong() - asistenciasAntiguas
-                            nuevosMvpTemp = nuevosMvp-mvpAntiguos
+                            Log.d("Firebase", nuevosGolesTemp.toString())
+                            nuevasAsistenciasTemp = asistenciasText.toLong() - asistenciasAntiguas
+                            Log.d("Firebase", nuevasAsistenciasTemp.toString())
+                            nuevosMvpTemp = nuevosMvp - mvpAntiguos
                             mostrarConfirmacionCambios(
                                 jugador.nombre,
                                 golesText.toLong(),
-                                golesText.toLong()
+                                asistenciasText.toLong()
                             )
                         }
-
 
 
                     } else {
@@ -155,6 +156,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
 
             dialog.show()
         }
+
         // Función para mostrar un cuadro de diálogo de confirmación antes de aplicar los cambios
         private fun mostrarConfirmacionCambios(
             nombreJugador: String,
@@ -179,6 +181,8 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                         nuevosGolesTemp,
                         nuevasAsistenciasTemp,
                         nuevosMvpTemp
+
+
                     )
                     notifyDataSetChanged()
                 }
@@ -188,6 +192,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                 .create()
             dialog.show()
         }
+
         // Función para actualizar los datos de un jugador en Firestore para un partido
         private fun actualizarPartidoEnFirestore(
             fechaPartido: String,
@@ -196,7 +201,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
             nuevaValoracion: Long,
             nuevaHoraInicio: String,
             nuevaHoraFin: String,
-            nombreJugador:String
+            nombreJugador: String
         ) {
             val currentUserEmail = firebaseAuth.currentUser?.email
 
@@ -233,13 +238,23 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                                         "jugadores", jugadoresData
                                     ).addOnCompleteListener { updateTask ->
                                         if (updateTask.isSuccessful) {
-                                            Log.d("Firebase", "Datos del partido actualizados correctamente")
+                                            Log.d(
+                                                "Firebase",
+                                                "Datos del partido actualizados correctamente"
+                                            )
                                         } else {
-                                            Log.e("Firebase", "Error al actualizar datos del partido", updateTask.exception)
+                                            Log.e(
+                                                "Firebase",
+                                                "Error al actualizar datos del partido",
+                                                updateTask.exception
+                                            )
                                         }
                                     }
                                 } else {
-                                    Log.d("Firebase", "No hay datos de partidos para la fecha especificada")
+                                    Log.d(
+                                        "Firebase",
+                                        "No hay datos de partidos para la fecha especificada"
+                                    )
                                 }
                             } catch (e: Exception) {
                                 Log.e("Firebase", "Error al procesar datos del partido", e)
@@ -277,7 +292,8 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
 
                                 try {
                                     if (documents != null && !documents.isEmpty) {
-                                        val document = documents.documents[0] // Tomamos el primer documento (suponemos nombres únicos)
+                                        val document =
+                                            documents.documents[0] // Tomamos el primer documento (suponemos nombres únicos)
 
                                         // Obtener la lista de jugadores del partido
                                         val jugadoresData =
@@ -297,11 +313,25 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                                             // Agrega logs para verificar los valores
 
 
-
                                             val jugador: JugadorBase = when (posicion) {
-                                                "Portero" -> Portero(valoracion, nombre, posicion, goles, asistencias, selectedImageUri.toString())
+                                                "Portero" -> Portero(
+                                                    valoracion,
+                                                    nombre,
+                                                    posicion,
+                                                    goles,
+                                                    asistencias,
+                                                    selectedImageUri.toString()
+                                                )
 
-                                                "Jugador Normal" -> Jugadores(valoracion, nombre, posicion, goles, asistencias, selectedImageUri.toString())
+                                                "Jugador Normal" -> Jugadores(
+                                                    valoracion,
+                                                    nombre,
+                                                    posicion,
+                                                    goles,
+                                                    asistencias,
+                                                    selectedImageUri.toString()
+                                                )
+
                                                 else -> throw IllegalArgumentException("Posición de jugador desconocida: $posicion")
                                             }
 
@@ -311,7 +341,10 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                                             callback.invoke(null)
                                         }
                                     } else {
-                                        Log.d("Firebase", "No hay datos de jugadores para la fecha especificada")
+                                        Log.d(
+                                            "Firebase",
+                                            "No hay datos de jugadores para la fecha especificada"
+                                        )
                                         callback.invoke(null)
                                     }
                                 } catch (e: Exception) {
@@ -319,7 +352,11 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                                     callback.invoke(null)
                                 }
                             } else {
-                                Log.e("Firebase", "Error al obtener datos del jugador", task.exception)
+                                Log.e(
+                                    "Firebase",
+                                    "Error al obtener datos del jugador",
+                                    task.exception
+                                )
                                 callback.invoke(null)
                             }
                         }
@@ -329,6 +366,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                 callback.invoke(null)
             }
         }
+
         // Función para actualizar los datos de un jugador en Firestore (totales acumulados)
         private fun actualizarDatosEnFirestoreJugadores(
             nombreJugador: String,
@@ -377,8 +415,11 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                     .addOnFailureListener {
                         Log.e("Firestore", "Error al buscar el jugador en Firestore", it)
                     }
+            } else {
+                Log.e("Firestore", "Usuario no autenticado")
             }
         }
+
     }
 }
 
