@@ -24,7 +24,6 @@
         android:id="@+id/toolbarmenuprincipal"
         android:layout_width="408dp"
         android:layout_height="76dp"
-        android:background="#19BFB9"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,12 +40,13 @@
         android:layout_height="52dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
         android:text="Contacto"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.885"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.93" />
+        app:layout_constraintVertical_bias="0.935" />
 
     <Button
         android:id="@+id/cerrarsesionmenuopciones"
@@ -54,6 +54,7 @@
         android:layout_height="52dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
         android:text="Cerrar Sesion"
+        android:textColor="@android:color/white"
         android:textColorHighlight="#19BFB9"
         android:textColorLink="#19BFB9"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -65,18 +66,19 @@
 
     <TextView
         android:id="@+id/textoMenuopciones"
-        android:layout_width="208dp"
-        android:layout_height="40dp"
+        android:layout_width="402dp"
+        android:layout_height="106dp"
+        android:fontFamily="@font/press_start_2p"
         android:text="Menu de opciones"
-        android:textColor="#19BFB9"
+        android:textColor="@android:color/white"
         android:textColorHint="#19BFB9"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.576"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.146" />
+        app:layout_constraintVertical_bias="0.132" />
 
     <ImageButton
         android:id="@+id/crearJugador"
@@ -85,10 +87,10 @@
         android:background="@color/md_theme_dark_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.692"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.316"
+        app:layout_constraintVertical_bias="0.319"
         app:srcCompat="@drawable/baseline_person_add_alt_1_25" />
 
     <ImageView
@@ -108,6 +110,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
         android:text="Ranking"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.53"
@@ -117,29 +120,34 @@
 
     <Button
         android:id="@+id/btnBorrarUsuario"
-        android:layout_width="109dp"
-        android:layout_height="57dp"
+        android:layout_width="134dp"
+        android:layout_height="60dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
+        android:fontFamily="@font/press_start_2p"
         android:text="Borrar Usuario"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.068"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.703" />
+        app:layout_constraintVertical_bias="0.693" />
 
     <Button
         android:id="@+id/btnAcercaDe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="134dp"
+        android:layout_height="60dp"
         android:background="@color/CustomColor1"
         android:backgroundTint="#E12525"
+        android:fontFamily="@font/press_start_2p"
         android:text="Acera de"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.206" />
+        app:layout_constraintVertical_bias="0.195" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

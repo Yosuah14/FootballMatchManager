@@ -61,9 +61,9 @@
         android:id="@+id/radioGroupPosicion"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="84dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.125"
+        app:layout_constraintHorizontal_bias="0.937"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextGoles">
 
@@ -73,12 +73,6 @@
             android:layout_height="wrap_content"
             android:text="Portero"
             android:textColor="#19BFB9" />
-
-        <ImageView
-            android:id="@+id/imagenJugador"
-            android:layout_width="188dp"
-            android:layout_height="95dp"
-            tools:srcCompat="@tools:sample/avatars" />
 
         <RadioButton
             android:id="@+id/radioButtonJugador"
@@ -91,7 +85,14 @@
             android:id="@+id/BtnSeleccionarImgen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
             android:text="Abrir camara" />
+
+        <ImageView
+            android:id="@+id/imagenJugador"
+            android:layout_width="188dp"
+            android:layout_height="95dp"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </RadioGroup>
 

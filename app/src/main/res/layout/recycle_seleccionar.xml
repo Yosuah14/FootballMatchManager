@@ -51,10 +51,11 @@
 
     <Button
         android:id="@+id/seleccionar"
-        android:layout_width="104dp"
-        android:layout_height="49dp"
+        android:layout_width="118dp"
+        android:layout_height="59dp"
         android:layout_marginTop="24dp"
         android:text="eliminar"
+        app:icon="@android:drawable/btn_dialog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
