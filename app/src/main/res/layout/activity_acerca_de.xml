@@ -29,6 +29,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:fontFamily="@font/emblema_one"
         android:text="!Hola! Soy José un estudiante del grado de desarrollador de aplicaciones multiplataforma,este es mi proyecto de android.La idea de hacer este proyecto vino porque necesitabamos hacer una aplicacion util que nos sirviese o le sirviese a alguien de algo.Pense en mis amigos y como nos gusta mucho el futbol sala pense en hacer un gestor de partidos y de jugadores para ver nuestras estadisticas y ver quien hace mas goles,asistencias..."
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,7 +37,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbarCrearJugadores"
-        app:layout_constraintVertical_bias="0.073" />
+        app:layout_constraintVertical_bias="0.014" />
 
     <ImageView
         android:id="@+id/imageViewAcercaDe"
@@ -54,19 +55,20 @@
 
     <TextView
         android:id="@+id/txtCreadorApp"
-        android:layout_width="137dp"
-        android:layout_height="34dp"
-        android:layout_marginBottom="76dp"
+        android:layout_width="192dp"
+        android:layout_height="26dp"
+        android:layout_marginBottom="100dp"
         android:autoLink="web"
         android:clickable="true"
+        android:fontFamily="@font/emblema_one"
         android:linksClickable="true"
         android:text="Enlace a mi github"
         android:textSize="16sp"
-        android:textStyle="bold"
 
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.536"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

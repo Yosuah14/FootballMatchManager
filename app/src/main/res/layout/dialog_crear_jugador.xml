@@ -11,8 +11,8 @@
         android:id="@+id/editTextNombre"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/emblema_one"
         android:hint="Nombre"
-        android:textColorHint="#19BFB9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,8 +23,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/emblema_one"
         android:hint="MVP"
-        android:textColorHint="#19BFB9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextNombre" />
@@ -35,8 +35,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/emblema_one"
         android:hint="Goles"
-        android:textColorHint="#19BFB9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextValoracion" />
@@ -50,8 +50,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:fontFamily="@font/emblema_one"
         android:hint="Asistencias"
-        android:textColorHint="#19BFB9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.093"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,22 +71,23 @@
             android:id="@+id/radioButtonPortero"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Portero"
-            android:textColor="#19BFB9" />
+            android:fontFamily="@font/emblema_one"
+            android:text="Portero" />
 
         <RadioButton
             android:id="@+id/radioButtonJugador"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jugador"
-            android:textColor="#19BFB9" />
+            android:fontFamily="@font/emblema_one"
+            android:text="Jugador" />
 
         <Button
             android:id="@+id/BtnSeleccionarImgen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
-            android:text="Abrir camara" />
+            android:text="Abrir camara"
+            android:textColor="@color/md_theme_dark_onBackground" />
 
         <ImageView
             android:id="@+id/imagenJugador"

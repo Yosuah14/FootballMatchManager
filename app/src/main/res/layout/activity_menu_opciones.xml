@@ -7,19 +7,6 @@
     tools:context=".MenuOpciones">
 
 
-    <ImageButton
-        android:id="@+id/crearBalon"
-        android:layout_width="87dp"
-        android:layout_height="84dp"
-        android:background="@color/md_theme_dark_background"
-        android:src="@drawable/baseline_sports_soccer_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.949"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.741" />
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarmenuprincipal"
         android:layout_width="408dp"
@@ -50,8 +37,8 @@
 
     <Button
         android:id="@+id/cerrarsesionmenuopciones"
-        android:layout_width="106dp"
-        android:layout_height="52dp"
+        android:layout_width="89dp"
+        android:layout_height="34dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
         android:text="Cerrar Sesion"
         android:textColor="@android:color/white"
@@ -59,10 +46,10 @@
         android:textColorLink="#19BFB9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.085"
+        app:layout_constraintHorizontal_bias="0.341"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.946" />
+        app:layout_constraintVertical_bias="0.022" />
 
     <TextView
         android:id="@+id/textoMenuopciones"
@@ -80,48 +67,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.132" />
 
-    <ImageButton
-        android:id="@+id/crearJugador"
-        android:layout_width="297dp"
-        android:layout_height="133dp"
-        android:background="@color/md_theme_dark_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.692"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.319"
-        app:srcCompat="@drawable/baseline_person_add_alt_1_25" />
-
-    <ImageView
-        android:id="@+id/btnCrearPartidos"
-        android:layout_width="254dp"
-        android:layout_height="112dp"
-        android:layout_marginTop="344dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.56"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/_137726__2_" />
-
-    <Button
-        android:id="@+id/Rankingbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
-        android:text="Ranking"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.53"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.777" />
-
     <Button
         android:id="@+id/btnBorrarUsuario"
-        android:layout_width="134dp"
-        android:layout_height="60dp"
+        android:layout_width="79dp"
+        android:layout_height="36dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
         android:fontFamily="@font/press_start_2p"
         android:text="Borrar Usuario"
@@ -129,10 +78,10 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintHorizontal_bias="0.894"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.693" />
+        app:layout_constraintVertical_bias="0.035" />
 
     <Button
         android:id="@+id/btnAcercaDe"
@@ -145,9 +94,83 @@
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.036"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.195" />
+        app:layout_constraintVertical_bias="0.946" />
+
+    <Button
+        android:id="@+id/crearJugador"
+        android:layout_width="253dp"
+        android:layout_height="74dp"
+        android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
+        android:fontFamily="@font/press_start_2p"
+        android:text="Crear Jugadores"
+        android:textColor="@color/md_theme_dark_onBackground"
+        android:textSize="16sp"
+        app:icon="@drawable/baseline_person_add_alt_1_25"
+        app:iconSize="40dp"
+        app:iconTint="@color/md_theme_dark_onBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.229" />
+
+    <Button
+        android:id="@+id/btnCrearPartidos"
+        android:layout_width="253dp"
+        android:layout_height="74dp"
+        android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
+        android:fontFamily="@font/press_start_2p"
+        android:text="Crear Partidos"
+        android:textColor="@color/md_theme_dark_onBackground"
+        android:textSize="16sp"
+        app:icon="@drawable/twotone_stadium_24"
+        app:iconSize="40dp"
+        app:iconTint="@color/md_theme_dark_onBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.391" />
+
+    <Button
+        android:id="@+id/Rankingbutton"
+        android:layout_width="253dp"
+        android:layout_height="74dp"
+        android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
+        android:fontFamily="@font/press_start_2p"
+        android:text="Rankings"
+        android:textColor="@color/md_theme_dark_onBackground"
+        android:textSize="16sp"
+        app:icon="@drawable/sharp_sports_score_24"
+        app:iconSize="40dp"
+        app:iconTint="@color/md_theme_dark_onBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.558" />
+
+    <Button
+        android:id="@+id/CrearBalon"
+        android:layout_width="253dp"
+        android:layout_height="74dp"
+        android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
+        android:fontFamily="@font/press_start_2p"
+        android:text="Jugar al Balon"
+        android:textColor="@color/md_theme_dark_onBackground"
+        android:textSize="16sp"
+        app:icon="@drawable/baseline_sports_soccer_24"
+        app:iconSize="40dp"
+        app:iconTint="@color/md_theme_dark_onBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.719" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
