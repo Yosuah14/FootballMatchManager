@@ -13,7 +13,7 @@
         android:layout_height="53dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
-        android:text="Modificar"
+        android:text="@string/modificar"
         android:textColor="@color/md_theme_dark_onBackground"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

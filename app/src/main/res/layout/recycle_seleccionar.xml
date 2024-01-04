@@ -54,7 +54,7 @@
         android:layout_height="42dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
-        android:text="eliminar"
+        android:text="@string/eliminar"
         android:textColor="@color/md_theme_dark_onBackground"
         android:textSize="12sp"
         app:icon="@drawable/baseline_do_not_disturb_24"

@@ -7,6 +7,37 @@
     <string name="iniciarsesion">Log in</string>
     <string name="iniciarsesioncongoogle">Log in with Google</string>
     <string name="EncabezadoLogin">Login to the application</string>
+    <string name="cerrar">Close</string>
+    <string name="eliminar">delete</string>
+    <string name="crearjugadores">Create players</string>
+    <string name="crearpartidos">Create matches</string>
+    <string name="rankings">Rankings</string>
+    <string name="jugarbalon">" Playing ball"</string>
+    <string name="preferencias">Preferences</string>
+    <string name="acercade">" About me"</string>
+    <string name="contacto">Contact</string>
+    <string name="menudeopciones">Option menu</string>
+    <string name="volversincerrar">Return (without logging out)</string>
+    <string name="crearpartido">Create match</string>
+    <string name="crearjugador">Create Player</string>
+    <string name="sobremi">!Hello! I am José, a student of the degree of multiplatform application developer, this is my android project. The idea of ​​doing this project came because we needed to make a useful application that would be useful to us or to someone. I thought about my friends and how we I really like futsal, I thought about making a match and player manager to see our statistics and see who scores the most goals, assists...</string>
+    <string name="github">Link to my Github</string>
+    <string name="edad">Age</string>
+    <string name="nombre">Name</string>
+    <string name="fecha">date(YYYY-MM-DD)</string>
+    <string name="hora">Hour(HH:MM)</string>
+    <string name="eliminarjugadorespartido">Remove players from the match</string>
+    <string name="guardar">Save</string>
+    <string name="abrircamara">Open Camera</string>
+    <string name="Portero">GoalKeeper</string>
+    <string name="jugador">Player</string>
+    <string name="goles">Goal</string>
+    <string name="asistencias">Assits</string>
+    <string name="Continuar">Continue</string>
+    <string name="cerrarsesion">Sign out</string>
+    <string name="borrarusu">Delete user</string>
+    <string name="modificar">Modify</string>
+    <string name="verjugadores">" see players"</string>
 
 
 </resources>

@@ -30,7 +30,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/emblema_one"
-        android:text="!Hola! Soy José un estudiante del grado de desarrollador de aplicaciones multiplataforma,este es mi proyecto de android.La idea de hacer este proyecto vino porque necesitabamos hacer una aplicacion util que nos sirviese o le sirviese a alguien de algo.Pense en mis amigos y como nos gusta mucho el futbol sala pense en hacer un gestor de partidos y de jugadores para ver nuestras estadisticas y ver quien hace mas goles,asistencias..."
+        android:text="@string/sobremi"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
         android:clickable="true"
         android:fontFamily="@font/emblema_one"
         android:linksClickable="true"
-        android:text="Enlace a mi github"
+        android:text="@string/github"
         android:textSize="16sp"
 
         android:textStyle="bold"
