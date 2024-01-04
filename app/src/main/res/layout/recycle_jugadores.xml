@@ -26,13 +26,13 @@
         android:id="@+id/textViewNombre"
         android:layout_width="169dp"
         android:layout_height="31dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="28dp"
         android:fontFamily="@font/emblema_one"
         android:text="Nombre"
         android:textColor="@color/md_theme_dark_onBackground"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@id/jugadormodificado"
-        app:layout_constraintHorizontal_bias="0.851"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,25 +63,25 @@
         app:layout_constraintStart_toEndOf="@id/jugadormodificado"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.163" />
+        app:layout_constraintVertical_bias="0.222" />
 
     <ImageView
         android:id="@+id/imageJugador"
-        android:layout_width="108dp"
-        android:layout_height="114dp"
+        android:layout_width="88dp"
+        android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39"
+        app:layout_constraintVertical_bias="0.491"
         app:srcCompat="@drawable/pedroleon" />
 
     <Button
         android:id="@+id/btnBorrarJugador"
         android:layout_width="101dp"
         android:layout_height="51dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="76dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
         android:text="Borrar"
         android:textColor="@color/md_theme_dark_onBackground"
@@ -90,7 +90,7 @@
         app:icon="@drawable/baseline_do_not_disturb_24"
         app:iconPadding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.996"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

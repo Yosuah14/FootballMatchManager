@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Preferencias">
+
+    <Button
+        android:id="@+id/btnBorrarUsuario"
+        android:layout_width="137dp"
+        android:layout_height="67dp"
+        android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
+        android:fontFamily="@font/press_start_2p"
+        android:text="Borrar Usuario"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.825"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.694" />
+
+    <Button
+        android:id="@+id/cerrarsesionmenuopciones"
+        android:layout_width="137dp"
+        android:layout_height="67dp"
+        android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
+        android:fontFamily="@font/press_start_2p"
+        android:text="Cerrar Sesion"
+        android:textColor="@android:color/white"
+        android:textColorHighlight="#19BFB9"
+        android:textColorLink="#19BFB9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.199"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.693" />
+</androidx.constraintlayout.widget.ConstraintLayout>

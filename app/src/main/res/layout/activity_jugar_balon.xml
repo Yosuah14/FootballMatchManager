@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#045360"
     tools:context=".JugarBalon">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarCrearJugadores"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background=" #19BFB9"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,8 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="404dp"
-        android:text="Puntos"
-        android:textColor="#19BFB9"
+        android:textColor="@color/md_theme_dark_onBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -33,26 +30,31 @@
 
     <Button
         android:id="@+id/btnGuardar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_width="227dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
         android:text="Guardar"
+        android:textColor="@color/md_theme_dark_onBackground"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.532"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewPuntos" />
 
     <Button
         android:id="@+id/btnBorrar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="227dp"
+        android:layout_height="57dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
         android:text="Borrar"
+        android:textColor="@color/md_theme_dark_onBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.534"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnGuardar"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.059" />
 
     <ImageButton
         android:id="@+id/crearJugador"

@@ -6,18 +6,6 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
 
-    <!-- ImageView para la imagen -->
-
-    <!-- TextView para el primer texto -->
-
-    <!-- TextView para el segundo texto -->
-
-    <!-- Button para realizar acciones -->
-
-
-    <!-- Otros elementos -->
-
-    <!-- Otros elementos -->
 
     <Button
         android:id="@+id/btnmodi"
@@ -35,9 +23,9 @@
 
     <TextView
         android:id="@+id/textViewDetalle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="268dp"
+        android:layout_width="136dp"
+        android:layout_height="17dp"
+        android:layout_marginEnd="152dp"
         android:fontFamily="@font/emblema_one"
         android:text="Goles"
         android:textColor="@color/md_theme_dark_onBackground"
@@ -45,12 +33,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.381" />
+        app:layout_constraintVertical_bias="0.307" />
 
     <TextView
         android:id="@+id/asistencias"
-        android:layout_width="91dp"
-        android:layout_height="22dp"
+        android:layout_width="146dp"
+        android:layout_height="16dp"
         android:fontFamily="@font/emblema_one"
         android:text="Asistencias"
         android:textSize="12sp"
@@ -72,13 +60,13 @@
 
     <TextView
         android:id="@+id/posicion"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="24dp"
         android:fontFamily="@font/emblema_one"
         android:text="Posicion"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="@id/mvp"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/mvp"
         app:layout_constraintTop_toBottomOf="@id/mvp" />
 
@@ -86,30 +74,27 @@
         android:id="@+id/mvp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/emblema_one"
         android:text="MVP"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@id/asistencias"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/asistencias"
         app:layout_constraintTop_toBottomOf="@id/asistencias" />
 
     <TextView
         android:id="@+id/textViewNombre"
-        android:layout_width="108dp"
-        android:layout_height="26dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="164dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/emblema_one"
         android:text="TextView"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.293"
+        app:layout_constraintHorizontal_bias="0.449"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Otros elementos -->
-
-    <!-- Otros elementos -->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

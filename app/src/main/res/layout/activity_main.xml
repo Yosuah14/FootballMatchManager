@@ -32,7 +32,7 @@
 
     <Button
         android:id="@+id/btLogin"
-        android:layout_width="181dp"
+        android:layout_width="171dp"
         android:layout_height="62dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
         android:fontFamily="@font/press_start_2p"
@@ -42,7 +42,7 @@
         android:textSize="11dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.886"
+        app:layout_constraintHorizontal_bias="0.933"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.581" />
@@ -64,7 +64,7 @@
 
     <Button
         android:id="@+id/btRegistrar"
-        android:layout_width="181dp"
+        android:layout_width="171dp"
         android:layout_height="62dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
         android:fontFamily="@font/press_start_2p"
@@ -73,7 +73,7 @@
         android:textSize="11sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.069"
+        app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.581" />
