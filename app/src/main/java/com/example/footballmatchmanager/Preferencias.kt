@@ -2,9 +2,12 @@ package com.example.footballmatchmanager
 
 import android.content.ContentValues
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.RadioButton
 import androidx.appcompat.app.AlertDialog
 import com.example.footballmatchmanager.databinding.ActivityAcercaDeBinding
 import com.example.footballmatchmanager.databinding.ActivityPreferenciasBinding
@@ -14,24 +17,63 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.Locale
 
 class Preferencias : AppCompatActivity() {
     lateinit var binding: ActivityPreferenciasBinding
     private val auth: FirebaseAuth = com.google.firebase.Firebase.auth
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPreferenciasBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.cerrarsesionmenuopciones.setOnClickListener {
-            mostrarVentanaConfirmacionCerrarSesion()
+        sharedPreferences = getSharedPreferences("idioma", MODE_PRIVATE)
 
+        setSupportActionBar(binding.toolbarCrearJugadores)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbarCrearJugadores.setNavigationOnClickListener {
+            onBackPressed()
+        }
+        binding.btnAplicar.setOnClickListener {
+            val radioGroupIdioma = binding.idioma
+            val radioButtonSeleccionado = findViewById<RadioButton>(radioGroupIdioma.checkedRadioButtonId)
+            if (radioButtonSeleccionado != null) {
+                val idiomaSeleccionado = when (radioButtonSeleccionado.id) {
+                    R.id.ingles -> "en"
+                    R.id.espanol -> "es"
+                    else -> "es" // Idioma por defecto si no se encuentra ninguna selección
+                }
+                cambiarIdioma(idiomaSeleccionado)
+                // Guardar el idioma seleccionado en las SharedPreferences
+                sharedPreferences.edit().putString("idioma", idiomaSeleccionado).apply()
+                // Ir a la actividad MenuOpciones
+                val intent = Intent(this, MenuOpciones::class.java)
+                startActivity(intent)
+                finish() // Finalizar esta actividad para evitar que el usuario regrese al menú de preferencias
+            }
+        }
+
+        binding.cerrarsesionmenuopciones.setOnLongClickListener{
+            mostrarVentanaConfirmacionCerrarSesion()
+            true
         }
         binding.btnBorrarUsuario.setOnClickListener {
             mostrarVentanaConfirmacionBorrar()
         }
+    }
+
+
+    private fun cambiarIdioma(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        // Reiniciar la actividad para aplicar el cambio de idioma
+        recreate()
     }
     private fun borrarJugadoresEnFirestore() {
         val currentUserEmail = firebaseAuth.currentUser?.email

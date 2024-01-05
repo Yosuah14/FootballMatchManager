@@ -17,10 +17,10 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.825"
+        app:layout_constraintHorizontal_bias="0.897"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.694" />
+        app:layout_constraintVertical_bias="0.566" />
 
     <Button
         android:id="@+id/cerrarsesionmenuopciones"
@@ -34,8 +34,62 @@
         android:textColorLink="#19BFB9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.199"
+        app:layout_constraintHorizontal_bias="0.167"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.693" />
+        app:layout_constraintVertical_bias="0.566" />
+
+
+    <Button
+        android:id="@+id/btnAplicar"
+        android:layout_width="137dp"
+        android:layout_height="67dp"
+        android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
+        android:fontFamily="@font/press_start_2p"
+        android:text="@string/aplicar"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.802"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.21" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarCrearJugadores"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/md_theme_dark_background"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="?android:attr/homeAsUpIndicator"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <RadioGroup
+        android:id="@+id/idioma"
+        android:layout_width="98dp"
+        android:layout_height="93dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.311"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.19">
+
+        <RadioButton
+            android:id="@+id/ingles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ingles" />
+
+        <RadioButton
+            android:id="@+id/espanol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/español" />
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

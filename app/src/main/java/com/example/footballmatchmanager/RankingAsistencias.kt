@@ -97,7 +97,7 @@ class RankingAsistencias : Fragment() {
                         }
                     }
 
-                    // Ordenar la lista de jugadores por la cantidad de goles de mayor a menor
+                    // Ordenar la lista de jugadores por la cantidad de asistencias de mayor a menor
                     jugadoresList.sortByDescending { it.asistencias }
 
                     jugadoresAdapter.notifyDataSetChanged()

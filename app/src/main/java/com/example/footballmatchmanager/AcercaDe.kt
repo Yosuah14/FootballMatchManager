@@ -14,11 +14,7 @@ class AcercaDe : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAcercaDeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        Log.d("AcercaDe", "onCreate: View initialized successfully")
-
         binding.txtCreadorApp.setOnClickListener {
-            Log.d("AcercaDe", "Click on txtCreadorApp")
             abrirEnlaceGitHub()
         }
 
@@ -30,7 +26,6 @@ class AcercaDe : AppCompatActivity() {
     }
 
     private fun abrirEnlaceGitHub() {
-        Log.d("AcercaDe", "Opening GitHub link")
         // Abrir el enlace del perfil de GitHub en el navegador web
         val url = "https://github.com/Yosuah14"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))

@@ -1,7 +1,4 @@
 package com.example.footballmatchmanager
-
-
-
 class Jugadores(
     valoracion: Long,
     nombre: String,

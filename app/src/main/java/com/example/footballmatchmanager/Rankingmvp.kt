@@ -43,11 +43,9 @@ class Rankingmvp : Fragment() {
     private fun leerJugadoresDelUsuarioPorMVP() {
         val currentUserEmail = firebaseAuth.currentUser?.email
         Log.d("Firebase", "Email del usuario: $currentUserEmail")
-
         if (currentUserEmail != null) {
             val jugadoresCollection = db.collection("usuarios").document(currentUserEmail)
                 .collection("jugadores")
-
             jugadoresCollection.get().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d("Firebase", "Obtención de jugadores exitosa")
@@ -79,7 +77,6 @@ class Rankingmvp : Fragment() {
                                 )
                                 else -> null
                             }
-
                             jugador?.let {
                                 jugadoresList.add(it)
                             }
@@ -87,10 +84,8 @@ class Rankingmvp : Fragment() {
                             Log.e("Firebase", "Error al convertir documento a JugadorBase", e)
                         }
                     }
-
-                    // Ordenar la lista de jugadores por la cantidad de goles de mayor a menor
+                    // Ordenar la lista de jugadores por la cantidad de mvp de mayor a menor
                     jugadoresList.sortByDescending { it.valoracion }
-
                     jugadoresAdapter.notifyDataSetChanged()
                 } else {
                     Log.e("Firebase", "Error al obtener los jugadores", task.exception)

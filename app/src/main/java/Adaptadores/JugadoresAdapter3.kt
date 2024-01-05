@@ -89,16 +89,18 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
             }
         }
 
-        // Función para mostrar un cuadro de diálogo con detalles y opciones de modificación del jugador
+      //Funcion para saber los datos que debemos nintroducir para ctualizar los datos de los jugadores
         private fun mostrarDetallesJugador(jugador: JugadorBase) {
             val inflater = LayoutInflater.from(binding.root.context)
             val dialogBinding = DialogActulaizaJugadoresBinding.inflate(inflater)
             val checkBoxMvp = dialogBinding.checkBoxMVP
             val textoCompleto = binding.textViewNombre.text.toString()
             val partes = textoCompleto.split(":")
+          //Sacamos el nombre del jugador
             if (partes.size >= 2) {
                 nombre = partes[1].trim()
             }
+          //cargamos sus datos del partido
             cargarDatosJugador(nombre!!, fecha) { jugadorCargado ->
                 asistenciasAntiguas = jugadorCargado?.asistencias ?: 0L
                 Log.d("Firebase", asistenciasAntiguas.toString())
@@ -107,15 +109,12 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                 mvpAntiguos = jugadorCargado?.valoracion ?: 0L
 
             }
-
             val dialog = AlertDialog.Builder(binding.root.context)
                 .setView(dialogBinding.root)
                 .setPositiveButton("Modificar") { _, _ ->
+                    //Si le damos a modifcar cogemos las variables antiguas
                     val golesText = dialogBinding.editTextGolesDialog.text.toString()
                     val asistenciasText = dialogBinding.editTextAsistenciasDialog.text.toString()
-
-
-
                     if (golesText.isNotEmpty() && golesText.toInt() >= 0 &&
                         asistenciasText.isNotEmpty() && asistenciasText.toInt() >= 0
                     ) {
@@ -142,8 +141,6 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                                 asistenciasText.toLong()
                             )
                         }
-
-
                     } else {
                         Toast.makeText(
                             binding.root.context,
@@ -157,7 +154,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
             dialog.show()
         }
 
-        // Función para mostrar un cuadro de diálogo de confirmación antes de aplicar los cambios
+        // Función para mostrar un cuadro de diálogo de confirmación antes de aplicar los cambios(modifcar los datos del jugador del partido y los datos totales)
         private fun mostrarConfirmacionCambios(
             nombreJugador: String,
             nuevosGoles: Long,
@@ -174,14 +171,12 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                         horaIni,
                         horaFin,
                         nombreJugador
-
                     )
                     actualizarDatosEnFirestoreJugadores(
                         nombreJugador,
                         nuevosGolesTemp,
                         nuevasAsistenciasTemp,
                         nuevosMvpTemp
-
 
                     )
                     notifyDataSetChanged()
@@ -193,7 +188,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
             dialog.show()
         }
 
-        // Función para actualizar los datos de un jugador en Firestore para un partido
+        // Función para actualizar los datos de un jugador en Firestore para un partido (actualizar los datos de esos jugadores en el recycler con los nuevos goles y nuesvas asistencias)
         private fun actualizarPartidoEnFirestore(
             fechaPartido: String,
             nuevosGoles: Long,
@@ -204,7 +199,6 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
             nombreJugador: String
         ) {
             val currentUserEmail = firebaseAuth.currentUser?.email
-
             if (currentUserEmail != null) {
                 val partidosCollection =
                     db.collection("usuarios").document(currentUserEmail)
@@ -267,9 +261,7 @@ class JugadoresAdapter3(private val jugadoresList: MutableList<JugadorBase>, pri
                 Log.e("Firebase", "Usuario no autenticado")
             }
         }
-
-
-        // Función para cargar los datos de un jugador desde Firestore para un partido
+        // Función para cargar los datos de un jugador desde Firestore para un partido(cargar los datos de los jugadores de ese jugador pero sus datos del partido no totales)
         private fun cargarDatosJugador(
             fechaPartido: String,
             nombreJugador: String,

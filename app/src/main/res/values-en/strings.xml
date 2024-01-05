@@ -38,6 +38,10 @@
     <string name="borrarusu">Delete user</string>
     <string name="modificar">Modify</string>
     <string name="verjugadores">" see players"</string>
+    <string name="aplicar">Apply</string>
+    <string name="datos">Data</string>
+    <string name="ingles">English</string>
+    <string name="español">Spanish</string>
 
 
 </resources>

@@ -24,10 +24,8 @@ class CrearPartidos : AppCompatActivity() {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
     private val jugadoresPartidos: MutableList<JugadorBase> = mutableListOf()
-    private var agregados = false
     private var partidosAdapter: PartidosAdapter? = null
     var cargado = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCrearPartidosBinding.inflate(layoutInflater)
@@ -42,7 +40,6 @@ class CrearPartidos : AppCompatActivity() {
         binding.btnCrearPartido.setOnClickListener {
             mostrarDialogoCrearPartido()
         }
-
         // Configurar la Toolbar con la flecha de retroceso
         setSupportActionBar(binding.toolbarPartidos)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -50,14 +47,11 @@ class CrearPartidos : AppCompatActivity() {
             onBackPressed()
         }
     }
-
     private fun mostrarDialogoCrearPartido() {
         val builder = AlertDialog.Builder(this)
         val dialogBinding = DialogCrearPartidosBinding.inflate(layoutInflater)
         builder.setView(dialogBinding.root)
-
         var jugadoresSeleccionados = false
-
         dialogBinding.btnAgregarJugadores.setOnClickListener {
             val inflater = LayoutInflater.from(this)
             val dialogBinding = DialogagregarjugadoresBinding.inflate(inflater)
@@ -69,7 +63,6 @@ class CrearPartidos : AppCompatActivity() {
                 layoutManager = LinearLayoutManager(context)
                 adapter = jugadoresAdapter
             }
-
             val jugadoresSeleccionados = jugadoresAdapter.getJugadoresSeleccionados().toMutableList()
             jugadoresPartidos.addAll(jugadoresSeleccionados)
 
@@ -79,21 +72,17 @@ class CrearPartidos : AppCompatActivity() {
             } else {
                 cargado = true
             }
-
             builder.setPositiveButton("Eliminar") { _, _ ->
                 dialogBinding.root.postDelayed(
                     { builder.create().dismiss() },
                     500
                 )
             }
-
             builder.setNegativeButton("Cancelar") { _, _ ->
             }
-
             val dialog = builder.create()
             dialog.show()
         }
-
         builder.setPositiveButton("Crear") { _, _ ->
             val fecha = dialogBinding.editTextFecha.text.toString()
             val horaInicio = dialogBinding.editTextHora.text.toString()
@@ -122,9 +111,7 @@ class CrearPartidos : AppCompatActivity() {
                                             horaFin = horaFin2,
                                             jugadores = jugadoresList
                                         )
-
                                         partidosList.add(nuevoPartido)
-
                                         guardarPartidoEnFirestore(nuevoPartido)
 
                                         partidosAdapter?.notifyDataSetChanged()
@@ -154,12 +141,10 @@ class CrearPartidos : AppCompatActivity() {
                 cargado = false
             }
         }
-
         builder.setNegativeButton("Cancelar", null)
         val dialog = builder.create()
         dialog.show()
     }
-
     private fun cargarDatosFirebaseEnDialog(adapter: JugadoresAdapter2) {
         val currentUserEmail = firebaseAuth.currentUser?.email
         if (currentUserEmail != null) {
@@ -213,7 +198,6 @@ class CrearPartidos : AppCompatActivity() {
                 }
         }
     }
-
     private fun sumarUnaHoraObtenerHora(fecha: Date?): String? {
         if (fecha == null) {
             return null
@@ -225,17 +209,14 @@ class CrearPartidos : AppCompatActivity() {
         val formatoHora = SimpleDateFormat("HH:mm", Locale.getDefault())
         return formatoHora.format(calendar.time)
     }
-
     private fun mostrarMensajeError(mensaje: String) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
     }
-
     private fun guardarPartidoEnFirestore(partido: Partido) {
         val currentUserEmail = firebaseAuth.currentUser?.email
         if (currentUserEmail != null) {
             val partidosCollection =
                 db.collection("usuarios").document(currentUserEmail).collection("partidos")
-
             val jugadoresData = partido.jugadores?.map { jugador ->
                 mapOf(
                     "nombre" to jugador.nombre,
@@ -246,7 +227,6 @@ class CrearPartidos : AppCompatActivity() {
                     "imageUrl" to jugador.imagenUrl
                 )
             }
-
             val partidoData = hashMapOf(
                 "fecha" to partido.fecha,
                 "horaInicio" to partido.horaInicio,
@@ -271,10 +251,8 @@ class CrearPartidos : AppCompatActivity() {
                 }
         }
     }
-
     private fun leerPartidosDelUsuario() {
         val currentUserEmail = firebaseAuth.currentUser?.email
-
         if (currentUserEmail != null) {
             val partidosCollection =
                 db.collection("usuarios").document(currentUserEmail).collection("partidos")

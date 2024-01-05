@@ -55,7 +55,7 @@
         android:layout_width="101dp"
         android:layout_height="51dp"
         android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
-        android:text="Datos"
+        android:text="@string/datos"
         android:textColor="@color/md_theme_dark_onBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -9,7 +9,6 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     companion object {
         const val DATABASE_NAME = "toques_database"
         const val DATABASE_VERSION = 1
-
         const val TABLE_TOQUES = "toques"
         const val COLUMN_ID = "id"
         const val COLUMN_USUARIO = "usuario"

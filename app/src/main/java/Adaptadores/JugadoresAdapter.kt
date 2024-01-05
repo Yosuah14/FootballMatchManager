@@ -19,11 +19,9 @@ import com.bumptech.glide.Glide
 
 
 class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
-
     RecyclerView.Adapter<JugadoresAdapter.JugadorViewHolder>() {
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JugadorViewHolder {
         val binding =
             RecycleJugadoresBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -41,15 +39,9 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
 
     inner class JugadorViewHolder(private val binding: RecycleJugadoresBinding) :
         RecyclerView.ViewHolder(binding.root) {
-         fun ocultarBotonBorrar(holder: RecyclerView.ViewHolder) {
-            // Configurar la visibilidad del botón de borrar según tus criterios
-            // Puedes ajustar la lógica aquí para mostrar u ocultar el botón según tus necesidades
-            binding.btnBorrarJugador.visibility = View.INVISIBLE
-        }
-
         init {
             // Configurar el clic largo en el botón
-            binding.btnmodi.setOnLongClickListener {
+            binding.btnmodi.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
                     mostrarDetallesJugador(jugadoresList[adapterPosition])
                 } else {
@@ -62,7 +54,6 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
                 true // Indica que se ha manejado el evento
             }
         }
-
         fun bind(jugador: JugadorBase) {
             //Cargar la imagen
             Glide.with(binding.root.context)
@@ -85,7 +76,7 @@ class JugadoresAdapter(private val jugadoresList: MutableList<JugadorBase>) :
             val dialogBinding = DatosjugadorBinding.inflate(inflater)
             dialogBinding.tvNombre.text = "Nombre: ${jugador.nombre}"
             dialogBinding.tvTipo.text = "Tipo: ${jugador.posicion}"
-            dialogBinding.tvValoracion.text = "Valoración: ${jugador.valoracion}"
+            dialogBinding.tvValoracion.text = "Mvp: ${jugador.valoracion}"
 
             when (jugador) {
                 is Jugadores -> {

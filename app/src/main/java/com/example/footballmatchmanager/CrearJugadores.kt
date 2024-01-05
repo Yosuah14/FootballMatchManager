@@ -39,19 +39,16 @@ class CrearJugadores : AppCompatActivity() {
         setContentView(binding.root)
         // Leer los jugadores existentes del usuario actual
         leerJugadoresDelUsuario()
-
         // Configurar el RecyclerView
         jugadoresAdapter = JugadoresAdapter(jugadoresList)
         binding.recyclerViewJugadores.apply {
             layoutManager = LinearLayoutManager(this@CrearJugadores)
             adapter = jugadoresAdapter
         }
-
         // Configurar el botón para crear jugadores
         binding.btnCrearJugador.setOnClickListener {
             mostrarDialogoCrearJugador()
         }
-
         // Configurar la Toolbar con la flecha de retroceso
         setSupportActionBar(binding.toolbarCrearJugadores)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -59,17 +56,14 @@ class CrearJugadores : AppCompatActivity() {
             onBackPressed()
         }
     }
-
     private fun mostrarDialogoCrearJugador() {
         val builder = AlertDialog.Builder(this)
         val dialogBinding = DialogCrearJugadorBinding.inflate(layoutInflater)
         dialogImageView = dialogBinding.imagenJugador
         builder.setView(dialogBinding.root)
-
         dialogBinding.BtnSeleccionarImgen.setOnClickListener {
             abrirGaleriaDesdeDialogo()
         }
-
         builder.setPositiveButton("Crear") { _, _ ->
             // Obtener datos del diálogo y crear una instancia de Jugador
             val nombre = dialogBinding.editTextNombre.text.toString()
@@ -82,7 +76,6 @@ class CrearJugadores : AppCompatActivity() {
                 try {
                     // Obtener la posición seleccionada del RadioGroup
                     val radioButtonPosicionId = dialogBinding.radioGroupPosicion.checkedRadioButtonId
-
                     // Verificar que la posición no sea nula
                     if (radioButtonPosicionId != View.NO_ID) {
                         // Obtener el texto del RadioButton seleccionado
@@ -91,7 +84,6 @@ class CrearJugadores : AppCompatActivity() {
                             dialogBinding.radioButtonJugador.id -> "Jugador Normal"
                             else -> null
                         }
-
                         // Verificar si ya existe un jugador con el mismo nombre en Firestore
                         jugadorExistenteEnFirestore(nombre) { jugadorExistente ->
                             if (!jugadorExistente) {
@@ -114,10 +106,8 @@ class CrearJugadores : AppCompatActivity() {
                                         asistencias.toLong(),
                                         selectedImageUri.toString()
                                     )
-
                                     else -> null
                                 }
-
                                 // Si se creó un nuevo jugador, agregarlo a la lista y actualizar el RecyclerView
                                 nuevoJugador?.let {
                                     jugadoresList.add(it)
@@ -145,32 +135,24 @@ class CrearJugadores : AppCompatActivity() {
                 return@setPositiveButton
             }
         }
-
         builder.setNegativeButton("Cancelar", null)
-
         val dialog = builder.create()
-
         // Al hacer clic en "Cancelar" o cerrar el diálogo, no restablecer los datos
         dialog.setOnDismissListener {
             // Puedes realizar alguna acción si es necesario
         }
-
         dialog.show()
     }
-
     private fun abrirGaleriaDesdeDialogo() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, REQUEST_IMAGE_PICK)
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
             data?.data?.let { uri ->
                 // Almacenar la URI de la imagen seleccionada
                 selectedImageUri = uri
-
                 // Mostrar la imagen en el ImageView del diálogo sin usar Glide
                 try {
                     val inputStream = contentResolver.openInputStream(uri)
@@ -182,12 +164,10 @@ class CrearJugadores : AppCompatActivity() {
             }
         }
     }
-
     private fun guardarJugadorEnFirestore(jugador: JugadorBase) {
         val currentUserEmail = firebaseAuth.currentUser?.email
         if (currentUserEmail != null) {
             val jugadoresCollection = db.collection("usuarios").document(currentUserEmail).collection("jugadores")
-
             val jugadorData = hashMapOf(
                 "nombre" to jugador.nombre,
                 "valoracion" to jugador.valoracion,
@@ -207,18 +187,13 @@ class CrearJugadores : AppCompatActivity() {
                 }
         }
     }
-
     private fun leerJugadoresDelUsuario() {
         val currentUserEmail = firebaseAuth.currentUser?.email
-        Log.d("Firebase", "Email del usuario: $currentUserEmail")
-
         if (currentUserEmail != null) {
             val jugadoresCollection = db.collection("usuarios").document(currentUserEmail).collection("jugadores")
-
             jugadoresCollection.get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d("Firebase", "Obtención de jugadores exitosa")
                         for (document in task.result!!) {
                             try {
                                 // Obtener los datos del jugador del documento
@@ -228,7 +203,6 @@ class CrearJugadores : AppCompatActivity() {
                                 val goles = document.getLong("goles")
                                 val asistencias = document.getLong("asistencias")
                                 val imageUrl = document.getString("imageUrl") // Obtener la URL de la imagen
-
                                 // Determinar el tipo de jugador y crear la instancia adecuada
                                 val jugador: JugadorBase? = when (posicion) {
                                     "Portero" -> Portero(
@@ -249,36 +223,29 @@ class CrearJugadores : AppCompatActivity() {
                                     )
                                     else -> null
                                 }
-
-                                // Agregar el jugador a la lista si se creó correctamente
                                 jugador?.let {
                                     jugadoresList.add(it)
                                 }
                             } catch (e: Exception) {
-                                Log.e("Firebase", "Error al convertir documento a JugadorBase", e)
+
                             }
                         }
                         jugadoresAdapter.notifyDataSetChanged()
                     } else {
-                        Log.e("Firebase", "Error al obtener los jugadores", task.exception)
                         Toast.makeText(this, "Error al obtener los jugadores", Toast.LENGTH_SHORT).show()
                     }
                 }
         } else {
-            Log.e("Firebase", "El email del usuario es nulo")
-            // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
         }
     }
 
     private fun mostrarMensajeError(mensaje: String) {
         Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
     }
-
     private fun jugadorExistenteEnFirestore(nombre: String, onComplete: (Boolean) -> Unit) {
         val currentUserEmail = firebaseAuth.currentUser?.email
         if (currentUserEmail != null) {
             val jugadoresCollection = db.collection("usuarios").document(currentUserEmail).collection("jugadores")
-
             jugadoresCollection.whereEqualTo("nombre", nombre).get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -286,12 +253,11 @@ class CrearJugadores : AppCompatActivity() {
                         onComplete(jugadores?.isNotEmpty() == true)
                     } else {
                         onComplete(false)
-                        Log.e("Firebase", "Error al comprobar jugador existente en Firestore", task.exception)
                     }
                 }
         } else {
             onComplete(false)
-            Log.e("Firebase", "El email del usuario es nulo")
+
         }
     }
 

@@ -15,7 +15,6 @@ class JugarBalon : AppCompatActivity() {
     private lateinit var dbHelper: DbHelper
     private lateinit var toquesRepository: ToquesRepository
     private var ultimoToquesCargado: Toques? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityJugarBalonBinding.inflate(layoutInflater)

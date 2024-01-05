@@ -39,4 +39,8 @@
     <string name="borrarusu">Borrar usuario</string>
     <string name="modificar">Modificar</string>
     <string name="verjugadores">Ver Jugadores</string>
+    <string name="aplicar">Aplicar</string>
+    <string name="datos">Datos</string>
+    <string name="ingles">Ingles</string>
+    <string name="español">Español</string>
 </resources>

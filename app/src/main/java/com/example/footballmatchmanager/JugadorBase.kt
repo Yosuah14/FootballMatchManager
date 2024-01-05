@@ -1,5 +1,4 @@
 package com.example.footballmatchmanager
-
 open class JugadorBase(
     var valoracion: Long = 0L,
     var nombre: String = "",

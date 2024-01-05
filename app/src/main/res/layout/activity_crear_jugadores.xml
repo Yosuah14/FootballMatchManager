@@ -20,9 +20,6 @@
         app:navigationIcon="?android:attr/homeAsUpIndicator"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <!-- Botón "Crear Jugador" -->
-
-    <!-- ScrollView para la lista de jugadores -->
 
     <Button
         android:id="@+id/btnCrearJugador"

@@ -49,7 +49,6 @@ class PartidosAdapter(
                 ).show()
             }
         }
-
         fun bind(partido: Partido) {
             binding.textViewFecha.text = "Fecha: ${partido.fecha}"
             binding.textViewHoraInicio.text = "Hora de inicio: ${partido.horaInicio}"
@@ -58,7 +57,6 @@ class PartidosAdapter(
             binding.btnVerJugadores.setOnClickListener {
                 leerJugadoresDePartido(partido.fecha, partido.horaInicio,partido.horaFin)
             }
-
             binding.btnBorrarPartido.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -67,14 +65,12 @@ class PartidosAdapter(
                 }
             }
         }
-
         private fun leerJugadoresDePartido(fechaPartido: String,horaIni:String,horaFin:String) {
             val currentUserEmail = firebaseAuth.currentUser?.email
 
             if (currentUserEmail != null) {
                 val partidosCollection =
                     db.collection("usuarios").document(currentUserEmail).collection("partidos")
-
                 partidosCollection.whereEqualTo("fecha", fechaPartido).get()
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -94,7 +90,6 @@ class PartidosAdapter(
                                             jugadorData["asistencias"] as Long
                                         )
                                     }
-
                                     // Agregar los jugadores de este partido a la lista general
                                     jugadores?.let {
                                         jugadoresList.addAll(it)
@@ -115,11 +110,9 @@ class PartidosAdapter(
                     }
             } else {
                 Log.e("Firebase", "El email del usuario es nulo")
-                // Puedes mostrar un mensaje o realizar alguna acción adecuada si el email es nulo
+
             }
         }
-
-
         private fun cargarJugadoresEnDialog(jugadoresAdapter: JugadoresAdapter3?) {
             if (jugadoresAdapter != null) {
                 // Configurar el diálogo para agregar jugadores
@@ -127,7 +120,6 @@ class PartidosAdapter(
                 val dialogBinding = DialogagregarjugadoresBinding.inflate(inflater)
                 val builder = AlertDialog.Builder(binding.root.context)
                 builder.setView(dialogBinding.root)
-
                 // Configurar el RecyclerView en el diálogo con el JugadoresAdapter3
                 dialogBinding.recyclerViewJugadoresDialog.apply {
                     layoutManager = LinearLayoutManager(context)
@@ -136,13 +128,8 @@ class PartidosAdapter(
 
                 // Configurar el botón "Cancelar"
                 builder.setPositiveButton("Cancelar") { _, _ ->
-                    // Realiza las acciones necesarias antes de cerrar el diálogo
-                    // (En este punto, los jugadores seleccionados han sido eliminados temporalmente del RecyclerView)
-
-                    // Cierra el diálogo después de realizar las acciones necesarias
                     builder.create().dismiss()
                 }
-
                 // Mostrar el diálogo correctamente
                 builder.show()
             }

@@ -8,7 +8,7 @@ class RankingsPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAd
 
     override fun getItemCount(): Int {
         // Número total de pestañas
-        return 3  // Ajusta el número según sea necesario (Goles, Asistencias, MVP)
+        return 3  //(Goles, Asistencias, MVP)
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -17,7 +17,7 @@ class RankingsPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAd
             0 -> RankingGoles()
             1 -> RankingAsistencias()
             2 -> Rankingmvp()
-            else -> throw IllegalArgumentException("Invalid position: $position")
+            else -> throw IllegalArgumentException("Poscion no valida: $position")
         }
     }
 }
