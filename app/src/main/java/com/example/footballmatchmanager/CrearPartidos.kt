@@ -89,13 +89,22 @@ class CrearPartidos : AppCompatActivity() {
 
             if (fecha.isNotEmpty() && horaInicio.isNotEmpty()) {
                 try {
-                    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN)
+                    val timeFormat = SimpleDateFormat("HH:mm", Locale.GERMAN)
                     val fechaActual = Date()
                     val fechaSeleccionada = dateFormat.parse(fecha)
                     val horaInicioSeleccionada = timeFormat.parse(horaInicio)
 
-                    if (fechaSeleccionada != null && fechaSeleccionada >= fechaActual) {
+                    // Combina la fecha y la hora para obtener una nueva fecha con la hora especificada
+                    val calendar = Calendar.getInstance()
+                    calendar.time = fechaSeleccionada ?: Date() // Usa la fecha actual si fechaSeleccionada es null
+                    calendar.set(Calendar.HOUR_OF_DAY, horaInicioSeleccionada?.hours ?: 0)
+                    calendar.set(Calendar.MINUTE, horaInicioSeleccionada?.minutes ?: 0)
+
+                    // El objeto Date combinado
+                    val fechaConHora = calendar.time
+
+                    if (fechaSeleccionada != null && fechaConHor >= fechaActual) {
                         val horaFin: String? = sumarUnaHoraObtenerHora(horaInicioSeleccionada)
                         val horaFin2 = horaFin.toString()
 
@@ -315,7 +324,6 @@ class CrearPartidos : AppCompatActivity() {
             Log.e("Firebase", "El email del usuario es nulo")
         }
     }
-
     private fun partidoExistenteEnFirestore(fecha: String, onComplete: (Boolean) -> Unit) {
         val currentUserEmail = firebaseAuth.currentUser?.email
         if (currentUserEmail != null) {
